@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="WARN">
+
+    <Appenders>
+            
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%t] %-5p | %-60c | %m (%F:%L)%n" />
+        </Console>
+        
+       <RollingFile name="LOG_FILE" fileName="D:/logs/stockforme.txt"
+			filePattern="stockforme-%d{yyyy-MM-dd}-%i.txt">
+			<PatternLayout pattern="%d %-5p [%t] - %m (%F:%L)%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="1024 KB" />
+			</Policies>
+			<DefaultRolloverStrategy max="4" />
+		</RollingFile>   
+        
+    </Appenders>
+
+    <Loggers>
+        
+        <Root level="error">
+            <AppenderRef ref="stdout" />
+            <AppenderRef ref="LOG_FILE" />
+        </Root>
+        <Logger name="com.stockforme.controler"
+			level="INFO" additivity="false">
+			<AppenderRef ref="LOG_FILE" />
+		</Logger>        
+        
+    </Loggers>
+
+</Configuration>
