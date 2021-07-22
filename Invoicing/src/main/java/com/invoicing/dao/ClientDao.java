@@ -8,4 +8,5 @@ public interface ClientDao {
 	Client getclientbyraisonsociale(String rs);
 	void addclient(Client c);
 	List<Client> getallclients();
+	Long numberclient();
 }

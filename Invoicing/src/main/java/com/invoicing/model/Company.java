@@ -21,6 +21,8 @@ public class Company {
 	private String bankname;
 	private String slug;
 	private String token;
+	private String rcs;
+	private String bic;
 	public String getBankname() {
 		return bankname;
 	}
@@ -81,5 +83,18 @@ public class Company {
 	public void setSiret(String siret) {
 		this.siret = siret;
 	}
-
+	public String getRcs() {
+		return rcs;
+	}
+	public void setRcs(String rcs) {
+		this.rcs = rcs;
+	}
+	public String getBic() {
+		return bic;
+	}
+	public void setBic(String bic) {
+		this.bic = bic;
+	}
+	
+    
 }

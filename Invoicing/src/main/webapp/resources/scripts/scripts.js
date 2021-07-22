@@ -83,31 +83,54 @@ function autocomplete() {
 	
 	$(function() {
 		var emails=[];
-		var noms=[];
+		var raisons_sociales=[];
 		$.ajax({
-	        url: "Getallnamesclients",
+	        url: "Getallclients",
 	        type: 'GET',
 	        async: false,
 	        success: function (data) {	
 	        	for (var i in data){ 
-	        		emails.push(data[i].email);
-	        		noms.push(data[i].nom);
+	        		emails.push(data[i].mail);
+	        		raisons_sociales.push(data[i].rs);
 	                }	
-                $("#nomfromsearchclient").autocomplete({
-	               source: noms
+                if (document.getElementById("nomfromsearchclient")) {
+                
+	        	$("#nomfromsearchclient").autocomplete({
+	               source: raisons_sociales
 	             });
-	        	$("#emailfromsearchclient").autocomplete({
+                }
+	        	if (document.getElementById("emailfromsearchclient")) {
+	        	
+                $("#emailfromsearchclient").autocomplete({
 		               source: emails
 		             });
+	        	}
+	        
+	        	if (document.getElementById("client_name")) {
+	                $("#client_name").autocomplete({
+			               source: raisons_sociales
+			             });
+		        	}
+	        	
+	         
+	        
+	        
+	        
 	        }
 	        
 		});
 		
-     });
-	
-	
-	
+     });	
 }
+
+function checkfilesize(size) {
+if (size>20000000) {
+	 document.getElementById("msgmodalnotif").innerHTML="<b> La taille de la piece jointe > 20 MO </b>";
+     document.getElementById("titleModalnotify").innerHTML="<span style='color: red;'>ERROR</span>";
+     $("#Modalnotify").modal();
+}
+}
+
 
 
 
@@ -305,9 +328,132 @@ function createnewclient(){
 	}
    
 }
+
+function showmodalcompany(){
+	$("#raisonsocialemodal").val($("#raisonsociale").val());
+	$("#siretmodal").val($("#siret").val());
+	$("#ribmodal").val($("#rib").val());
+	$("#adressemodal").val($("#adresse").val());
+	$("#villemodal").val($("#ville").val());
+	$("#cpmodal").val($("#cp").val());
+	$("#bankenamemodal").val($("#bankname").val());
+	$("#slugmodal").val($("#slug").val());
+	$("#tokenmodal").val($("#token").val());
+	$("#Modalmodifclient").modal();
+}
+function savecompanymodify(){
+	$("#spinnerbutton").show();
+	var formData = new FormData();
+	if(! document.getElementById('raisonsocialemodal').disabled) {
+	formData.append('rs', $("#raisonsocialemodal").val());
+	}
+	
+	if(! document.getElementById('siretmodal').disabled) {
+		formData.append('siret', $("#siretmodal").val());
+	
+		}
+	
+	if( ! document.getElementById('ribmodal').disabled) {
+		formData.append('rib', $("#ribmodal").val());
+	
+		}
+	
+	if(!document.getElementById('adressemodal').disabled) {
+		formData.append('adresse', $("#adressemodal").val());
+
+		}
+	if(!document.getElementById('villemodal').disabled) {
+		formData.append('ville', $("#villemodal").val());
+
+		}
+	
+	if(!document.getElementById('cpmodal').disabled) {
+		formData.append('cp', $("#cpmodal").val());
+
+		}
+	
+	if(!document.getElementById('bankenamemodal').disabled) {
+		formData.append('bank', $("#bankenamemodal").val());
+
+		}
+	if(!document.getElementById('slugmodal').disabled) {
+		formData.append('slug', $("#slugmodal").val());
+	
+		}
+	
+	if(!document.getElementById('tokenmodal').disabled) {
+		formData.append('token', $("#tokenmodal").val());
+		
+		}
+	
+	$.ajax({
+        url: "updatecompany",
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+        	$("#spinnerbutton").hide();
+        	  document.getElementById("msgmodalnotif").innerHTML="<b>"+response+"</b>";
+		      document.getElementById("titleModalnotify").innerHTML=" <span style='color: green;'><i class='far fa-check-square'></i> Confirmation</span>";
+		      $("#Modalnotify").modal(); 
+        },
+        error: function (jqXHR) {
+        	if (jqXHR.status == 501) {
+        		$("#spinnerbutton").hide();
+        		  document.getElementById("msgmodalnotif").innerHTML="<b>"+jqXHR.responseText+"</b>";    
+		          document.getElementById("titleModalnotify").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-triangle'></i> ERREUR</span>";
+				  $("#Modalnotify").modal(); 		
+        	}
+     
+        }
+        
+	});
+	
+	
+	
+
+}
+
+
+function getclientsnames() {
+	$.ajax({
+        url: "Getallclients",
+        type: 'GET',
+        async: false,
+        success: function (data) {	      	
+        	for (var i in data){ 
+        		$("#client_name").append("<option value='"+data[i].rs+"'>"+data[i].rs+"</option>");
+                }
+        }
+        });
+	
+}
+
+function getclientemail(client_name) {
+	if (client_name.localeCompare('') == 0) {
+		$("#client_email").val('');
+	}
+	$.ajax({
+        url: "Getallclients",
+        type: 'GET',
+        async: false,
+        success: function (data) {	
+        	for (var i in data){ 
+        		if(data[i].rs.localeCompare(client_name) == 0) {
+        		$("#client_email").val(data[i].mail);	
+        		}
+                }
+        }
+        });
+	
+}
+
 //##########################################################################JS create invoice
 
-function showinfoarticle(namearticle){
+function showinfoarticle(quantite,namearticle){
+	$("#pleaseWaitDialog").modal();
 	var formData = new FormData();
 	formData.append('designation', namearticle);
 	$.ajax({
@@ -323,9 +469,175 @@ function showinfoarticle(namearticle){
         $("#taxe").val(response.taxe);
         $("#valtaxe").val(response.valtaxe);
         $("#prixttc").val(response.pvttc);
+        $("#totalprixttc").val(response.pvttc*quantite);
+    
+        
+       
+        if (response.pvttc*quantite >0) {
+        document.getElementById("button_generate").disabled=false;
+        }
         },
         error :function () {
  
         }
 	});
+}
+
+function Generateinvoice(){
+	$("#loader").show();
+	var formData = new FormData();
+	formData.append('quantite', $("#quantite").val());
+	formData.append('pvht', $("#prix_HT").val());
+	formData.append('pvttc', $("#prixttc").val());
+	formData.append('totalttc', $("#totalprixttc").val());
+	formData.append('namearticle', $("#article").val());
+	formData.append('nomclient', $("#nomclient").val());
+	formData.append('taxe', $("#taxe").val());
+	formData.append('valtaxe', $("#valtaxe").val());
+	$.ajax({
+        url: "generateinvoice",
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+        	$("#loader").hide();
+        	document.getElementById("msgModalnotify").innerHTML="<b> La facture a été bien générée </b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+            $("#Modalnotify").modal();
+            setTimeout(function(){
+            	  $('#Modalnotify').modal('hide')
+            	}, 2000);
+        },
+        error : function (jqXHR) {
+        	$("#loader").hide();
+        	document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
+            $("#Modalnotify").modal();	
+        }
+        
+	}); 
+}
+//****************************************************** JS send mail 
+function sendmail(mailto,subject,contain){
+	var formData = new FormData();
+	formData.append('mailto', mailto);
+	formData.append('subject', subject);
+	formData.append('contain', contain);
+	formData.append('attached_file', $('input[type=file]')[0].files[0]);
+	formData.append('attached_file_name', document.getElementById('file').files[0].name);
+	$.ajax({
+        url: "sendmail",
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+        document.getElementById("msgok").innerHTML="<b>"+response+"</b>"
+        $("#alertok").show();
+        },
+        error :function (jqXHR) {
+        document.getElementById("msgko").innerHTML="<b>"+jqXHR.responseText+"</b>"
+        $("#alertko").show();
+        }
+	});	
+}
+
+
+// ************************************************************ JS ARTICLES
+
+
+function setttcfield(){
+	var input = document.querySelector('#valtaxe');
+	input.addEventListener('keyup', function (e) {
+		var ttc = parseInt($("#pvht").val())+parseInt(($("#pvht").val()*($("#valtaxe").val()/100)));
+		$("#pvttc").val(ttc);
+	});
+}
+function createnewarticle() {
+	var formData = new FormData();
+	if ($("#designation").val().length >0 && $("#famille").val().length > 0 && $("#pvht").val().length >0  
+			&& $("#paht").val().length >0 && $("#taxe").val().length >0 && $("#valtaxe").val().length>0 && $("#pvttc").val().length >0 ) {
+    $("#loader").show();
+	formData.append('designation', $("#designation").val());
+	formData.append('famille', $("#famille").val());
+	formData.append('pvht', $("#pvht").val());
+	formData.append('paht', $("#paht").val());
+	formData.append('taxe', $("#taxe").val());
+	formData.append('valtaxe', $("#valtaxe").val());
+	formData.append('pvttc', $("#pvttc").val());
+	
+	$.ajax({
+        url: "createnewarticle",
+        type: 'POST',
+        async: true,
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+        	 $("#loader").hide();
+        		document.getElementById("msgModalnotify").innerHTML="<b> Le nouveau article a été bien créé </b>";
+                document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+                $("#Modalnotify").modal();
+                setTimeout(function(){
+                	  $('#Modalnotify').modal('hide')
+                	}, 4000);
+        },
+        error :function () {
+        	 $("#loader").hide();
+        	 document.getElementById("msgModalnotify").innerHTML="<b> Erreur lors de la création du nouveau article </b>";
+             document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation'></i> Error</span>";
+             $("#Modalnotify").modal(); 
+        }
+	});	
+	
+	
+	
+	
+	
+	}
+	else {
+		//$("#msgko").val("vous devez saisir tous les champs");
+	}
+
+	
+}
+
+
+// ***************************************************************** JS paiement 
+
+function validate_paiement(){
+	$("#tablepaiement tr").click(function() {//Add a click event to the row of the table
+	    var tr = $(this);//Find tr element
+	    var td = tr.find("td");//Find td element
+	    
+	    
+	    $.ajax({
+	        url: "validatepaiement/"+td[0].innerText,
+	        type: 'POST',
+	        async: true,
+	        processData: false,
+	        contentType: false,
+	        success: function (response) {
+	        		document.getElementById("msgModalnotify").innerHTML="<b> Le Paiement de la facture "+td[0].innerText+" a été bien validé</b>";
+	                document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+	                $("#Modalnotify").modal();
+	                setTimeout(function(){
+	                	  $('#Modalnotify').modal('hide')
+	                	}, 4000);
+	         
+	        },
+	        error :function () {
+	        	 document.getElementById("msgModalnotify").innerHTML="<b> Le Paiement de la facture "+td[0].innerText+"  n'a pas pu être validé </b>";
+	             document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation'></i> Error</span>";
+	             $("#Modalnotify").modal(); 
+	        }
+		});	
+	    
+	    
+	    
+	    
+	  });
 }

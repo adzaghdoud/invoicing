@@ -16,15 +16,21 @@ import com.invoicing.model.Article;
 public class ArticleServiceImpl implements ArticleService {
 	@Autowired
     private ArticlesDao dao;
-	@Override
+	
 	public List<Article> getlistarticles() {
 		// TODO Auto-generated method stub
 		return dao.getlistarticles();
 	}
-	@Override
+	
 	public Article getarticlebydesignation(String designation) {
 		// TODO Auto-generated method stub
 		return dao.getarticlebydesignation(designation);
+	}
+
+	@Override
+	public void addarticle(Article a) {
+		dao.addarticle(a);
+		
 	}
 
 }

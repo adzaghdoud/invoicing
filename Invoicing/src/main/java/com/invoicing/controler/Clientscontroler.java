@@ -1,6 +1,7 @@
 package com.invoicing.controler;
 
 import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Client;
 import com.invoicing.service.ClientService;
-
-
 @Controller
 public class Clientscontroler {
 	@SuppressWarnings("resource")

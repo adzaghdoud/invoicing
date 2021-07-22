@@ -14,7 +14,7 @@ import com.invoicing.model.Client;
 @Repository("ArticleDao")
 public class ArticlesDaoImpl extends  AbstractDao implements ArticlesDao {
 
-	@Override
+	
 	public List<Article> getlistarticles() {
 		// TODO Auto-generated method stub
 		
@@ -26,7 +26,7 @@ public class ArticlesDaoImpl extends  AbstractDao implements ArticlesDao {
 		return q.list();
 	}
 
-	@Override
+	
 	public Article getarticlebydesignation(String designation) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -35,6 +35,13 @@ public class ArticlesDaoImpl extends  AbstractDao implements ArticlesDao {
 		criteria.select(root).where(builder.equal(root.get("designation"), designation));
 		Query<Article> q=getSession().createQuery(criteria);
         return q.getSingleResult();
+	}
+
+
+	@Override
+	public void addarticle(Article a) {
+		persist(a);
+		
 	}
 
 }

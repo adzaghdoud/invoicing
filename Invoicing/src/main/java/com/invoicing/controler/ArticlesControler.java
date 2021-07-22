@@ -1,5 +1,6 @@
 package com.invoicing.controler;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,37 @@ public class ArticlesControler {
 		context.close();
 		return a ;
 	}
+	
+	
+	@RequestMapping(value = "/createnewarticle", method = RequestMethod.POST)
+	public @ResponseBody boolean createnew(@RequestParam (required = true)String designation,@RequestParam (required = true)String famille,
+			@RequestParam (required = true) double pvht , @RequestParam (required = true) double paht,	@RequestParam (required = true) String taxe,
+			@RequestParam (required = true) int valtaxe, @RequestParam (required = true) double pvttc ) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+		ArticleService srvarticles = (ArticleService) context.getBean("ArticleService");
+		Article a = new Article();
+		a.setDesignation(designation);
+		a.setFamille(famille);
+		a.setPaht(paht);
+		a.setPvht(pvht);
+		a.setPvttc(pvttc);
+		a.setTaxe(taxe);
+		a.setValtax(valtaxe);
+		try {
+			srvarticles.addarticle(a);	
+			
+		}catch(Exception e) {
+			context.close();
+			ExceptionUtils.getStackTrace(e);
+			return false;
+		}
+		
+	
+		context.close();
+		return true;
+	}
+	
+	
 	
 	
 }

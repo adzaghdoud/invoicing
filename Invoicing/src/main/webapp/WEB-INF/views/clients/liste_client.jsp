@@ -147,13 +147,13 @@
 
 
 <div class="modal" tabindex="-1" role="dialog" id ="modalgetclient"  aria-hidden="true">
-  <div class=".modal-sm" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 65%;" >
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id ="titlemodalgetclient">Information du client trouvé</h5>
+        <h5 class="modal-title" id ="titlemodalgetclient"><span style="color:green">Information du client trouvé</span></h5>
       </div>
   <div class="modal-body">
-  <table class="table" id="tablegetclient">
+  <table class="table table-striped" id="tablegetclient">
   <thead class="thead-dark">
     <tr>
         <th scope="col">Raison Sociale</th>
@@ -177,7 +177,11 @@
   </div>
 </div>
 
-
+<script>
+$(document).ready(function () {
+	autocomplete();
+	});
+</script>
 
 </body>
 </html>

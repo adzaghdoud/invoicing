@@ -14,20 +14,26 @@ import com.invoicing.model.Client;
 public class ClientServiceImpl implements ClientService {
 	@Autowired
     private ClientDao dao;
-	@Override
+	
 	public Client getclientbyraisonsociale(String rs)  {
 		// TODO Auto-generated method stub
 		return dao.getclientbyraisonsociale(rs);
 	}
-	@Override
+	
 	public void addclient(Client c) {
 		dao.addclient(c);
 		
 	}
-	@Override
+	
 	public List<Client> getallclients() {
 		// TODO Auto-generated method stub
 		return dao.getallclients();
+	}
+
+	@Override
+	public Long numberclient() {
+		// TODO Auto-generated method stub
+		return dao.numberclient();
 	}
 
 }

@@ -4,32 +4,114 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" >
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css" >   
-   
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://kit.fontawesome.com/b16c365929.js"></script>
+<style>
+.loader{
+    width: 70px;
+    height: 70px;
+    margin: 40px auto;
+}
+.loader p{
+    font-size: 16px;
+    color: #777;
+}
+.loader .loader-inner{
+    display: inline-block;
+    width: 15px;
+    border-radius: 15px;
+    background: #74d2ba;
+}
+.loader .loader-inner:nth-last-child(1){
+    -webkit-animation: loading 1.5s 1s infinite;
+    animation: loading 1.5s 1s infinite;
+}
+.loader .loader-inner:nth-last-child(2){
+    -webkit-animation: loading 1.5s .5s infinite;
+    animation: loading 1.5s .5s infinite;
+}
+.loader .loader-inner:nth-last-child(3){
+    -webkit-animation: loading 1.5s 0s infinite;
+    animation: loading 1.5s 0s infinite;
+}
+@-webkit-keyframes loading{
+    0%{
+        height: 15px;
+    }
+    50%{
+        height: 35px;
+    }
+    100%{
+        height: 15px;
+    }
+}
+@keyframes loading{
+    0%{
+        height: 15px;
+    }
+    50%{
+        height: 35px;
+    }
+    100%{
+        height: 15px;
+    }
+}
+.filterable {
+    margin-top: 15px;
+}
+.filterable .panel-heading .pull-right {
+    margin-top: -20px;
+}
+.filterable .filters input[disabled] {
+    background-color: transparent;
+    border: none;
+    cursor: auto;
+    box-shadow: none;
+    padding: 0;
+    height: auto;
+}
+.filterable .filters input[disabled]::-webkit-input-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]::-moz-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]:-ms-input-placeholder {
+    color: #333;
+}
+
+</style>
 <body>
-<div class="card card-outline-secondary">
-                        <div class="card-header">
-                            <h5 class="mb-0">Liste des Articles</h5>
-                        </div>
-                        <div class="card-body">
-                                <div class="form-group row">
 <div class="container">
-<table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+    <h3>Liste des Articles</h3>
+    <hr>
+    <div class="row">
+        <div class="panel panel-primary filterable">
+            <div class="panel-heading">
+                <h3 class="panel-title">Articles</h3>
+                <div class="pull-right">
+                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                </div>
+             
+                
+            </div>
+            <table  class="table">
                 <thead>
-            <tr>
-                <th>Designation</th>
-                <th>Famille</th>
-                <th>PV HT</th>
-                <th>PA HT</th>
-                <th>TAXE</th>
-                <th>VAL</th>
-                <th>PV TTC</th>
-            </tr>
-           </thead>
-            <tbody>
-            <c:forEach var="liste" items="${ Listarticles }">
+                    <tr class="filters">
+                        <th><input type="text" class="form-control" placeholder="Designation" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Famille" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="PV HT" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="PA HT" disabled></th>
+						<th><input type="text" class="form-control" placeholder="TAXE" disabled></th>
+						<th><input type="text" class="form-control" placeholder="VAL TAXE" disabled></th>
+						<th><input type="text" class="form-control" placeholder="PV TTC" disabled></th>
+						<th><input type="text" class="form-control" placeholder="Action" disabled></th>
+                    </tr>
+                </thead>
+                <tbody>
+                              <c:forEach var="liste" items="${ Listarticles }">
             <tr>
             <td>${liste.designation}</td>
             <td>${liste.famille}</td>
@@ -38,40 +120,162 @@
             <td>${liste.taxe}</td>
             <td>${liste.valtaxe} %</td>
             <td>${liste.pvttc}</td>
+            <td><a href="#"><span style="color:green"><i class="far fa-edit"></i></span></a> <a href="#"><span style="color:red"><i class="far fa-trash-alt"></i></span></a></td>
             </c:forEach>
-            </tbody>
-    </table>
+                </tbody>
+            </table>
+            
+        </div>
+           <div>
+                   <button class="btn btn-success" data-toggle="modal" data-target="#Modalnewarticle"> Nouveau Article </button>
             </div>
+            
+            
+            
+   <div class="modal fade" id="Modalnewarticle" tabindex="-1"  aria-labelledby="titleModalnewarticle" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="titleModalnewarticle"> <span style="color:green">Nouveau Article</span></h4>
+      </div>
+      <div class="modal-body">  
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Designation</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="designation" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Famille</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="famille" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Prix vente HT</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="pvht" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Prix achat HT</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="paht" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Taxe</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="taxe" class="form-control" placeholder="TVA"/> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Valeur Taxe %</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="valtaxe" class="form-control" oninput="setttcfield()" placeholder="20"/> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Prix vente TTC</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="pvttc" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 
+      
+      </div>
+       <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="createnewarticle()" id="buttonsave" >save</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">close</button>
+       
+      </div>
+       <div class="loader" style="display:none;" id="loader">
+                <p>Loading...</p>
+                <div class="loader-inner"></div>
+                <div class="loader-inner"></div>
+                <div class="loader-inner"></div>
             </div>
-            </div>
-            </div>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>   
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>   
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap.min.js"></script>   
-<script>
-$(document).ready(function() {
-    $('#example').DataTable( {
-        responsive: {
-            details: {
-                display: $.fn.dataTable.Responsive.display.modal( {
-                    header: function ( row ) {
-                        var data = row.data();
-                        return 'Details for '+data[0]+' '+data[1];
-                    }
-                } ),
-                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
-                    tableClass: 'table'
-                } )
+          </div>  
+            
+    </div>
+    </div>
+    </div>
+       
+    </div>
+    
+    
+    
+  <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titlemodal"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <span id="msgModalnotify"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> 
+    
+    
+    <script>
+    /*
+    Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
+    */
+    $(document).ready(function(){
+        $('.filterable .btn-filter').click(function(){
+            var $panel = $(this).parents('.filterable'),
+            $filters = $panel.find('.filters input'),
+            $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
             }
-        }
-    } );
-} );
-</script>
-<body>
+        });
+
+        $('.filterable .filters input').keyup(function(e){
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+            inputContent = $input.val().toLowerCase(),
+            $panel = $input.parents('.filterable'),
+            column = $panel.find('.filters th').index($input.parents('th')),
+            $table = $panel.find('.table'),
+            $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function(){
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+            }
+        });
+    });
+    </script>
 </body>
 </html>

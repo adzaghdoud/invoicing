@@ -7,5 +7,6 @@ import com.invoicing.model.Article;
 public interface ArticleService {
 	List<Article> getlistarticles();
 	Article getarticlebydesignation(String designation);
+	void addarticle(Article a);
 
 }

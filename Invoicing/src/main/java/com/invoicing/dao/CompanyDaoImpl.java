@@ -39,7 +39,7 @@ public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
         } 
 
         getSession().createQuery(criteriaUpdate).executeUpdate();
-;
+
    
 		
 	}

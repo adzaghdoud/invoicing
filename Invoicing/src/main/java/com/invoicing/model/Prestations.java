@@ -19,8 +19,12 @@ public class Prestations {
 	private Double montantHT;
 	@Column(name = "montant_TTC")
 	private Double montantTTC;
-	@Column(name = "id_article")
-	private int idarticle;
+	private String article;
+	@Column(name = "total_TTC")
+	private double totalttc;
+	private String taxe;
+	private double valtaxe;
+	private String statut_paiement;
 	public int getId() {
 		return id;
 	}
@@ -57,11 +61,38 @@ public class Prestations {
 	public void setMontantTTC(Double montantTTC) {
 		this.montantTTC = montantTTC;
 	}
-	public int getIdarticle() {
-		return idarticle;
+	public String getArticle() {
+		return article;
 	}
-	public void setIdarticle(int idarticle) {
-		this.idarticle = idarticle;
+	public void setArticle(String  article) {
+		this.article = article;
 	}
+	public double getTotalttc() {
+		return totalttc;
+	}
+	public void setTotalttc(double totalttc) {
+		this.totalttc = totalttc;
+	}
+	public String getTaxe() {
+		return taxe;
+	}
+	public void setTaxe(String taxe) {
+		this.taxe = taxe;
+	}
+	public double getValtaxe() {
+		return valtaxe;
+	}
+	public void setValtaxe(double valtaxe) {
+		this.valtaxe = valtaxe;
+	}
+	public String getStatut_paiement() {
+		return statut_paiement;
+	}
+	public void setStatut_paiement(String statut_paiement) {
+		this.statut_paiement = statut_paiement;
+	}
+	
+	
+	
 	
 }

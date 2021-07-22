@@ -1,19 +1,21 @@
 package com.invoicing.controler;
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.multipart.MultipartFile;
 import com.invoicing.hibernate.configuration.AppConfig;
-
 import com.invoicing.service.CompanyService;
+import com.invoicing.tools.Sendmail;
 
 @Controller
 public class CompanyController {
@@ -142,4 +144,19 @@ public class CompanyController {
 		return ResponseEntity.ok("La modification a été bien prise en compte pour "+listoffields);
 	}
 
+
+	@PostMapping(value = "/sendmail")
+	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) {
+	Sendmail s= new Sendmail();
+	s.setContain(contain);
+	s.setSubject(subject);
+	s.setMailto(mailto);
+	s.setFile(attached_file);
+	s.setFilename(attached_file_name);
+	if (! s.send() ) {
+	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du mail");	
+	}
+		
+	return ResponseEntity.ok("Le mail a été bien envoyé à "+mailto);	
+	}
 }
