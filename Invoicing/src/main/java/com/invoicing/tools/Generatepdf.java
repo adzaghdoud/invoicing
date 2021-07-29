@@ -93,7 +93,7 @@ public class Generatepdf extends HttpServlet{
 		this.prestation = prestation;
 	}
 
-	public boolean generate(HttpServletResponse response,String numfacture) {
+	public boolean generate(HttpServletResponse response) {
 		
 		
 		//regeneration Facture
@@ -103,6 +103,7 @@ public class Generatepdf extends HttpServlet{
 		   JRDataSource reportSource2;
 		   JRDataSource reportSource3;
 		   JRDataSource reportSource4;
+		   JRDataSource reportSource5;
 		   try {
 		      ClassLoader classLoader = getClass().getClassLoader();	 
 		      File file = new File(classLoader.getResource("invoice.jrxml").getFile());
@@ -120,10 +121,12 @@ public class Generatepdf extends HttpServlet{
 		    	 reportSource2 = new JRBeanCollectionDataSource(listclient); 
 		    	 reportSource3 = new JRBeanCollectionDataSource(listprestation);
 		    	 reportSource4 = new JRBeanCollectionDataSource(listcompany);
+		    	 reportSource5 = new JRBeanCollectionDataSource(listprestation);
 			     reportParameters.put("DS1", reportSource1);
 			     reportParameters.put("DS2", reportSource2);
 			     reportParameters.put("DS3", reportSource3);
 			     reportParameters.put("DS4", reportSource4);
+			     reportParameters.put("DSinvoiceheader", reportSource5);
 			     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
 			     JasperExportManager.exportReportToPdfFile(jasperPrint,System.getProperty("pdf.stor")+FileSystems.getDefault().getSeparator()+this.filename+".pdf");	     
 		   } catch (JRException ex) {

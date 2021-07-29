@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +13,7 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/b16c365929.js"></script>
 
 </head>
 <body>
@@ -22,12 +25,19 @@
     <div class="fadeIn first">
      <img src="${pageContext.request.contextPath}/resources/images/logo.png">
     </div>
-
+    
+    
     <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+    <form action="login" method="post">
+      <input type="text" name="login" class="fadeIn second" placeholder="login">
+      <input type="password" name="password" class="fadeIn third"  placeholder="password">
       <input type="submit" class="fadeIn fourth" value="Log In">
+       <c:if test = "${not empty  erromsg}"> 
+       <hr/>
+       <div class="alert alert-danger" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> ${erromsg}
+      </div>
+      </c:if>
     </form>
 
     <!-- Remind Passowrd -->

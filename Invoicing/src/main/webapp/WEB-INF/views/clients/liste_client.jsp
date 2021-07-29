@@ -30,9 +30,9 @@
                                   </div>
                                   </div>
                              
-                                  <button  class="btn btn-primary" onclick="Getclient()">Rechecher <span class="spinner-border spinner-border-sm"  id="spinnerbuttonsearchclient" style="display:none;"></span></button>
+                                  <button  class="btn btn-primary" onclick="Getclient()"><i class="fas fa-search"></i> Rechecher <span class="spinner-border spinner-border-sm"  id="spinnerbuttonsearchclient" style="display:none;"></span></button>
                                   
-                                  <input type="button" value="Nouveau Client" class="btn btn-secondary"  data-toggle="modal" data-target="#modalnvclient"/>
+                                  <button type="button"  class="btn btn-success"  data-toggle="modal" data-target="#modalnvclient"><i class="fas fa-plus"></i> Nouveau client</button>
                          
                      
                         </div>

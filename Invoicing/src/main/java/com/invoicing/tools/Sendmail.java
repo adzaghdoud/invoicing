@@ -1,10 +1,11 @@
 package com.invoicing.tools;
 
 import java.io.File;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -30,6 +31,8 @@ public class Sendmail {
 	private String contain;
 	private MultipartFile file;
 	private String filename;
+	private String systempath;
+	private String filetype;
 
 	
 	public MultipartFile getFile() {
@@ -92,9 +95,35 @@ public class Sendmail {
 	public void setContain(String contain) {
 		this.contain = contain;
 	}
+ 
+	
+	
+	
+	
+	public String getSystempath() {
+		return systempath;
+	}
 
+
+	public void setSystempath(String systempath) {
+		this.systempath = systempath;
+	}
+
+    
 	
 	
+	
+	
+	public String getFiletype() {
+		return filetype;
+	}
+
+
+	public void setFiletype(String filetype) {
+		this.filetype = filetype;
+	}
+
+
 	public   File multipartToFile(MultipartFile multipart, String fileName) throws IllegalStateException, IOException {
 	    File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+fileName);
 	    multipart.transferTo(convFile);
@@ -134,8 +163,10 @@ public class Sendmail {
 	    		try {
 	    		
 	    	   // Etape 2 : Création de l'objet Message
-	    	    multipartToFile(this.file, this.filename);
-	    			
+	    	    
+	    		if (this.file != null) {		
+	    	   multipartToFile(this.file, this.filename);
+	    		}
 	    			
 	    	    Message message = new MimeMessage(session);
 	    		message.setFrom(new InternetAddress(prop.getProperty("COMPANY.EMAIL")));
@@ -149,9 +180,9 @@ public class Sendmail {
 	            textBodyPart.setContent(this.contain, "text/html; charset=utf-8");
 
 	            MimeBodyPart attachmentBodyPart= new MimeBodyPart();
-	            FileDataSource source = new FileDataSource(System.getProperty("java.io.tmpdir")+"/"+this.filename);
+	            FileDataSource source = new FileDataSource(System.getProperty(this.systempath)+"/"+this.filename+"."+this.filetype);
 	            attachmentBodyPart.setDataHandler(new DataHandler(source));
-	            attachmentBodyPart.setFileName(this.filename);
+	            attachmentBodyPart.setFileName(this.filename+"."+this.filetype);
 
 	            multipart.addBodyPart(textBodyPart); 
 	            multipart.addBodyPart(attachmentBodyPart);
@@ -160,6 +191,7 @@ public class Sendmail {
 	  
 	    		Transport.send(message);
 	    		} catch (MessagingException e) {
+	    			System.out.print(ExceptionUtils.getStackTrace(e));
 	    		return false;
 	    		} 
 		       } catch (Exception e) {

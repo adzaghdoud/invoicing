@@ -127,7 +127,7 @@
             
         </div>
            <div>
-                   <button class="btn btn-success" data-toggle="modal" data-target="#Modalnewarticle"> Nouveau Article </button>
+                   <button class="btn btn-success" data-toggle="modal" data-target="#Modalnewarticle"><i class="fas fa-plus"></i> Nouveau Article </button>
             </div>
             
             

@@ -4,7 +4,7 @@
   <groupId>Invoicing</groupId>
   <artifactId>Invoicing</artifactId>
   <packaging>war</packaging>
-  <version>2.0</version>
+  <version>1.0</version>
   <name>Invoicing Maven Webapp</name>
   <url>http://maven.apache.org</url>
    <properties>
@@ -118,11 +118,13 @@
     <artifactId>mail</artifactId>
   	<version>1.4</version>
   	</dependency>
-    
 
-    
-    
-    
+   <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+   </dependency>
+ 
   </dependencies>
   <build>
     <finalName>Invoicing</finalName>

@@ -2,6 +2,7 @@ package com.invoicing.hibernate.configuration;
 
 	import java.util.Properties;
 
+
 	 
 	import javax.sql.DataSource;
 	 

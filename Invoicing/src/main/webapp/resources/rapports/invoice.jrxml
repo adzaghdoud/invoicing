@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4cca7ae4-7da0-4b6a-a1b0-8f429314e206">
+	<subDataset name="Dataset1" uuid="19726f0e-9f2d-4ad6-8264-efef133fdf9c">
+		<parameter name="DS1" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource">
+			<defaultValueExpression><![CDATA[$P{DS1}]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="rs" class="java.lang.String"/>
+		<field name="adresse" class="java.lang.String"/>
+		<field name="cp" class="java.lang.Integer"/>
+		<field name="ville" class="java.lang.String"/>
+		<field name="tel" class="java.lang.String"/>
+		<field name="rcs" class="java.lang.String"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="292" splitType="Stretch">
+			<staticText>
+				<reportElement x="220" y="10" width="183" height="30" uuid="9786f9e9-638d-4886-9f32-0a5920790684"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Facture]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="0" y="50" width="310" height="230" uuid="97961031-86fe-4bc7-bfe3-fed8e20262bd"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Dataset1" uuid="38b8605b-432f-4127-a0df-0bbd9b8efaf0">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource() ]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="230" width="310">
+						<textField>
+							<reportElement x="0" y="0" width="90" height="20" uuid="62286eb3-8b36-4810-9670-f619180ddee8"/>
+							<textFieldExpression><![CDATA[$F{rs}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="30" width="70" height="20" uuid="5dfe7432-0570-440b-b206-05d054c83363"/>
+							<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="60" width="100" height="30" uuid="798dbfb7-317e-4a01-aed9-d3b06a068b8e"/>
+							<textFieldExpression><![CDATA[$F{cp}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="100" width="100" height="30" uuid="0f620320-814a-4f9a-8a91-b9329c6882ed"/>
+							<textFieldExpression><![CDATA[$F{ville}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="130" width="100" height="30" uuid="a725e600-dd44-4aa4-bc22-b8b4d94b5246"/>
+							<textFieldExpression><![CDATA[$F{tel}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="170" width="100" height="30" uuid="e79f246c-0695-41f5-b494-43f8fec6a6ba"/>
+							<textFieldExpression><![CDATA[$F{rcs}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="430" y="10" width="100" height="30" uuid="5486a2cf-a6ff-413a-abe5-6e1da15f80a4"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="497" splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="311" splitType="Stretch"/>
+	</summary>
+</jasperReport>

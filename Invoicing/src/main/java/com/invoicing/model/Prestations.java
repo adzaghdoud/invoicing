@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name="prestations")
 public class Prestations {
@@ -13,6 +15,8 @@ public class Prestations {
     @Column(name = "id_prestation")
 	private int id;
 	private String numfacture;
+	private String nomfacture;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris")
 	private Timestamp date;
 	private int quantite;
 	@Column(name = "montant_HT")
@@ -25,6 +29,7 @@ public class Prestations {
 	private String taxe;
 	private double valtaxe;
 	private String statut_paiement;
+	private String client;
 	public int getId() {
 		return id;
 	}
@@ -90,6 +95,18 @@ public class Prestations {
 	}
 	public void setStatut_paiement(String statut_paiement) {
 		this.statut_paiement = statut_paiement;
+	}
+	public String getClient() {
+		return client;
+	}
+	public void setClient(String client) {
+		this.client = client;
+	}
+	public String getNomfacture() {
+		return nomfacture;
+	}
+	public void setNomfacture(String nomfacture) {
+		this.nomfacture = nomfacture;
 	}
 	
 	

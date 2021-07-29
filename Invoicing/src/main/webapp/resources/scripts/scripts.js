@@ -1,6 +1,7 @@
 //**************************intialisation appel WS
 	var url_api_insee="";
 	var url_api_checkiban="";
+	var url_api_bank="";
 	messageResource.init({
 		  // path to directory containing config.properties
 		  filePath : 'resources/config/'
@@ -14,6 +15,8 @@
 	
 		 url_api_insee = messageResource.get('api.insee', 'config');
 		 url_api_checkiban = messageResource.get('api.checkiban', 'config');
+		 url_api_bank = messageResource.get('api.bank', 'config');
+		 
 		});
 //************************************************JS sharded tools 
 function checkEmail(email) {
@@ -503,7 +506,7 @@ function Generateinvoice(){
         data: formData,
         success: function (response) {
         	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b> La facture a été bien générée </b>";
+        	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
             $("#Modalnotify").modal();
             setTimeout(function(){
@@ -640,4 +643,114 @@ function validate_paiement(){
 	    
 	    
 	  });
+}
+
+
+function relance_paiement (){
+	document.getElementById("spinnerbutton").style.display = 'inline';
+	$("#tablepaiement tr").click(function() {//Add a click event to the row of the table
+	    var tr = $(this);//Find tr element
+	    var td = tr.find("td");
+	    $.ajax({
+	        url: "relance_paiement/"+td[0].innerText+"/"+td[1].innerText,
+	        type: 'POST',
+	        async: true,
+	        processData: false,
+	        contentType: false,
+	        success: function (response) {
+	        	$("#spinnerbutton").hide();
+	        		document.getElementById("msgModalnotify").innerHTML="<b> Le client a été bien relancé </b>";
+	                document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+	                $("#Modalnotify").modal();
+	                setTimeout(function(){
+	                	  $('#Modalnotify').modal('hide')
+	                	}, 4000);
+	         
+	        },
+	        error :function () {
+	 
+	        	 document.getElementById("msgModalnotify").innerHTML="<b> erreur lors de l'appel du controller relance_paiement</b>";
+	             document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation'></i> Error</span>";
+	             $("#Modalnotify").modal(); 
+	        }
+		});	
+	   	    
+	
+	});	
+	
+}
+//*************************************************************charts
+
+function drawcharts() {
+	$.ajax({
+		type : 'GET',
+		url : 'liste_prestations',
+		sync: true,
+	     processData: false,
+	     contentType: false,
+		success : function(result) {
+			google.charts.load('current', {
+				'packages' : [ 'corechart' ]
+			});
+			google.charts.setOnLoadCallback(function() {
+				drawChartca(result);
+			
+			});
+		}
+		
+	});
+	}
+function drawChartca(result) {
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'date');
+	data.addColumn('number', 'totalttc');
+	var dataArray = [];
+	$.each(result, function(i,obj) {
+		if (obj.date.localeCompare('') !== 0) {	
+		var datesub=obj.date.toString().substring(0,10);
+		var somme=0;
+		$.each(result, function(i,obj) {
+		 var date=obj.date.toString().substring(0,10);
+		 if (date.localeCompare(datesub) == 0) {
+			somme=somme+obj.totalttc; 
+			obj.date="";
+		 }
+		});
+		data.addRow([datesub,somme]);	
+		}
+	});
+	
+	
+	
+	 
+	var combochart_options = {
+			title : 'Evolution CA ',
+			vAxis: {title: 'Chiffre affaire en euro'},
+	        hAxis: {title: 'Date facture'},
+	        seriesType: 'bars',
+	        series: {5: {type: 'line'} }};
+	       
+		var combochart = new google.visualization.ComboChart(document.getElementById('combodiv'));
+		combochart.draw(data, combochart_options);
+
+		
+}
+//**********************************************JS bank
+var slug="zohratec-7289";
+var iban= "FR7616958000018388151027285";
+var token="9843cd2bbe87db673e74817b3f89960f"
+function getinfofrombank(iban,slug,token){
+	var settings = {
+			  "url": "https://thirdparty.qonto.com/v2/transactions?iban=FR7616958000018388151027285",
+			  "method": "GET",
+			  "timeout": 0,
+			  "headers": {
+			    "Access-Control-Allow-Origin": "*",
+			    "Authorization": "zohratec-7289:9843cd2bbe87db673e74817b3f89960f"
+			  },
+			};
+
+			$.ajax(settings).done(function (response) {
+			  console.log(response);
+			});
 }

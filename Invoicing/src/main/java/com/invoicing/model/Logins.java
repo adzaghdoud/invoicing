@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
-@Table(name="Logins")
+@Table(name="logins")
 public class Logins {
 	@Id
 	private String login;
@@ -12,6 +12,7 @@ public class Logins {
 	private String nom;
 	private String email;
 	private String password;
+	private String tel;
 	public String getLogin() {
 		return login;
 	}
@@ -41,6 +42,12 @@ public class Logins {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 
