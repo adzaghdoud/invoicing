@@ -11,7 +11,7 @@ import com.invoicing.model.Logins;
 @Repository("LoginsDao")
 public class LoginsDaoImpl extends  AbstractDao implements LoginsDao{
 
-	@Override
+
 	public boolean checkloginpassword(String login, String password) {
 
 		
@@ -29,7 +29,7 @@ public class LoginsDaoImpl extends  AbstractDao implements LoginsDao{
         
 	}
 
-	@Override
+	
 	public Logins getinfo(String login) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();

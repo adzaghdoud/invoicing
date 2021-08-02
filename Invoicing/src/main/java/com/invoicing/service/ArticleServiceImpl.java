@@ -27,7 +27,7 @@ public class ArticleServiceImpl implements ArticleService {
 		return dao.getarticlebydesignation(designation);
 	}
 
-	@Override
+	
 	public void addarticle(Article a) {
 		dao.addarticle(a);
 		

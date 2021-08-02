@@ -7,8 +7,8 @@
             <PatternLayout pattern="[%t] %-5p | %-60c | %m (%F:%L)%n" />
         </Console>
         
-       <RollingFile name="LOG_FILE" fileName="D:/logs/stockforme.txt"
-			filePattern="stockforme-%d{yyyy-MM-dd}-%i.txt">
+       <RollingFile name="LOG_FILE" fileName="D:/stor/logs/invoicing.log"
+			filePattern="invoicing-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout pattern="%d %-5p [%t] - %m (%F:%L)%n" />
 			<Policies>
 				<SizeBasedTriggeringPolicy size="1024 KB" />
@@ -24,10 +24,18 @@
             <AppenderRef ref="stdout" />
             <AppenderRef ref="LOG_FILE" />
         </Root>
-        <Logger name="com.stockforme.controler"
-			level="INFO" additivity="false">
-			<AppenderRef ref="LOG_FILE" />
-		</Logger>        
+         
+        
+    </Loggers>
+
+
+ <Loggers>
+        
+        <Root level="info">
+            <AppenderRef ref="stdout" />
+            <AppenderRef ref="LOG_FILE" />
+        </Root>
+              
         
     </Loggers>
 

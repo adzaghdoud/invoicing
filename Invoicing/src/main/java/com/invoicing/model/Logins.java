@@ -13,6 +13,7 @@ public class Logins {
 	private String email;
 	private String password;
 	private String tel;
+	private String company;
 	public String getLogin() {
 		return login;
 	}
@@ -49,7 +50,13 @@ public class Logins {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
 	
-
+    
 
 }

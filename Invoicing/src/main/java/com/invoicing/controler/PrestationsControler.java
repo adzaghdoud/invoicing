@@ -138,12 +138,11 @@ public class PrestationsControler {
 		  
 		  
 		  Sendmail s = new Sendmail();
-		  s.setFilename(nomfacture);
+		  s.setFilename(nomfacture+".pdf");
 		  s.setSystempath("pdf.stor");
 		  s.setMailto(c.getMail());
 		  s.setSubject("Relance Facture "+nomfacture);
 		  s.setContain("Merci de penser à régler la facture ci-jointe , Cordialement ");
-		  s.setFiletype("pdf");
 		  
 		  if (! s.send() ) {
 			  context.close();

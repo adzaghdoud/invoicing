@@ -137,7 +137,7 @@ public class Sendmail {
 				InputStream input = new FileInputStream(System.getProperty("env.file.ext"));
 				
 
-	            Properties prop = new Properties();
+				final Properties prop = new Properties();
 
 	            // load a properties file
 	            try {
@@ -154,6 +154,7 @@ public class Sendmail {
 	    		props.put("mail.smtp.starttls.enable","true");
 	    		props.put("mail.smtp.host",prop.getProperty("SMTP.HOST"));
 	    		props.put("mail.smtp.port",prop.getProperty("SMTP.PORT"));
+	    		props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 	    		Session session = Session.getInstance(props,
 	    		new javax.mail.Authenticator() {
 	    		protected PasswordAuthentication getPasswordAuthentication() {
@@ -180,9 +181,9 @@ public class Sendmail {
 	            textBodyPart.setContent(this.contain, "text/html; charset=utf-8");
 
 	            MimeBodyPart attachmentBodyPart= new MimeBodyPart();
-	            FileDataSource source = new FileDataSource(System.getProperty(this.systempath)+"/"+this.filename+"."+this.filetype);
+	            FileDataSource source = new FileDataSource(System.getProperty(this.systempath)+FileSystems.getDefault().getSeparator()+this.filename);
 	            attachmentBodyPart.setDataHandler(new DataHandler(source));
-	            attachmentBodyPart.setFileName(this.filename+"."+this.filetype);
+	            attachmentBodyPart.setFileName(this.filename);
 
 	            multipart.addBodyPart(textBodyPart); 
 	            multipart.addBodyPart(attachmentBodyPart);

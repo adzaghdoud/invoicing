@@ -153,6 +153,7 @@ public class CompanyController {
 	s.setMailto(mailto);
 	s.setFile(attached_file);
 	s.setFilename(attached_file_name);
+	s.setSystempath("pdf.stor");
 	if (! s.send() ) {
 	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du mail");	
 	}

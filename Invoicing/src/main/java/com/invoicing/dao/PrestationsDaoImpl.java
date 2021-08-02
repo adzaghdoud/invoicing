@@ -18,13 +18,13 @@ import com.invoicing.model.Prestations;
 @Repository("PrestationsDao")
 public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 
-	@Override
+
 	public void addprestation(Prestations p) {
 		// TODO Auto-generated method stub
 		persist(p);
 	}
 
-	@Override
+	
 	public Long getlast_id_prestation() {
 		// TODO Auto-generated method stub
 		       
@@ -42,7 +42,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         return count;
 	}
 
-	@Override
+
 	public List<Prestations> getlistprestations() {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -54,7 +54,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 		return q.list();
 	}
 
-	@Override
+
 	public Prestations getperstationbynomfacture(String nomfacture) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -65,7 +65,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         return q.getSingleResult();
 	}
 
-	@Override
+
 	public List<Prestations> getpendingpaiement() {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -76,7 +76,6 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         return q.getResultList();
 	}
 
-	@Override
 	public void validate_paiement(String numfacture) {
 		
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -92,13 +91,13 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 		
 	}
 
-	@Override
+
 	public double chiffre_affaire() {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Double> query = builder.createQuery(Double.class);
 		Root<Prestations> root = query.from(Prestations.class);
-		query.select(builder.sum(root.get("totalttc")));
+	    query.select(builder.sum(root.<Double>get("totalttc")));
 		TypedQuery<Double> typedQuery = getSession().createQuery(query);
 	    Double sum = typedQuery.getSingleResult();
 	      
@@ -107,7 +106,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
      
 	}
 
-	@Override
+
 	public long number_paiement_to_validate() {
 		// TODO Auto-generated method stub
 
@@ -125,7 +124,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         return count;
 	}
 
-	@Override
+	
 	public long number_paiement_validate() {
 		// TODO Auto-generated method stub
         CriteriaBuilder builder = getSession().getCriteriaBuilder();

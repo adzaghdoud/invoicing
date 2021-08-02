@@ -44,7 +44,7 @@ public class ClientDaoImpl  extends  AbstractDao implements ClientDao {
 	}
 
 
-	@Override
+
 	public Long numberclient() {
 		// TODO Auto-generated method stub
 CriteriaBuilder builder = getSession().getCriteriaBuilder();

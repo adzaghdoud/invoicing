@@ -524,6 +524,7 @@ function Generateinvoice(){
 }
 //****************************************************** JS send mail 
 function sendmail(mailto,subject,contain){
+	$("#refresh_gif").show();
 	var formData = new FormData();
 	formData.append('mailto', mailto);
 	formData.append('subject', subject);
@@ -538,10 +539,12 @@ function sendmail(mailto,subject,contain){
         contentType: false,
         data: formData,
         success: function (response) {
+	    $("#refresh_gif").hide();
         document.getElementById("msgok").innerHTML="<b>"+response+"</b>"
         $("#alertok").show();
         },
         error :function (jqXHR) {
+	    $("#refresh_gif").hide();
         document.getElementById("msgko").innerHTML="<b>"+jqXHR.responseText+"</b>"
         $("#alertko").show();
         }
@@ -753,4 +756,25 @@ function getinfofrombank(iban,slug,token){
 			$.ajax(settings).done(function (response) {
 			  console.log(response);
 			});
+}
+
+
+function refresh_transactions() {	
+$("#refresh").show();
+$.ajax({
+type : 'GET',
+url : 'refresh_transactions',
+async: true,
+processData: false,
+contentType: false,
+success : function() {
+	$("#refresh").hide();		
+
+},
+error : function() {
+$("#refresh").hide();
+console.log("****************ko");
+}
+
+});
 }

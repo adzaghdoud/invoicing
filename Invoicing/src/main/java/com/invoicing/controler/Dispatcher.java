@@ -1,6 +1,9 @@
 package com.invoicing.controler;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +25,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,6 +56,7 @@ public class Dispatcher {
 	public ModelAndView forwordlogin(HttpServletRequest request, HttpServletResponse response , @RequestParam(required = true) String login,@RequestParam(required = true) String password) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 	  if (!srvlogins.checkloginpassword(request.getParameter("login"),request.getParameter("password"))) {
 		ModelAndView mv = new ModelAndView("/accueil/login");
 		mv.addObject("erromsg", "Login ou password invalide");
@@ -59,6 +65,8 @@ public class Dispatcher {
 		}
 		ModelAndView mv = new ModelAndView("/accueil/main");
 		mv.addObject("welcome","Bonjour "+login);
+		mv.addObject("company_name",srvlogins.getinfo(login).getCompany());
+		mv.addObject("company_bank_name",srvcompany.getcompanybyraison(srvlogins.getinfo(login).getCompany()).getBankname());
 		Cookie userName = new Cookie("invoicing_username", login);
 		userName.setMaxAge(-1);
 		response.addCookie(userName);
@@ -101,7 +109,10 @@ public class Dispatcher {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");	
 		ModelAndView mv = new ModelAndView("/settings/company_settings");
+		
+		String encodedimage = Base64Utils.encodeToString(srvcompany.getinfo().getLogo());
 		mv.addObject("info", srvcompany.getinfo());
+		mv.addObject("encodedimage", encodedimage);
 		context.close();
 		return mv;
 	}
@@ -125,6 +136,7 @@ public class Dispatcher {
 		mv.addObject("email", p.getEmail());
 		mv.addObject("login", p.getLogin());
 		mv.addObject("tel", p.getTel());
+		mv.addObject("company", p.getCompany());
 		context.close();	 
 		return mv;
 	

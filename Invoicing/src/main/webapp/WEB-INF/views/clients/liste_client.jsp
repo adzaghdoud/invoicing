@@ -9,7 +9,6 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/messageResource.js"></script> 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 
 <body>
 
 <div class="card card-outline-secondary">
@@ -147,7 +146,7 @@
 
 
 <div class="modal" tabindex="-1" role="dialog" id ="modalgetclient"  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 65%;" >
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 63%;" >
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id ="titlemodalgetclient"><span style="color:green">Information du client trouvé</span></h5>
@@ -163,7 +162,7 @@
         <th scope="col">ville</th>
         <th scope="col">Telephone</th>
         <th scope="col">Email</th>
-        <th scope="col">Siret</th>
+        <th scope="col" >Siret</th>
     </tr>
   </thead>
   <tbody id ="bodytablemodalgetclient">
@@ -176,7 +175,7 @@
     </div>
   </div>
 </div>
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 
 <script>
 $(document).ready(function () {
 	autocomplete();

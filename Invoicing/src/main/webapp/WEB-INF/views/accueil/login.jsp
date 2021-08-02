@@ -31,7 +31,7 @@
     <form action="login" method="post">
       <input type="text" name="login" class="fadeIn second" placeholder="login">
       <input type="password" name="password" class="fadeIn third"  placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+      <button  class="fadeIn fourth" onclick="javascript:$('#refresh_gif').show()">Log In <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="25" height="25" style="display: none" id="refresh_gif" ></button>
        <c:if test = "${not empty  erromsg}"> 
        <hr/>
        <div class="alert alert-danger" role="alert">

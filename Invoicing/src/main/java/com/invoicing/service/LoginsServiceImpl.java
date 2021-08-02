@@ -20,7 +20,7 @@ public class LoginsServiceImpl  implements LoginsService{
 		return dao.checkloginpassword(login, password);
 	}
 
-	@Override
+	
 	public Logins getinfo(String login) {
 		// TODO Auto-generated method stub
 		return dao.getinfo(login);

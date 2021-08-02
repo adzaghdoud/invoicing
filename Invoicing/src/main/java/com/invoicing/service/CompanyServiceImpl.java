@@ -11,14 +11,25 @@ import com.invoicing.model.Company;
 public class CompanyServiceImpl implements CompanyService {
 	@Autowired
     private CompanyDao dao;
-	@Override
+	
 	public Company getinfo() {
 		// TODO Auto-generated method stub
 		return dao.getinfo();
 	}
-	@Override
+
 	public void updatecompany(String field, String value) {
 		dao.updatecompany(field, value);
+		
+	}
+
+	public Company getcompanybyraison(String raison) {
+		// TODO Auto-generated method stub
+		return dao.getcompanybyraison(raison);
+	}
+
+	public void updatelogocompany(byte[] logo, String raison) {
+		// TODO Auto-generated method stub
+		dao.updatelogocompany(logo, raison);
 		
 	}
 

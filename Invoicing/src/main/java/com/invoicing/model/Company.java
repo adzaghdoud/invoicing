@@ -23,6 +23,7 @@ public class Company {
 	private String token;
 	private String rcs;
 	private String bic;
+	private byte[] logo;
 	public String getBankname() {
 		return bankname;
 	}
@@ -94,6 +95,12 @@ public class Company {
 	}
 	public void setBic(String bic) {
 		this.bic = bic;
+	}
+	public byte[] getLogo() {
+		return logo;
+	}
+	public void setLogo(byte[] logo) {
+		this.logo = logo;
 	}
 	
     

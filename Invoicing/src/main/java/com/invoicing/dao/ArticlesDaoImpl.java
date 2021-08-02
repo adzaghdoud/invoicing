@@ -38,7 +38,7 @@ public class ArticlesDaoImpl extends  AbstractDao implements ArticlesDao {
 	}
 
 
-	@Override
+
 	public void addarticle(Article a) {
 		persist(a);
 		

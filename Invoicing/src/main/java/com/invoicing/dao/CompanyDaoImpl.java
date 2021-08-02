@@ -13,7 +13,7 @@ import com.invoicing.model.Company;
 @Repository("CompanyDao")
 public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
 
-	@Override
+	
 	public Company getinfo() {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -24,7 +24,6 @@ public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
 		return q.uniqueResult();
 	}
 
-	@Override
 	public void updatecompany(String field , String value) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
@@ -42,6 +41,27 @@ public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
 
    
 		
+	}
+
+	public Company getcompanybyraison(String raison) {
+		// TODO Auto-generated method stub
+		CriteriaBuilder builder = getSession().getCriteriaBuilder();
+		CriteriaQuery<Company> criteria = builder.createQuery(Company.class);
+		Root<Company> root = criteria.from(Company.class);
+		criteria.select(root).where(builder.equal(root.get("rs"), raison));	
+		Query<Company> q=getSession().createQuery(criteria);
+		return q.uniqueResult();
+	}
+
+	public void updatelogocompany(byte[] logo, String raison) {
+		// TODO Auto-generated method stub
+		CriteriaBuilder builder = getSession().getCriteriaBuilder();
+        // create update
+        CriteriaUpdate<Company> criteriaUpdate  = builder.createCriteriaUpdate(Company.class);
+        Root<Company> root = criteriaUpdate.from(Company.class);
+        criteriaUpdate.where(builder.equal(root.get("rs"), raison));  
+        criteriaUpdate.set("logo",logo);
+        getSession().createQuery(criteriaUpdate).executeUpdate();
 	}
 
 }

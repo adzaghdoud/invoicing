@@ -30,7 +30,7 @@ public class ClientServiceImpl implements ClientService {
 		return dao.getallclients();
 	}
 
-	@Override
+
 	public Long numberclient() {
 		// TODO Auto-generated method stub
 		return dao.numberclient();

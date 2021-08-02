@@ -99,9 +99,9 @@
                 </ul>
                 </li> 
                 <li data-toggle="collapse" data-target="#bank" class="collapsed">
-                <a href="#"><i class="fas fa-university"></i>Transactions bancaires <span class="arrow"></span></a>
+                <a href="#"><i class="fas fa-university"></i>Transactions bancaires<span class="arrow"></span></a>
                 <ul class="sub-menu collapse" id="bank">
-                <li><a href="liste_transactions_bank" class="link">Liste transactions</a></li>
+                <li><a href="liste_transactions_bank" class="link">Liste transactions  ${company_bank_name}</a></li>
                 </ul>
                 </li>
                 <li>
@@ -115,6 +115,13 @@
                      
             </ul>
      </div>
+     
+      <div class="brand">
+       ${company_name}
+      </div>
+     
+     
+     
      </div>
      
      
@@ -168,7 +175,7 @@
         </form>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val())">Send message</button>
+      <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val())">Send message <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif"></button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
       
