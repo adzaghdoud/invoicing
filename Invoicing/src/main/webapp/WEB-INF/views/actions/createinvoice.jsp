@@ -4,9 +4,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/messageResource.js"></script> 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 
 <style><style>
@@ -147,14 +145,25 @@
                                  </div>
                                  </div>
                                  
-                        
-                                 
-                        
-                                 
-                                 
-                                 
-                                 
-                                
+                                 <div class="form-group row">
+                                 <label class="col-sm-2 col-form-label"><b>Article</b></label>
+                                 <div class="col-sm-4">
+                                 <select   id ="modepaiement"  class="form-control">
+                                 <option value=""></option>          
+                                 <option value="Virement">Virement</option>  
+                                 <option value="chéque">Chéque</option> 
+                                 </select> 
+                                 </div>
+                                 </div> 
+                                    <div class="form-group row">
+                                 <label class="col-sm-2 col-form-label"><b>Date dû</b></label>
+                                 <div class="col-sm-4">
+                                <div class="datepicker date input-group">
+                              <input type="date" placeholder="Choisir une date" class="form-control" id="date_attendue">
+                             <div class="input-group-append"><span class="input-group-text px-4"><i class="fa fa-calendar"></i></span></div>
+                            </div>
+                           </div>
+                           </div>     
                                 <div class="form-group row">
                                  <button class="btn btn-success" onclick="javascirpt:Generateinvoice()"  id="button_generate"disabled><i class="fas fa-file-invoice-dollar"></i> Générer facture <span class="spinner-border spinner-border-sm"  id="spinnerbutton" style="display:none;"></span> </button> 
                                  <div class="col-sm-1">

@@ -140,6 +140,7 @@ if (size>20000000) {
 //*********************************************** JS clients
 
 function Getclient() {
+		
 		if ($('#nomfromsearchclient').val().length === 0 &&  $('#emailfromsearchclient').val().length === 0 ) {
 			    document.getElementById("msgmodalnotifyclient").innerHTML="<b> Merci de saisir le nom ou l'email</b>";
 		        document.getElementById("titlemodalnotifyclient").innerHTML="<span style='color: red;'>ERROR</span>";
@@ -147,7 +148,7 @@ function Getclient() {
 		}
 		else {
 		if (checkEmail($('#emailfromsearchclient').val()) || $('#nomfromsearchclient').val().length > 0) {
-		$("#spinnerbuttonsearchclient").show();
+		document.getElementById("refresh_gif").style.display = 'inline';
 		var formData = new FormData();
 		formData.append('nom', $('#nomfromsearchclient').val());
 		formData.append('email', $('#emailfromsearchclient').val());
@@ -159,20 +160,19 @@ function Getclient() {
 	        contentType: false,
 	        data: formData,
 	        success: function (response) {
-	        	$("#spinnerbuttonsearchclient").hide();
-	        	document.getElementById("bodytablemodalgetclient").innerHTML = "";
-	            if (response !== '' ) {
+	        	document.getElementById("refresh_gif").style.display = 'none';           
+                  if (response !== null ) {
 	        		  if (response.rs !== null){
-	             	   $("#bodytablemodalgetclient").append('<tr>' +
-	  	        		  '<td><b>'+response.rs+'</b></td>'+
-	  	        		  '<td></td>'+
-	  	        		  '<td><b>'+response.adresse+'</b></td>'+
-	  	        		  '<td><b>'+response.cp+'</b></td>'+
-	  	        		  '<td><b>'+response.ville+'</b></td>'+
-	  	        		  '<td><b>'+response.telephone+'</b></td>'+
-	  	        		  '<td><b>'+response.mail+'</b></td>'+
-	  	        		  '<td><b>'+response.siret+'</b></td>'+
-	  	        		  '</tr>')              
+	             	  
+                         $("#rs").val(response.rs);
+                         $("#siret").val(response.siret);
+                         $("#adresse").val(response.adresse);
+                         $("#cp").val(response.cp);
+                         $("#ville").val(response.ville);
+                         $("#tel").val(response.telephone);
+                         $("#email").val(response.mail);
+                         $("#rib").val(response.rib);
+                         $("#divcontainer").show();             
 	        		  }
 	        		  if (response.nom !== null){
 		             	   $("#bodytablemodalgetclient").append('<tr>' +
@@ -190,20 +190,22 @@ function Getclient() {
 	              $('#modalgetclient').modal();         
 	            }
 	            else {
-	            	$("#spinnerbuttonsearchclient").hide();
+	            	document.getElementById("refresh_gif").style.display = 'none';
 	            	document.getElementById("msgmodalnotifyclient").innerHTML="<b> Aucun client n'a été trouvé avec ce critére </b>";
 	                document.getElementById("titlemodalnotifyclient").innerHTML="<span style='color: red;'>ERROR</span>";
 	                $("#Modalnotifyclient").modal();   	
 	            	
 	            }
 	        },
-	        error: function (xhr) {$("#spinnerbuttonsearchclient").hide(); 
+	        error: function (xhr) {document.getElementById("refresh_gif").style.display = 'none';
 	        document.getElementById("msgmodalnotifyclient").innerHTML="<b> Erreur technique</b>";
 	        document.getElementById("titlemodalnotifyclient").innerHTML="<span style='color: red;'>ERROR</span>";
 	        $("#Modalnotifyclient").modal();   
 	        }            
 	        });
 		}else {
+			
+			document.getElementById("refresh_gif").style.display = 'none';
 			document.getElementById("msgmodalnotifyclient").innerHTML="<b> L'adresse mail n'est pas valide </b>";
 	        document.getElementById("titlemodalnotifyclient").innerHTML="<span style='color: red;'>ERROR</span>";
 	        $("#Modalnotifyclient").modal();  
@@ -497,6 +499,8 @@ function Generateinvoice(){
 	formData.append('nomclient', $("#nomclient").val());
 	formData.append('taxe', $("#taxe").val());
 	formData.append('valtaxe', $("#valtaxe").val());
+	formData.append('modepaiement', $("#modepaiement").val());
+	formData.append('date_paiement_attendue', $("#date_attendue").val());
 	$.ajax({
         url: "generateinvoice",
         type: 'POST',
@@ -767,10 +771,25 @@ url : 'refresh_transactions',
 async: true,
 processData: false,
 contentType: false,
-success : function() {
-	$("#refresh").hide();		
+success : function(response) {
+	$("#refresh").hide();
+	if (response > 0) {
+	            document.getElementById("msgModalnotify").innerHTML="<b>"+response+" Nouvelles transactions ont été importées avec succés</b>";
+		        document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-file-upload'></i> Confirmation</span>";
+                $("#container_transaction").load("liste_transactions_bank");
+                $("#Modalnotify").modal();
+                
 
-},
+
+	}
+	if (response == 0) {
+	            document.getElementById("msgModalnotify").innerHTML="<b> Pas de nouvelles transactions à importer</b>";
+		        document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-file-upload'></i> Confirmation</span>"; 
+                $("#Modalnotify").modal();	
+ 
+	}			
+		
+	},
 error : function() {
 $("#refresh").hide();
 console.log("****************ko");
@@ -778,3 +797,73 @@ console.log("****************ko");
 
 });
 }
+
+function addtva(value) {
+
+	  
+		$("#table_transactions tr").click(function() {//Add a click event to the row of the table
+
+        var tr = $(this);//Find tr element
+	    var td = tr.find("td");//Find td element
+        
+       var formData = new FormData();
+       formData.append('typeoperation', 'add');
+       formData.append('amountttc', td[0].innerText);
+       formData.append('settled_at', td[6].innerText);
+		$.ajax({
+	        url: "GestionTVA",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        data: formData,
+	        success: function () {
+		      document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été bien appliquée </b>";
+              document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i>Confirmation</span>";
+              $("#Modalnotify").modal();
+             },
+            error : function(){
+	          document.getElementById("msgModalnotify").innerHTML="<b> Erreur application TVA</b>";
+              document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error</span>";
+              $("#Modalnotify").modal();
+             }
+            });
+
+});
+}	
+	
+function reducetva(value) {
+	  
+		$("#table_transactions tr").click(function() {//Add a click event to the row of the table
+
+        var tr = $(this);//Find tr element
+	    var td = tr.find("td");//Find td element
+        
+       var formData = new FormData();
+       formData.append('typeoperation', 'reduce');
+       formData.append('amountttc', td[0].innerText);
+       formData.append('settled_at', td[6].innerText);
+		$.ajax({
+	        url: "GestionTVA",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        data: formData,
+	        success: function () {
+		      document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été enlevée </b>";
+              document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i> Confirmation</span>";
+              $("#Modalnotify").modal();
+             },
+            error : function(){
+	          document.getElementById("msgModalnotify").innerHTML="<b> Erreur suppression TVA </b>";
+              document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error</span>";
+              $("#Modalnotify").modal();
+             }
+        
+            });
+
+});
+}	
+
+

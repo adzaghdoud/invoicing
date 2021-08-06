@@ -8,4 +8,6 @@ public interface TransactionsService {
 	void addtransaction(Transaction t);
 	List<Transaction> getlist();
 	boolean checkexistancetransaction(String transactionID);
+	long countnbtransaction();
+	void updatetvatransaction(String setted_at,double amountttc);
 }

@@ -2,8 +2,12 @@ package com.invoicing.tools;
 
 
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +16,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.io.ByteSource;
 import com.invoicing.model.Client;
 import com.invoicing.model.Company;
 import com.invoicing.model.Prestations;
+import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -122,11 +129,27 @@ public class Generatepdf extends HttpServlet{
 		    	 reportSource3 = new JRBeanCollectionDataSource(listprestation);
 		    	 reportSource4 = new JRBeanCollectionDataSource(listcompany);
 		    	 reportSource5 = new JRBeanCollectionDataSource(listprestation);
+		    	 java.io.InputStream logo;
+		    	 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
+		    	 String condition_paiement=this.prestation.getTotalttc()+" € a payer par "+this.prestation.getModepaiement()+" le "+formatter.format(this.prestation.getDatepaiementattendue());
+				try {
+					logo = ByteSource.wrap(company.getLogo()).openStream();
+					BufferedImage logoimage = ImageIO.read(logo);
+					reportParameters.put("logo", logoimage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                        
 			     reportParameters.put("DS1", reportSource1);
 			     reportParameters.put("DS2", reportSource2);
 			     reportParameters.put("DS3", reportSource3);
 			     reportParameters.put("DS4", reportSource4);
 			     reportParameters.put("DSinvoiceheader", reportSource5);
+			     reportParameters.put("condition_paiement", condition_paiement);
+			     reportParameters.put("total_HT", prestation.getMontantHT());
+			     reportParameters.put("TVA", prestation.getValtaxe());
+			     reportParameters.put("Total_TTC", prestation.getMontantTTC());
 			     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
 			     JasperExportManager.exportReportToPdfFile(jasperPrint,System.getProperty("pdf.stor")+FileSystems.getDefault().getSeparator()+this.filename+".pdf");	     
 		   } catch (JRException ex) {

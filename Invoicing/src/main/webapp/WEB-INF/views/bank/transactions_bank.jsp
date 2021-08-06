@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://kit.fontawesome.com/b16c365929.js"></script>
 <style>
 .loader{
@@ -145,10 +144,12 @@ card-counter{
     font-size: 18px;
     
   }
+  .btn-default.btn-on.active{background-color: #5BB75B;color: white;}
+.btn-default.btn-off.active{background-color: #DA4F49;color: white;}
   
 </style>
 <body>
-<div class="container">
+<div class="container" id="container_transaction">
     
     <div class="row">
     <h3>Transactions Bancaires</h3>
@@ -177,18 +178,19 @@ card-counter{
              
                 
             </div>
-            <table  class="table table-striped">
+            <table  class="table table-striped" id="table_transactions">
                 <thead>
                     <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="Amount" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Side" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Status" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Operation type" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Currency" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Label" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Settled at" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Updated_at" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Reference" disabled></th>
+                        <th  width="auto"><input type="text" class="form-control" placeholder="Amount" disabled></th>
+                        <th  width="auto"><input type="text" class="form-control" placeholder="Side" disabled></th>
+                        <th  width="auto"><input type="text" class="form-control" placeholder="Status" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Type" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Currency" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Label" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Settled at" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Updated_at" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Reference" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="TVA" disabled></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,15 +198,39 @@ card-counter{
             
             <tr>
             <c:if test = "${liste.side == 'credit'}"> 
-            <td>${liste.amount}</td>
-            <td><span class="label label-success">${liste.side}</span></td>
-            <td>${liste.status}</td>
-            <td>${liste.operation_type}</td>
-            <td>${liste.currency}</td>
-            <td>${liste.label}</td>
-            <td>${liste.settled_at}</td>
-            <td>${liste.updated_at}</td>
-            <td>${liste.reference}</td>
+            <td width="auto">${liste.amount}</td>
+            <td width="auto"><span class="label label-success">${liste.side}</span></td>
+            <td width="auto">${liste.status}</td>
+            <td width="auto">${liste.operation_type}</td>
+            <td width="auto">${liste.currency}</td>
+            <td width="auto">${liste.label}</td>
+            <td width="auto">${liste.settled_at}</td>
+            <td width="auto">${liste.updated_at}</td>
+            <td width="auto">${liste.reference}</td>
+            <td width="auto"> 
+              <c:if test = "${liste.amount_HT >0}"> 
+              <div class="btn-group" id="status" data-toggle="buttons">
+              <label class="btn btn-default btn-on btn-xs active" onclick="javascript:addtva()"> 
+              <input type="radio" >Oui</label>
+              <label class="btn btn-default btn-off btn-xs " onclick="javascript:reducetva()">
+              <input type="radio" >Non</label>
+            </div>
+            </c:if>
+            
+             <c:if test = "${liste.amount_HT == 0}"> 
+              <div class="btn-group" id="status" data-toggle="buttons">
+              <label class="btn btn-default btn-on btn-xs " onclick="javascript:addtva()"> 
+              <input type="radio" >Oui</label>
+              <label class="btn btn-default btn-off btn-xs active " onclick="javascript:reducetva()">
+              <input type="radio" >Non</label>
+            </div>
+            </c:if>
+            
+            
+            
+                    
+                   
+</td>
            </c:if>
            
              <c:if test = "${liste.side == 'debit'}"> 
@@ -217,6 +243,25 @@ card-counter{
             <td>${liste.settled_at}</td>
             <td>${liste.updated_at}</td>
             <td>${liste.reference}</td>
+             <td width="auto"> 
+              <c:if test = "${liste.amount_HT >0}"> 
+              <div class="btn-group" id="status" data-toggle="buttons">
+              <label class="btn btn-default btn-on btn-xs active" onclick="javascript:addtva()"> 
+              <input type="radio" >Oui</label>
+              <label class="btn btn-default btn-off btn-xs " onclick="javascript:reducetva()">
+              <input type="radio" >Non</label>
+            </div>
+            </c:if>
+            
+             <c:if test = "${liste.amount_HT == 0}"> 
+              <div class="btn-group" id="status" data-toggle="buttons">
+              <label class="btn btn-default btn-on btn-xs " onclick="addtva()"> 
+              <input type="radio" >Oui</label>
+              <label class="btn btn-default btn-off btn-xs active " onclick="javascript:reducetva()">
+              <input type="radio" >Non</label>
+            </div>
+            </c:if>              
+            </td>
            </c:if>
            
            
@@ -235,9 +280,27 @@ card-counter{
        
     </div>
     
- 
     
+    <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titlemodal"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <span id="msgModalnotify"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> 
     
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 	
     <script>
     /*
     Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !

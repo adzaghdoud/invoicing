@@ -38,8 +38,21 @@ public class Clientscontroler {
 		}
 		
 		if (!requestParams.get("email").isEmpty()) {
-			c= srvclient.getclientbyraisonsociale(requestParams.get("email"));
+			try {
+			c= srvclient.getclientbyemail(requestParams.get("email"));
+			}catch(NoResultException e) {
+				return null;
 			}
+			}
+		if (!requestParams.get("email").isEmpty() && !requestParams.get("nom").isEmpty()) {
+			try {
+			c= srvclient.getclientbyemailandraisonsociale(requestParams.get("nom"),requestParams.get("email"));
+			}catch(NoResultException e) {
+				return null;
+			}
+			}
+		
+		
 		context.close();
 		return c;
 	}

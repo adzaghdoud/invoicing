@@ -6,15 +6,16 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+<%@include file="/resources/css/profil.css" %>
+</style>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/messageResource.js"></script> 
 <body>
 
-<div class="card card-outline-secondary">
-                        <div class="card-header">
-                            <h5 class="mb-0">Recherche Client</h5>
-                        </div>
+<div class="card h-100">
+                        
                         <div class="card-body">
                                 <div class="form-group row">
                                     <label for="id" class="col-sm-2 col-form-label">Nom:</label>
@@ -29,7 +30,7 @@
                                   </div>
                                   </div>
                              
-                                  <button  class="btn btn-primary" onclick="Getclient()"><i class="fas fa-search"></i> Rechecher <span class="spinner-border spinner-border-sm"  id="spinnerbuttonsearchclient" style="display:none;"></span></button>
+                                  <button  class="btn btn-primary" onclick="Getclient()" id="btsearch"><i class="fas fa-search"></i> Rechecher <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="25" height="25" style="display: none" id="refresh_gif" ></button>
                                   
                                   <button type="button"  class="btn btn-success"  data-toggle="modal" data-target="#modalnvclient"><i class="fas fa-plus"></i> Nouveau client</button>
                          
@@ -144,36 +145,79 @@
   </div>
 </div>
 
-
-<div class="modal" tabindex="-1" role="dialog" id ="modalgetclient"  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 63%;" >
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id ="titlemodalgetclient"><span style="color:green">Information du client trouvé</span></h5>
-      </div>
-  <div class="modal-body">
-  <table class="table table-striped" id="tablegetclient">
-  <thead class="thead-dark">
-    <tr>
-        <th scope="col">Raison Sociale</th>
-        <th scope="col">Nom</th>
-        <th scope="col">Adresse</th>
-        <th scope="col">Code Postale</th>
-        <th scope="col">ville</th>
-        <th scope="col">Telephone</th>
-        <th scope="col">Email</th>
-        <th scope="col" >Siret</th>
-    </tr>
-  </thead>
-  <tbody id ="bodytablemodalgetclient">
-  </tbody>
-</table>      
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"  data-dismiss="modal">close</button>
-      </div>
-    </div>
-  </div>
+<div class="container" style="display: none" id="divcontainer">
+<div class="row gutters">
+<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+<div class="card h-100">
+	<div class="card-body">
+		<div class="row gutters">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<h6 class="mb-2 text-primary">Information du Client</h6>
+			</div>
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="fullName">Raison Sociale</label>
+					<input type="text" class="form-control" id="rs">
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="fullName">siret</label>
+					<input type="text" class="form-control" id="siret">
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="eMail">adresse</label>
+					<input type="email" class="form-control" id="adresse">
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="phone">Code postale</label>
+					<input type="text" class="form-control" id="cp">
+				</div>
+			</div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="phone">ville</label>
+					<input type="text" class="form-control" id="ville">
+				</div>
+			</div>
+			
+			
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="phone">Tel</label>
+					<input type="text" class="form-control" id="tel">
+				</div>
+			</div>
+			
+			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="phone">Email</label>
+					<input type="text" class="form-control" id="email" >
+				</div>
+			</div>
+			
+			
+		</div>
+		<hr/>
+	
+		<div class="row gutters">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="text-right">
+					<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
+					<button type="button" id="submit" name="submit" class="btn btn-primary">Update</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 
 <script>
@@ -181,6 +225,14 @@ $(document).ready(function () {
 	autocomplete();
 	});
 </script>
-
+<script>
+var input = document.getElementById("nomfromsearchclient");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("btsearch").click();
+  }
+});
+</script>
 </body>
 </html>

@@ -8,9 +8,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Logins;
+import com.invoicing.model.Transaction;
 import com.invoicing.service.ArticleService;
 import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
@@ -42,6 +45,7 @@ import com.invoicing.service.PrestationsService;
 import com.invoicing.service.TransactionsService;
 
 import java.util.Iterator;
+import java.util.List;
 @Controller
 public class Dispatcher {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -218,25 +222,33 @@ public class Dispatcher {
 		TransactionsService srvtransaction = (TransactionsService) context.getBean("TransactionsService");
 		ModelAndView mv = new ModelAndView("/bank/transactions_bank");
 		mv.addObject("List_transactions", srvtransaction.getlist());
-		float in=0;
-		float out=0;
+			
+		double in=0;
+		double out=0;
 		for (int i=0 ; i<srvtransaction.getlist().size() ; i++) {
 			if (srvtransaction.getlist().get(i).getSide().contentEquals("debit")) {
-				out =(float) (out +srvtransaction.getlist().get(i).getAmount());
+				out = out +srvtransaction.getlist().get(i).getAmount();
 			}
 			
 			if (srvtransaction.getlist().get(i).getSide().contentEquals("credit")) {
-				in =(float) (in +srvtransaction.getlist().get(i).getAmount());
+				in =in +srvtransaction.getlist().get(i).getAmount();
 			}
 			
 		}
-		mv.addObject("amount_out", out);
-		mv.addObject("amount_in", in);
+		DecimalFormat decimalFormat= new DecimalFormat("#.##");
+		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+		mv.addObject("amount_out", decimalFormat.format(out));
+		mv.addObject("amount_in", decimalFormat.format(in));
 		context.close();
 		return mv;
 	
 	}
 
-
+	@RequestMapping(value = "/tva_collectee", method = RequestMethod.GET)
+	public ModelAndView tva_collectee() {
+		ModelAndView mv = new ModelAndView("/bank/detail_tva");
+		return mv;
+	
+	}
 
 }

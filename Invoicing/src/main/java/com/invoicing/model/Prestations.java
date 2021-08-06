@@ -1,11 +1,14 @@
 package com.invoicing.model;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
@@ -30,6 +33,10 @@ public class Prestations {
 	private double valtaxe;
 	private String statut_paiement;
 	private String client;
+	@Column(name = "mode_paiement")
+	private String modepaiement;
+	@Column(name = "date_paiement_attendue")
+	private Date datepaiementattendue;
 	public int getId() {
 		return id;
 	}
@@ -107,6 +114,18 @@ public class Prestations {
 	}
 	public void setNomfacture(String nomfacture) {
 		this.nomfacture = nomfacture;
+	}
+	public String getModepaiement() {
+		return modepaiement;
+	}
+	public void setModepaiement(String modepaiement) {
+		this.modepaiement = modepaiement;
+	}
+	public Date getDatepaiementattendue() {
+		return datepaiementattendue;
+	}
+	public void setDatepaiementattendue(Date datepaiementattendue) {
+		this.datepaiementattendue = datepaiementattendue;
 	}
 	
 	

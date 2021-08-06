@@ -36,4 +36,14 @@ public class ClientServiceImpl implements ClientService {
 		return dao.numberclient();
 	}
 
+	public Client getclientbyemail(String mail) {
+		// TODO Auto-generated method stub
+		return dao.getclientbyemail(mail);
+	}
+
+	public Client getclientbyemailandraisonsociale(String rs, String mail) {
+		// TODO Auto-generated method stub
+		return dao.getclientbyemailandraisonsociale(rs, mail);
+	}
+
 }

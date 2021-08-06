@@ -9,4 +9,6 @@ public interface ClientService {
 	void addclient(Client c);
 	List<Client> getallclients();
 	Long numberclient();
+	Client getclientbyemail(String mail);
+	Client getclientbyemailandraisonsociale(String rs , String mail);
 }

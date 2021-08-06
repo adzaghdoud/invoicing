@@ -102,8 +102,9 @@
                 <a href="#"><i class="fas fa-university"></i>Transactions bancaires<span class="arrow"></span></a>
                 <ul class="sub-menu collapse" id="bank">
                 <li><a href="liste_transactions_bank" class="link">Liste transactions  ${company_bank_name}</a></li>
+                <li><a href="tva_collectee" class="link">Détail TVA</a></li>
                 </ul>
-                </li>
+                </li>            
                 <li>
                 <a href="logout">
                 <i class="fas fa-sign-out-alt"></i> Exit </a>        

@@ -31,4 +31,14 @@ public class TransactionsServiceImpl implements TransactionsService {
 		return dao.checkexistancetransaction(transactionID);
 	}
 
+	public long countnbtransaction() {
+		// TODO Auto-generated method stub
+		return dao.countnbtransaction();
+	}
+
+	public void updatetvatransaction(String setted_at, double amountttc) {
+		// TODO Auto-generated method stub
+		dao.updatetvatransaction(setted_at, amountttc);
+	}
+
 }

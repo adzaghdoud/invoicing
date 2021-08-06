@@ -1,6 +1,7 @@
 package com.invoicing.controler;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,9 +38,8 @@ public class PrestationsControler {
 	@PostMapping(value = "/generateinvoice")
 	public  @ResponseBody ResponseEntity<String> generateinvoice(@RequestParam(required = true) int  quantite,@RequestParam(required = true) double  pvht,
 			@RequestParam(required = true) double  pvttc , @RequestParam(required = true) double  totalttc , @RequestParam(required = true) String namearticle, @RequestParam(required = true) String nomclient,HttpServletResponse response,
-			@RequestParam(required = true) String taxe,@RequestParam(required = true) double valtaxe){
+			@RequestParam(required = true) String taxe,@RequestParam(required = true) double valtaxe,@RequestParam(required = true) String modepaiement,@RequestParam(required = true) String date_paiement_attendue){
 		  //save prestation in BDD
-		 
 		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
 		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
@@ -73,6 +73,20 @@ public class PrestationsControler {
 		  p.setTaxe(taxe);
 		  p.setStatut_paiement("en attente");
 		  p.setClient(nomclient);
+		  p.setModepaiement(modepaiement);
+		  try {
+
+			 
+			    Date paiement = null;
+			    paiement = new SimpleDateFormat("yyyy-MM-dd").parse(date_paiement_attendue);
+	            p.setDatepaiementattendue(paiement);
+			 
+			 
+		
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		  try {
 		  srvprestation.addprestation(p);
 		  }

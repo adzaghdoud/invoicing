@@ -3,13 +3,17 @@ package com.invoicing.dao;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.invoicing.model.Prestations;
 import com.invoicing.model.Transaction;
 
 @Repository("TransactionDaoImpl")
@@ -47,6 +51,36 @@ import com.invoicing.model.Transaction;
 			return false;
 			
 	}
+
+		public long countnbtransaction() {
+			// TODO Auto-generated method stub
+		    CriteriaBuilder builder = getSession().getCriteriaBuilder();
+	        
+	        CriteriaQuery<Long> Query = builder.createQuery(Long.class);
+	        
+	        Root<Transaction> Root = Query.from(Transaction.class);
+	        Expression<Long> countExpression = builder.count(Root);
+	        Query.select(countExpression);
+	        TypedQuery<Long> typedQuery = getSession().createQuery(Query);
+	        Long count = typedQuery.getSingleResult();
+	        return count;
+		}
+
+		public void updatetvatransaction(String setted_at, double amount_ht) {
+			// TODO Auto-generated method stub
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+	        
+	        CriteriaUpdate<Transaction> criteriaUpdate  = builder.createCriteriaUpdate(Transaction.class);
+	        criteriaUpdate.from(Transaction.class);
+	        Root<Transaction> root = criteriaUpdate.from(Transaction.class);
+	        criteriaUpdate.set("amount_HT",amount_ht);
+	        criteriaUpdate.where(builder.equal(root.get("settled_at"),setted_at));
+	        getSession().createQuery(criteriaUpdate).executeUpdate();
+		}
+		
+		
+		
+		
 		
 }
 
