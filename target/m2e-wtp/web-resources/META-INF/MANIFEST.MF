@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: adem
+Build-Jdk: 16.0.2
+Implementation-Title: Invoicing Maven Webapp
+Implementation-Version: 2.6
+Implementation-Vendor-Id: Invoicing
+Implementation-URL: http://maven.apache.org
+Created-By: Maven Integration for Eclipse
+
