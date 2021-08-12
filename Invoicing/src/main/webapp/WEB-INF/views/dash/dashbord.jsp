@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +23,7 @@
   }
 
   .card-counter:hover{
-    box-shadow: 4px 4px 20px #DADADA;
+    box-shadow: 4px 4px 20px #c1c1a7;
     transition: .3s linear all;
   }
 
@@ -130,6 +131,14 @@
         <span class="count-name">Clients</span>
       </div>
     </div>
+    
+     <div class="col-md-4">
+      <div class="card-counter hover">
+        <i class="fas fa-money-bill-wave"></i>
+        <span class="count-numbers">${tresorie} €</span>
+        <span class="count-name">Trésorie ${bankname}</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -141,7 +150,7 @@
         <h5 class="card-title"><span style="color:green;font-weight:bold"><i class="fas fa-receipt"></i> Factures récentes</span></h5>
         <table class="table table-borderless table-striped">
   <thead>
-    <tr>
+    <tr >
       <th scope="col">Num Facture</th>
       <th scope="col">date</th>
       <th scope="col">client</th>
@@ -152,7 +161,9 @@
    <c:forEach var="prestation" items="${liste_prestations }" begin="0" end="4">
      <tr>
             <td>${prestation.numfacture}</td>
-            <td>${prestation.date}</td>
+            <c:set var = "date" value = "${prestation.date}"/>
+            <c:set var = "datereformatted" value = "${fn:substring(date, 0, 19)}" />
+            <td><c:out value="${datereformatted}"></c:out></td>
             <td>${prestation.client}</td>
             <td>${prestation.totalttc}</td>
      </tr>          
@@ -179,8 +190,5 @@
 <script>
 drawcharts();
 </script>
-
-
-
  </body>
 </html>

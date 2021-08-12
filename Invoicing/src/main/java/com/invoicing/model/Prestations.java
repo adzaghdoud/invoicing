@@ -7,9 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name="prestations")
@@ -36,6 +33,7 @@ public class Prestations {
 	@Column(name = "mode_paiement")
 	private String modepaiement;
 	@Column(name = "date_paiement_attendue")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date datepaiementattendue;
 	public int getId() {
 		return id;
@@ -126,9 +124,5 @@ public class Prestations {
 	}
 	public void setDatepaiementattendue(Date datepaiementattendue) {
 		this.datepaiementattendue = datepaiementattendue;
-	}
-	
-	
-	
-	
+	}	
 }

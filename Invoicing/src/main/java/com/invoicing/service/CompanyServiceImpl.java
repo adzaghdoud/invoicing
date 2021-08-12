@@ -1,5 +1,7 @@
 package com.invoicing.service;
 
+import java.sql.Timestamp;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,11 @@ public class CompanyServiceImpl implements CompanyService {
 		// TODO Auto-generated method stub
 		dao.updatelogocompany(logo, raison);
 		
+	}
+
+	public void updatetimestamprefresh(Timestamp t, String rs) {
+		// TODO Auto-generated method stub
+		dao.updatetimestamprefresh(t, rs);
 	}
 
 }

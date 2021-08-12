@@ -1,5 +1,6 @@
 package com.invoicing.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -39,6 +40,11 @@ public class TransactionsServiceImpl implements TransactionsService {
 	public void updatetvatransaction(String setted_at, double amountttc) {
 		// TODO Auto-generated method stub
 		dao.updatetvatransaction(setted_at, amountttc);
+	}
+
+	public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin)  {
+		// TODO Auto-generated method stub
+		return dao.searchtransacbetweentwodates(datedeb, datefin);
 	}
 
 }

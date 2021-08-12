@@ -8,11 +8,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
@@ -44,6 +46,7 @@ import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
 import com.invoicing.service.TransactionsService;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 @Controller
@@ -61,6 +64,7 @@ public class Dispatcher {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");	
 	  if (!srvlogins.checkloginpassword(request.getParameter("login"),request.getParameter("password"))) {
 		ModelAndView mv = new ModelAndView("/accueil/login");
 		mv.addObject("erromsg", "Login ou password invalide");
@@ -148,16 +152,37 @@ public class Dispatcher {
 	
 	
 	@RequestMapping(value = "/charts", method = RequestMethod.GET)
-	public ModelAndView charts() {
+	public ModelAndView charts(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		PrestationsService srvprestations = (PrestationsService) context.getBean("PrestationsService");
 		ClientService srvclient = (ClientService) context.getBean("ClientService");
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		double in=0;
+		double out=0;
+		for (int i=0 ; i<srvt.getlist().size() ; i++) {
+			if (srvt.getlist().get(i).getSide().contentEquals("debit")) {
+				out = out +srvt.getlist().get(i).getAmount();
+			}
+			
+			if (srvt.getlist().get(i).getSide().contentEquals("credit")) {
+				in =in +srvt.getlist().get(i).getAmount();
+			}
+			
+		}
+		BigDecimal bd = BigDecimal.valueOf(in);
+		BigDecimal bd2 = BigDecimal.valueOf(out);
+		BigDecimal result=bd.subtract(bd2);
+		result = result.setScale(2, RoundingMode.DOWN);
 		ModelAndView mv = new ModelAndView("/dash/dashbord");
 		mv.addObject("ca", srvprestations.chiffre_affaire());
 		mv.addObject("nb_paiement_to_validate", srvprestations.number_paiement_to_validate());
 		mv.addObject("nb_paiement_validated", srvprestations.number_paiement_validate());
 		mv.addObject("nb_clients", srvclient.numberclient());
 		mv.addObject("liste_prestations", srvprestations.getlistprestations());
+		mv.addObject("tresorie", result.doubleValue());
+		mv.addObject("bankname", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toUpperCase());
 		context.close();
 		return mv;
 	
@@ -217,9 +242,11 @@ public class Dispatcher {
 
 
 	@RequestMapping(value = "/liste_transactions_bank", method = RequestMethod.GET)
-	public ModelAndView getlisttransactions() {
+	public ModelAndView getlisttransactions(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		TransactionsService srvtransaction = (TransactionsService) context.getBean("TransactionsService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		ModelAndView mv = new ModelAndView("/bank/transactions_bank");
 		mv.addObject("List_transactions", srvtransaction.getlist());
 			
@@ -237,8 +264,12 @@ public class Dispatcher {
 		}
 		DecimalFormat decimalFormat= new DecimalFormat("#.##");
 		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+		
+		
 		mv.addObject("amount_out", decimalFormat.format(out));
 		mv.addObject("amount_in", decimalFormat.format(in));
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		mv.addObject("last_refresh_transaction", formatter.format(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getLast_refresh_transaction()));
 		context.close();
 		return mv;
 	

@@ -146,7 +146,7 @@
                                  </div>
                                  
                                  <div class="form-group row">
-                                 <label class="col-sm-2 col-form-label"><b>Article</b></label>
+                                 <label class="col-sm-2 col-form-label"><b>Mode de paiement</b></label>
                                  <div class="col-sm-4">
                                  <select   id ="modepaiement"  class="form-control">
                                  <option value=""></option>          
@@ -167,7 +167,7 @@
                                 <div class="form-group row">
                                  <button class="btn btn-success" onclick="javascirpt:Generateinvoice()"  id="button_generate"disabled><i class="fas fa-file-invoice-dollar"></i> Générer facture <span class="spinner-border spinner-border-sm"  id="spinnerbutton" style="display:none;"></span> </button> 
                                  <div class="col-sm-1">
-                                 <button class="btn btn-secondary">Effacer</button>
+                                 <button class="btn btn-secondary" onclick="javascript:document.getElementById('nomclient').value = '';document.getElementById('article').value = '';document.getElementById('quantite').value = '';document.getElementById('famille').value = '';document.getElementById('prix_HT').value = '';document.getElementById('taxe').value = '';document.getElementById('valtaxe').value = '';document.getElementById('prixttc').value = '';document.getElementById('totalprixttc').value = '';document.getElementById('modepaiement').value = '';document.getElementById('date_attendue').value = ''">Effacer</button>
                                  </div>
                                  </div>
                                  

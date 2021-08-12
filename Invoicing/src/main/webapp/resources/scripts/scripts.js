@@ -490,24 +490,15 @@ function showinfoarticle(quantite,namearticle){
 
 function Generateinvoice(){
 	$("#loader").show();
-	var formData = new FormData();
-	formData.append('quantite', $("#quantite").val());
-	formData.append('pvht', $("#prix_HT").val());
-	formData.append('pvttc', $("#prixttc").val());
-	formData.append('totalttc', $("#totalprixttc").val());
-	formData.append('namearticle', $("#article").val());
-	formData.append('nomclient', $("#nomclient").val());
-	formData.append('taxe', $("#taxe").val());
-	formData.append('valtaxe', $("#valtaxe").val());
-	formData.append('modepaiement', $("#modepaiement").val());
-	formData.append('date_paiement_attendue', $("#date_attendue").val());
+	var ItemJSON = {"quantite": $("#quantite").val(),"montantHT":$("#prix_HT").val(),"montantTTC": $("#prixttc").val(),"totalttc":$("#totalprixttc").val(),"article":$("#article").val(),"client":$("#nomclient").val(),"taxe":$("#taxe").val(),"valtaxe":$("#valtaxe").val(),"modepaiement":$("#modepaiement").val(),"datepaiementattendue":$("#date_attendue").val()};
+    var myJSON = JSON.stringify(ItemJSON);
 	$.ajax({
         url: "generateinvoice",
         type: 'POST',
         async: false,
         processData: false,
-        contentType: false,
-        data: formData,
+        contentType: "application/json; charset=utf-8",
+        data: myJSON,
         success: function (response) {
         	$("#loader").hide();
         	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
@@ -554,6 +545,23 @@ function sendmail(mailto,subject,contain){
         }
 	});	
 }
+
+
+function gettemplatecontain(value,clientname) {
+	if(value.localeCompare('Relance_Paiement') == 0) {
+     $("#subject").val("Relance Paiement "+document.getElementById('file').files[0].name);
+    document.getElementById("containmail").innerHTML="Bonjour "+clientname+",\nMerci de penser de régler la facture ci-jointe\nCordialement";
+    
+	}
+	if(value.localeCompare('Envoi_Facture') == 0) {
+    $("#subject").val("Nouvelle Facture "+document.getElementById('file').files[0].name);   
+    document.getElementById("containmail").innerHTML="Bonjour "+clientname+",\nci-joint  la facture à régler\nCordialement";
+    
+	}
+}
+
+
+
 
 
 // ************************************************************ JS ARTICLES
@@ -818,9 +826,11 @@ function addtva(value) {
 	        contentType: false,
 	        data: formData,
 	        success: function () {
+		      $("#container_transaction").load("liste_transactions_bank");
 		      document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été bien appliquée </b>";
               document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i>Confirmation</span>";
               $("#Modalnotify").modal();
+              
              },
             error : function(){
 	          document.getElementById("msgModalnotify").innerHTML="<b> Erreur application TVA</b>";
@@ -851,9 +861,11 @@ function reducetva(value) {
 	        contentType: false,
 	        data: formData,
 	        success: function () {
-		      document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été enlevée </b>";
+		      $("#container_transaction").load("liste_transactions_bank");
+              document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été enlevée </b>";
               document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i> Confirmation</span>";
               $("#Modalnotify").modal();
+            
              },
             error : function(){
 	          document.getElementById("msgModalnotify").innerHTML="<b> Erreur suppression TVA </b>";
@@ -866,4 +878,43 @@ function reducetva(value) {
 });
 }	
 
+function totaltva () {
+         $.ajax({
+	        url: "totaltva/"+$('#datedeb').val()+"/"+$('#datefin').val(),
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (response) {
+            $("#totaltva").val(response)
+	
+            },
+           error : function () {
+	
+}
+});
 
+            $.ajax({
+	        url: "Getransactionsbetween/"+$('#datedeb').val()+"/"+$('#datefin').val(),
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+        var trHTML = '';
+        $('#tbobytransaction').empty();	
+        $.each(data, function (i, item) {
+            trHTML += '<tr><td>' + item.label + '</td><td>'+item.reference +'</td><td>' + item.settled_at + '</td><td>' + item.side + '</td><td>'+item.operation_type+'</td><td>'+ item.amount  +'</td><td>'+item.amount_HT +'</td></tr>' ;
+        });
+	       $('#tbobytransaction').append(trHTML);
+            },
+           error : function () {
+	
+}
+});
+      
+
+
+
+
+}

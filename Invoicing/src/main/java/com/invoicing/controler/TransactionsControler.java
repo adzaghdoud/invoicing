@@ -1,4 +1,10 @@
 package com.invoicing.controler;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +13,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.model.Transaction;
 import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
@@ -42,6 +50,9 @@ public class TransactionsControler {
 	     }
 		 p.waitFor();
 		 nbafter= srvt.countnbtransaction();
+		 Date date = new Date();
+         Timestamp ts=new Timestamp(date.getTime());
+         srvcompany.updatetimestamprefresh(ts, srvlogins.getinfo(cookielogin).getCompany());
 		 context.close();
 		 
 	} catch (Exception e) {
@@ -58,11 +69,10 @@ public class TransactionsControler {
 	public @ResponseBody void gestiontva (@RequestParam(required = true) String  typeoperation,@RequestParam(required = true) String  amountttc,@RequestParam(required = true) String  settled_at){
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
-		System.out.println("*************************typeoperation"+typeoperation);
 		if (typeoperation.contentEquals("add")) {
-		System.out.println("*******************"+Double.parseDouble(amountttc));
-		System.out.println("*******************"+Double.parseDouble(amountttc)/1.2);
-	    //srvt.updatetvatransaction(settled_at, Double.parseDouble(amountttc)/1.2);
+		BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(amountttc)/1.2);
+		bd = bd.setScale(2, RoundingMode.DOWN);
+	    srvt.updatetvatransaction(settled_at, bd.doubleValue());
 		}
 		if (typeoperation.contentEquals("reduce")) {
 			srvt.updatetvatransaction(settled_at, 0);
@@ -71,8 +81,38 @@ public class TransactionsControler {
 	context.close();
 	}
 
+	@RequestMapping(value = "/totaltva/{date1}/{date2}", method = RequestMethod.GET)
+	public @ResponseBody double tva_collectee(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		double totaltva=0;
+		for (int i=0 ; i<srvt.searchtransacbetweentwodates(datedeb, datefin).size() ; i++) {
+			BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount());
+			BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount_HT());
+			BigDecimal result=bd.subtract(bd2);
+			result = result.setScale(2, RoundingMode.DOWN);
+			totaltva=totaltva+(result.doubleValue());
+		}
+		
 
+		
+		context.close();
+		return totaltva;
+	}
 
+	
+	
+	@RequestMapping(value = "/Getransactionsbetween/{date1}/{date2}", method = RequestMethod.GET)
+	public @ResponseBody List<Transaction> gettransactions(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+	    List<Transaction> listc=srvt.searchtransacbetweentwodates(datedeb, datefin);		
+		context.close();
+		return listc;
+	}
+	
+	
+	
 
 
 }

@@ -155,12 +155,7 @@
                                  </div>
                                  </div>
                                  
-                                 <div class="form-group row">
-                                 <label class="col-sm-4 col-form-label"><b>Sujet</b></label>
-                                 <div class="col-sm-8">
-                                 <input type="text" id ="subject"  class="form-control">
-                                 </div>
-                                 </div>
+          
                                  <div class="form-group row">
                                  <label class="col-sm-4 col-form-label"><b>Piéce jointe</b></label>
                                  <div class="col-sm-8">
@@ -168,7 +163,23 @@
                                  </div>
                                  </div>
                                  
+                                 <div class="form-group row">
+                                 <label class="col-sm-4 col-form-label"><b>Template</b></label>
+                                 <div class="col-sm-8">
+                                 <select   id ="templatecontain"  class="form-control" onchange="gettemplatecontain(this.value,$('#client_name').val())">
+                                 <option value=""></option>
+                                 <option value="Relance_Paiement">Relance Paiement</option>
+                                 <option value="Envoi_Facture">Envoi Facture</option>
+                                 </select>
+                                 </div>
+                                 </div>
                                  
+                                 <div class="form-group row">
+                                 <label class="col-sm-4 col-form-label"><b>Sujet</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id ="subject"  class="form-control">
+                                 </div>
+                                 </div>
                                  <div class="form-group">
                                  <label for="message-text" class="col-form-label"><b>Message</b></label>
                                  <textarea class="form-control" id="containmail" rows="5"></textarea>
@@ -232,6 +243,13 @@ $(document).ready(function () {
 	getclientsnames();
 	});
 </script>
-
+<script>
+$('#modalmessagerie').on('hidden.bs.modal', function () {
+    $(this).find('form').trigger('reset');
+    $("#containmail").val("");
+    $("#alertok").hide();
+    $("#alertko").hide();
+})
+</script>
 </body>
 </html>

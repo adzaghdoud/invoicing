@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,10 +37,7 @@ import com.invoicing.tools.Sendmail;
 @Controller
 public class PrestationsControler {
 	@PostMapping(value = "/generateinvoice")
-	public  @ResponseBody ResponseEntity<String> generateinvoice(@RequestParam(required = true) int  quantite,@RequestParam(required = true) double  pvht,
-			@RequestParam(required = true) double  pvttc , @RequestParam(required = true) double  totalttc , @RequestParam(required = true) String namearticle, @RequestParam(required = true) String nomclient,HttpServletResponse response,
-			@RequestParam(required = true) String taxe,@RequestParam(required = true) double valtaxe,@RequestParam(required = true) String modepaiement,@RequestParam(required = true) String date_paiement_attendue){
-		  //save prestation in BDD
+	public  @ResponseBody ResponseEntity<String> generateinvoice(@RequestBody Prestations p ,HttpServletResponse response ){	
 		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
 		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
@@ -50,43 +48,20 @@ public class PrestationsControler {
           SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
           String nomfacture;
           String numfacture;
-          Prestations p = new Prestations();
 		  if (srvprestation.getlast_id_prestation() <10) {
 	      numfacture=formatter.format(date)+"-"+"0"+srvprestation.getlast_id_prestation();
-		  nomfacture="Facture"+formatter.format(date)+"-"+"0"+srvprestation.getlast_id_prestation()+"-"+nomclient;
+		  nomfacture="Facture"+formatter.format(date)+"-"+"0"+srvprestation.getlast_id_prestation()+"-"+p.getClient();
 		  p.setNomfacture(nomfacture);
 		  p.setNumfacture(numfacture);
 	      }
 		  else {
 		  numfacture=formatter.format(date)+"-"+srvprestation.getlast_id_prestation();
-	      nomfacture= "Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+nomclient;
+	      nomfacture= "Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient();
 		  p.setNumfacture(numfacture);
 		  p.setNomfacture(nomfacture);
 		  }
 		  p.setDate(ts);
-		  p.setQuantite(quantite);
-		  p.setMontantHT(pvht);
-		  p.setMontantTTC(pvttc);
-		  p.setArticle(namearticle); 
-		  p.setTotalttc(totalttc);
-		  p.setValtaxe(valtaxe);
-		  p.setTaxe(taxe);
 		  p.setStatut_paiement("en attente");
-		  p.setClient(nomclient);
-		  p.setModepaiement(modepaiement);
-		  try {
-
-			 
-			    Date paiement = null;
-			    paiement = new SimpleDateFormat("yyyy-MM-dd").parse(date_paiement_attendue);
-	            p.setDatepaiementattendue(paiement);
-			 
-			 
-		
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		  try {
 		  srvprestation.addprestation(p);
 		  }
@@ -100,11 +75,11 @@ public class PrestationsControler {
 		  pdf.setCompany(srvcompany.getinfo());
 		  pdf.setFilename(nomfacture);
 		  pdf.setFiletype("invoice");
-		  pdf.setClient(srvclient.getclientbyraisonsociale(nomclient));
+		  pdf.setClient(srvclient.getclientbyraisonsociale(p.getClient()));
 		  pdf.setPrestation(srvprestation.getperstationbynomfacture(nomfacture));
 		  if (! pdf.generate(response)) {
 		      context.close();
-			  return ResponseEntity.status(506).body("Erreur génération facture : Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+nomclient); 
+			  return ResponseEntity.status(506).body("Erreur génération facture : Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient()); 
 			  
 		  }
 		  context.close();

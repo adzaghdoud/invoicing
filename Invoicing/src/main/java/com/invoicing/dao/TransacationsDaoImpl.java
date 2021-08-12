@@ -1,5 +1,8 @@
 package com.invoicing.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -8,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
@@ -76,6 +80,15 @@ import com.invoicing.model.Transaction;
 	        criteriaUpdate.set("amount_HT",amount_ht);
 	        criteriaUpdate.where(builder.equal(root.get("settled_at"),setted_at));
 	        getSession().createQuery(criteriaUpdate).executeUpdate();
+		}
+
+		public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin)  {
+			// TODO Auto-generated method stub
+			javax.persistence.Query query = getSession().createNamedQuery("searchtransactionbetweentwodates", Transaction.class);
+			query.setParameter(1, datedeb);
+			query.setParameter(2, datefin);
+			List<Transaction> list_transactions = query.getResultList();           
+		      return list_transactions;
 		}
 		
 		

@@ -1,5 +1,7 @@
 package com.invoicing.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,6 +26,7 @@ public class Company {
 	private String rcs;
 	private String bic;
 	private byte[] logo;
+	private Timestamp last_refresh_transaction;
 	public String getBankname() {
 		return bankname;
 	}
@@ -101,6 +104,12 @@ public class Company {
 	}
 	public void setLogo(byte[] logo) {
 		this.logo = logo;
+	}
+	public Timestamp getLast_refresh_transaction() {
+		return last_refresh_transaction;
+	}
+	public void setLast_refresh_transaction(Timestamp last_refresh_transaction) {
+		this.last_refresh_transaction = last_refresh_transaction;
 	}
 	
     

@@ -1,5 +1,6 @@
 package com.invoicing.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.invoicing.model.Transaction;
@@ -10,4 +11,5 @@ public interface TransactionsService {
 	boolean checkexistancetransaction(String transactionID);
 	long countnbtransaction();
 	void updatetvatransaction(String setted_at,double amountttc);
+	List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin) ;
 }

@@ -1,5 +1,7 @@
 package com.invoicing.dao;
 
+import java.sql.Timestamp;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
@@ -9,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.invoicing.model.Company;
+import com.invoicing.model.Prestations;
 
 @Repository("CompanyDao")
 public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
@@ -61,6 +64,17 @@ public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
         Root<Company> root = criteriaUpdate.from(Company.class);
         criteriaUpdate.where(builder.equal(root.get("rs"), raison));  
         criteriaUpdate.set("logo",logo);
+        getSession().createQuery(criteriaUpdate).executeUpdate();
+	}
+
+	public void updatetimestamprefresh(Timestamp t , String rs) {
+		// TODO Auto-generated method stub
+        CriteriaBuilder builder = getSession().getCriteriaBuilder();    
+        CriteriaUpdate<Company> criteriaUpdate  = builder.createCriteriaUpdate(Company.class);
+        criteriaUpdate.from(Company.class);
+        Root<Company> root = criteriaUpdate.from(Company.class);
+        criteriaUpdate.set("last_refresh_transaction",t);
+        criteriaUpdate.where(builder.equal(root.get("rs"),rs));
         getSession().createQuery(criteriaUpdate).executeUpdate();
 	}
 

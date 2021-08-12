@@ -170,10 +170,10 @@ card-counter{
     <div class="row">
         <div class="panel panel-primary filterable">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fas fa-chart-line"></i> Transactions Bancaires   <button class="btn btn-primary" onclick="refresh_transactions()"><img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh" > Refresh</button>
+                <h3 class="panel-title"><i class="fas fa-chart-line"></i> Transactions Bancaires    <button class="btn btn-primary" onclick="refresh_transactions()"><img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh" > Refresh</button>
                 </h3>
                 <div class="pull-right">
-                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                    <i><span style="color:black"> <i class="fas fa-sync"></i> Last refresh : ${last_refresh_transaction}</span></i>  <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
                 </div>
              
                 
@@ -250,6 +250,8 @@ card-counter{
               <input type="radio" >Oui</label>
               <label class="btn btn-default btn-off btn-xs " onclick="javascript:reducetva()">
               <input type="radio" >Non</label>
+              <br/>
+              <small><i><b>TVA ${liste.amount_HT} €</b></i></small>
             </div>
             </c:if>
             

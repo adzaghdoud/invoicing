@@ -77,7 +77,6 @@ CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Client> criteria = builder.createQuery(Client.class);
 		Root<Client> root = criteria.from(Client.class);
-		criteria.select(root).where(builder.equal(root.get("mail"), mail) ,builder.equal(root.get("rs"), rs) );	
 		Query<Client> q=getSession().createQuery(criteria);
         return q.getSingleResult();
 	}
