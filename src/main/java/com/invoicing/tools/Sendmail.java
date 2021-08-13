@@ -148,7 +148,7 @@ public class Sendmail {
 					return false;
 				}
 	            
-	    		// Etape 1 : Création de la session
+	  
 	    		Properties props = new Properties();
 	    		props.put("mail.smtp.auth", "true");
 	    		props.put("mail.smtp.starttls.enable","true");
@@ -163,7 +163,7 @@ public class Sendmail {
 	    		});
 	    		try {
 	    		
-	    	   // Etape 2 : Création de l'objet Message
+
 	    	    
 	    		if (this.file != null) {		
 	    	   multipartToFile(this.file, this.filename);

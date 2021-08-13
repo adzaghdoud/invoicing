@@ -1,8 +1,6 @@
 package com.invoicing.dao;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -11,13 +9,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
+
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.invoicing.model.Prestations;
+
 import com.invoicing.model.Transaction;
 
 @Repository("TransactionDaoImpl")
@@ -87,6 +85,7 @@ import com.invoicing.model.Transaction;
 			javax.persistence.Query query = getSession().createNamedQuery("searchtransactionbetweentwodates", Transaction.class);
 			query.setParameter(1, datedeb);
 			query.setParameter(2, datefin);
+			@SuppressWarnings("unchecked")
 			List<Transaction> list_transactions = query.getResultList();           
 		      return list_transactions;
 		}

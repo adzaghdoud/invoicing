@@ -83,7 +83,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         CriteriaUpdate<Prestations> criteriaUpdate  = builder.createCriteriaUpdate(Prestations.class);
         criteriaUpdate.from(Prestations.class);
         Root<Prestations> root = criteriaUpdate.from(Prestations.class);
-        criteriaUpdate.set("statut_paiement","validé");
+        criteriaUpdate.set("statut_paiement","validÃ©");
         criteriaUpdate.where(builder.equal(root.get("numfacture"),numfacture));
         getSession().createQuery(criteriaUpdate).executeUpdate();
 
@@ -132,7 +132,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         Root<Prestations> Root = Query.from(Prestations.class);
         Expression<Long> countExpression = builder.count(Root);
         Query.select(countExpression);
-        Query.where(builder.equal(Root.get("statut_paiement"),"validé"));
+        Query.where(builder.equal(Root.get("statut_paiement"),"validÃ©"));
         TypedQuery<Long> typedQuery = getSession().createQuery(Query);
         Long count = typedQuery.getSingleResult();
         return count;
