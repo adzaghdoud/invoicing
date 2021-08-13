@@ -87,11 +87,11 @@ public class Clientscontroler {
 			}
 			else {
 		    context.close();
-			return ResponseEntity.status(551).body("Erreur Enregistrement en base de données");	
+			return ResponseEntity.status(551).body("Erreur Enregistrement en base de donnÃ©es");	
 			}
 			}
 			context.close();
-		    return ResponseEntity.ok("le nouveau client"+c.getRs()+"a été bien créé");
+		    return ResponseEntity.ok("le nouveau client"+c.getRs()+"a Ã©tÃ© bien crÃ©e");
 		}
 	}
 

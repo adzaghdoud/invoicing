@@ -131,7 +131,7 @@ public class Generatepdf extends HttpServlet{
 		    	 reportSource5 = new JRBeanCollectionDataSource(listprestation);
 		    	 java.io.InputStream logo;
 		    	 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
-		    	 String condition_paiement=this.prestation.getTotalttc()+" € a payer par "+this.prestation.getModepaiement()+" le "+formatter.format(this.prestation.getDatepaiementattendue());
+		    	 String condition_paiement=this.prestation.getTotalttc()+" Ã  payer par "+this.prestation.getModepaiement()+" le "+formatter.format(this.prestation.getDatepaiementattendue());
 				try {
 					logo = ByteSource.wrap(company.getLogo()).openStream();
 					BufferedImage logoimage = ImageIO.read(logo);
