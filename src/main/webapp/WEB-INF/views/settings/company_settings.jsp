@@ -16,7 +16,16 @@
 					<div class="card">
 						<div class="card-body">
 							<div class="d-flex flex-column align-items-center text-center">
-								<img src="data:image/jpg;base64,${encodedimage}"   style="width:70%;height:70%">
+								<c:choose>
+								<c:when test="${empty encodedimage}">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png">
+                                </c:when>
+                                <c:otherwise>
+                                <img src="data:image/jpg;base64,${encodedimage}"   style="width:70%;height:70%">
+                                </c:otherwise>
+                                 </c:choose>	                    
+			                    <input type="file" id="imgupload" style="display:none" accept="image/*"/> 
+			                    <button type="button" id="buttonmodifyimage"  class="btn btn-warning"><i class="fas fa-user-cog"></i> Update Logo</button>
 							</div>
 							<hr class="my-4">
 						
@@ -42,6 +51,17 @@
 									<input type="text" id="siret" class="form-control" value="${info.siret}" disabled >
 								</div>
 							</div>
+							
+							<div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">Num TVA</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<input type="text" id="siret" class="form-control" value="${info.numtva}" disabled >
+								</div>
+							</div>
+							
+							
 							<div class="row mb-3">
 								<div class="col-sm-3">
 									<h6 class="mb-0">RIB</h6>
@@ -145,6 +165,15 @@
                                  </div>
                                  
                                   <div class="form-group row" >
+                                 <label class="col-sm-3 col-form-label"><b>Num TVA</b></label><a href="#" onclick="javascript:document.getElementById('numtvamodal').removeAttribute('disabled');"><span style="color:blue"><i class="far fa-edit"></i></span></a>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="numtvamodal" class="form-control" disabled/> 
+                                 </div>
+                                 </div>
+                                 
+                                 
+                                 
+                                  <div class="form-group row" >
                                  <label class="col-sm-3 col-form-label"><b>RIB</b></label><a href="#" onclick="javascript:document.getElementById('ribmodal').removeAttribute('disabled');"><span style="color:blue"><i class="far fa-edit"></i></span></a>
                                  <div class="col-sm-8">
                                  <input type="text" id="ribmodal" class="form-control" disabled/> 
@@ -224,7 +253,13 @@
   </div>
 </div>
 
-
+<script>
+$('#buttonmodifyimage').click(function(){ $('#imgupload').trigger('click'); 
+});
+$("#imgupload").change(function(){
+changelogo(document.getElementById('imgupload').files[0]) ;   
+});
+</script>
 
 
 <script src="${pageContext.request.contextPath}/resources/scripts/messageResource.js"></script> 

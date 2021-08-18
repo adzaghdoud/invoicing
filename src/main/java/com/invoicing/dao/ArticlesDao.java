@@ -8,5 +8,7 @@ public interface ArticlesDao {
 	List<Article> getlistarticles();
 	Article getarticlebydesignation(String designation);
 	void addarticle(Article a);
+	void updatearticle(Article a);
+	void deletearticle(String designation);
 
 }

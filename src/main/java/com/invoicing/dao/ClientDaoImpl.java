@@ -5,12 +5,14 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.invoicing.model.Client;
+import com.invoicing.model.Company;
 import com.invoicing.model.Prestations;
 @Repository("ClientDao")
 public class ClientDaoImpl  extends  AbstractDao implements ClientDao {
@@ -76,9 +78,25 @@ CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Client> criteria = builder.createQuery(Client.class);
-		Root<Client> root = criteria.from(Client.class);
 		Query<Client> q=getSession().createQuery(criteria);
         return q.getSingleResult();
+	}
+
+
+	public void updateclient(Client c) {
+		// TODO Auto-generated method stub
+	    CriteriaBuilder builder = getSession().getCriteriaBuilder();    
+        CriteriaUpdate<Client> criteriaUpdate  = builder.createCriteriaUpdate(Client.class);
+        criteriaUpdate.from(Client.class);
+        Root<Client> root = criteriaUpdate.from(Client.class);
+        criteriaUpdate.set("adresse",c.getAdresse());
+        criteriaUpdate.set("cp",c.getCp());
+        criteriaUpdate.set("ville",c.getVille());
+        criteriaUpdate.set("telephone",c.getTelephone());
+        criteriaUpdate.set("mail",c.getMail());
+        criteriaUpdate.set("rib",c.getRib());
+        criteriaUpdate.where(builder.equal(root.get("rs"),c.getRs()));
+        getSession().createQuery(criteriaUpdate).executeUpdate();
 	}
 
 }

@@ -2,11 +2,13 @@ package com.invoicing.dao;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.invoicing.model.Client;
 import com.invoicing.model.Logins;
 @Repository("LoginsDao")
 public class LoginsDaoImpl extends  AbstractDao implements LoginsDao{
@@ -38,5 +40,17 @@ public class LoginsDaoImpl extends  AbstractDao implements LoginsDao{
 		criteria.select(root).where(builder.equal(root.get("login"), login));
 		Query<Logins> q=getSession().createQuery(criteria);
 		return q.getSingleResult();
+	}
+
+
+	public void updateavatar(String login, byte[] avatar) {
+		// TODO Auto-generated method stub
+		    CriteriaBuilder builder = getSession().getCriteriaBuilder();    
+	        CriteriaUpdate<Logins> criteriaUpdate  = builder.createCriteriaUpdate(Logins.class);
+	        criteriaUpdate.from(Logins.class);
+	        Root<Logins> root = criteriaUpdate.from(Logins.class);
+	        criteriaUpdate.where(builder.equal(root.get("login"),login));
+	        criteriaUpdate.set("avatar", avatar);
+	        getSession().createQuery(criteriaUpdate).executeUpdate();
 	}
 }

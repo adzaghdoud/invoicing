@@ -79,11 +79,11 @@ public class PrestationsControler {
 		  pdf.setPrestation(srvprestation.getperstationbynomfacture(nomfacture));
 		  if (! pdf.generate(response)) {
 		      context.close();
-			  return ResponseEntity.status(506).body("Erreur gÃ©nÃ©ration facture : Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient()); 
+			  return ResponseEntity.status(506).body("Erreur génération facture : Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient()); 
 			  
 		  }
 		  context.close();
-		  return ResponseEntity.ok("La facture "+nomfacture+"a Ã©tÃ© bien gÃ©nÃ©rÃ©");
+		  return ResponseEntity.ok("La facture "+nomfacture+"a été bien générée");
 		
 	}
 
@@ -131,7 +131,7 @@ public class PrestationsControler {
 		  s.setSystempath("pdf.stor");
 		  s.setMailto(c.getMail());
 		  s.setSubject("Relance Facture "+nomfacture);
-		  s.setContain("Merci de penser de rÃ©gler la facture ci-jointe , Cordialement ");
+		  s.setContain("Merci de penser de régler la facture ci-jointe , Cordialement ");
 		  
 		  if (! s.send() ) {
 			  context.close();

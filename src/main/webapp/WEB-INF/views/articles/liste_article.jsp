@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://kit.fontawesome.com/b16c365929.js"></script>
 <style>
 .loader{
@@ -84,7 +83,7 @@
 
 </style>
 <body>
-<div class="container">
+<div class="container" id="articlescontainer">
     <h3>Liste des Articles</h3>
     <hr>
     <div class="row">
@@ -97,7 +96,7 @@
              
                 
             </div>
-            <table  class="table">
+            <table  class="table" id="tablearticle">
                 <thead>
                     <tr class="filters">
                         <th><input type="text" class="form-control" placeholder="Designation" disabled></th>
@@ -111,7 +110,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                              <c:forEach var="liste" items="${ Listarticles }">
+            <c:forEach var="liste" items="${ Listarticles }">
             <tr>
             <td>${liste.designation}</td>
             <td>${liste.famille}</td>
@@ -120,7 +119,7 @@
             <td>${liste.taxe}</td>
             <td>${liste.valtaxe} %</td>
             <td>${liste.pvttc}</td>
-            <td><a href="#"><span style="color:green"><i class="far fa-edit"></i></span></a> <a href="#"><span style="color:red"><i class="far fa-trash-alt"></i></span></a></td>
+            <td><a href="#" onclick="showupdatemodal()"><span style="color:green"><i class="far fa-edit" ></i></span></a> <a href="#" onclick="showmodaldelete()"><span style="color:red"><i class="far fa-trash-alt"></i></span></a></td>
             </c:forEach>
                 </tbody>
             </table>
@@ -130,10 +129,11 @@
                    <button class="btn btn-success" data-toggle="modal" data-target="#Modalnewarticle"><i class="fas fa-plus"></i> Nouveau Article </button>
             </div>
             
-            
+          </div>
+    </div>     
             
    <div class="modal fade" id="Modalnewarticle" tabindex="-1"  aria-labelledby="titleModalnewarticle" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="titleModalnewarticle"> <span style="color:green">Nouveau Article</span></h4>
@@ -161,7 +161,7 @@
                                  <div class="form-group row" >
                                  <label class="col-sm-4 col-form-label"><b>Prix achat HT</b></label>
                                  <div class="col-sm-6">
-                                 <input type="text" id="paht" class="form-control" /> 
+                                 <input type="text" id="paht" class="form-control" placeholder="0"/> 
                                  </div>
                                  </div>
                                  
@@ -203,12 +203,11 @@
           </div>  
             
     </div>
-    </div>
-    </div>
+ 
        
     </div>
     
-    
+  
     
   <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -228,6 +227,104 @@
     </div>
   </div>
 </div> 
+
+
+
+<div class="modal fade" id="Modalconfirmdelete" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titlemodalconfirmdelete"> <span style='color: green;'>Confirmation</span> </h5>
+      </div>
+      <div class="modal-body">
+       <b>Confirmer vous la suppression de l'article <span id="designation_article"></span> ?</b>
+      </div>
+        <div class="modal-footer">    
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="suppression_article(document.getElementById('designation_article').innerHTML)">confirm</button>
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+
+
+
+
+  <div class="modal fade" id="Modalmodifyarticle" tabindex="-1" role="dialog" aria-labelledby="titlemodalmodifyarticle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titlemodalmodifyarticle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Designation</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="designationmodify" class="form-control"  readonly/> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Famille</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="famillemodify" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>PV HT</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="pvhtmodify" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>PA HT</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="pahtmodify" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Taxe</b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="taxemodify" class="form-control" /> 
+                                 </div>
+                                 </div>
+
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Val TAXE </b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="valtaxemodify" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>PV TTC </b></label>
+                                 <div class="col-sm-6">
+                                 <input type="text" id="pvttcmodify" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+   
+                                                                                   
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" onclick="saveupdatearticle()">save</button>
+        
+        </div>   
+    </div>
+  </div>
+</div> 
+
+
+
     
     
     <script>

@@ -153,18 +153,19 @@
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<h6 class="mb-2 text-primary">Information du Client</h6>
+				<hr/>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="fullName">Raison Sociale</label>
-					<input type="text" class="form-control" id="rs">
+					<input type="text" class="form-control" id="rs" readonly>
 				</div>
 			</div>
 			
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="fullName">siret</label>
-					<input type="text" class="form-control" id="siret">
+					<input type="text" class="form-control" id="siret" readonly>
 				</div>
 			</div>
 			
@@ -202,6 +203,13 @@
 				</div>
 			</div>
 			
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="rib">Rib</label>
+					<input type="text" class="form-control" id="rib" >
+				</div>
+			</div>
+			
 			
 		</div>
 		<hr/>
@@ -209,8 +217,7 @@
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="text-right">
-					<button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
-					<button type="button" id="submit" name="submit" class="btn btn-primary">Update</button>
+					<button type="button" id="submit" name="submit" class="btn btn-warning" onclick="saveupdateclient()">Update</button>
 				</div>
 			</div>
 		</div>

@@ -141,7 +141,7 @@ public class CompanyController {
 			listoffields=listfield.get(i)+" "+listoffields;
 			
 		}
-		return ResponseEntity.ok("La modification a Ã©tÃ© bien prise en compte pour "+listoffields);
+		return ResponseEntity.ok("La modification a été bien prise en compte pour "+listoffields);
 	}
 
 
@@ -157,7 +157,6 @@ public class CompanyController {
 	if (! s.send() ) {
 	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du mail");	
 	}
-		
-	return ResponseEntity.ok("Le mail a Ã©tÃ© bien envoyÃ©e Ã  "+mailto);	
+	return ResponseEntity.ok("Le mail a été bien envoyée à "+mailto);	
 	}
 }

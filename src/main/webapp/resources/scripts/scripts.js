@@ -133,10 +133,6 @@ if (size>20000000) {
      $("#Modalnotify").modal();
 }
 }
-
-
-
-
 //*********************************************** JS clients
 
 function Getclient() {
@@ -455,6 +451,44 @@ function getclientemail(client_name) {
 	
 }
 
+
+
+function saveupdateclient() {
+	
+	
+    var ItemJSON = {"rs": $("#rs").val(),"siret":$("#siret").val(),"adresse": $("#adresse").val(),"cp":$("#cp").val(),"ville":$("#ville").val(),"telephone":$("#tel").val(),"mail":$("#email").val(),"rib":$("#rib").val()};
+    var myJSON = JSON.stringify(ItemJSON);
+	$.ajax({
+        url: "updateclient",
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: "application/json; charset=utf-8",
+        data: myJSON,
+        success: function (response) {
+	    document.getElementById("msgmodalnotifyclient").innerHTML="<b>"+response+ "</b>";
+		document.getElementById("titlemodalnotifyclient").innerHTML=" <span style='color: green;'><i class='fas fa-check'></i> Confirmation update</span>";
+		$("#Modalnotifyclient").modal();
+		  setTimeout(function(){
+            	  $('#Modalnotifyclient').modal('hide')
+            	}, 2000);
+
+    
+
+	    },
+        error : function (jqXHR) {
+	    document.getElementById("msgmodalnotifyclient").innerHTML="<b>"+jqXHR.responseText+ "</b>";
+		document.getElementById("titlemodalnotifyclient").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error update</span>";
+		$("#Modalnotifyclient").modal();
+        }
+
+     });
+	
+	
+	
+
+}
+
 //##########################################################################JS create invoice
 
 function showinfoarticle(quantite,namearticle){
@@ -595,13 +629,12 @@ function createnewarticle() {
         contentType: false,
         data: formData,
         success: function (response) {
-        	 $("#loader").hide();
-        		document.getElementById("msgModalnotify").innerHTML="<b> Le nouveau article a été bien créé </b>";
-                document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
-                $("#Modalnotify").modal();
-                setTimeout(function(){
-                	  $('#Modalnotify').modal('hide')
-                	}, 4000);
+	    $('.modal-backdrop').hide();
+        $('body').removeClass('modal-open');
+        $('#Modalnewarticle').modal('hide');  
+        $("#articlescontainer").load("articles");
+
+
         },
         error :function () {
         	 $("#loader").hide();
@@ -622,6 +655,88 @@ function createnewarticle() {
 
 	
 }
+
+
+
+function showupdatemodal() {
+	$("#tablearticle tr").click(function() {//Add a click event to the row of the table
+	    var tr = $(this);//Find tr element
+	    var td = tr.find("td");//Find td element
+       document.getElementById("titlemodalmodifyarticle").innerHTML="<b> <span style='color: green;'> Modificaion Article "+td[0].innerText+"</span></b>"
+       $("#designationmodify").val(td[0].innerText);
+       $("#famillemodify").val(td[1].innerText);
+       $("#pvhtmodify").val(td[2].innerText);
+       $("#pahtmodify").val(td[3].innerText);
+       $("#taxemodify").val(td[4].innerText);
+       $("#valtaxemodify").val(td[5].innerText);
+       $("#pvttcmodify").val(td[6].innerText);
+       $("#Modalmodifyarticle").modal();
+   });	
+}
+
+function saveupdatearticle () {
+	
+	var pvht = parseFloat($("#pvhtmodify").val());
+	var paht = parseFloat($("#pahtmodify").val());
+	var valtaxe = parseInt($("#valtaxemodify").val().toString().substring(0,$("#valtaxemodify").val().indexOf('%')));
+	var pvttc = parseFloat($("#pvttcmodify").val());
+	var ItemJSON = {"designation": $("#designationmodify").val(),"famille":$("#famillemodify").val(),"pvht": pvht,"paht":paht,"taxe":$("#taxemodify").val(),"valtaxe":valtaxe,"pvttc":pvttc};
+    var myJSON = JSON.stringify(ItemJSON);
+	
+	
+	$.ajax({
+        url: "updatearticle",
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: "application/json; charset=utf-8",
+        data: myJSON,
+        success: function (response) {
+	   $('.modal-backdrop').hide();
+        $('body').removeClass('modal-open');
+        $('#Modalmodifyarticle').modal('hide');  
+        $("#articlescontainer").load("articles");
+	    }, 
+       error : function() {
+	
+	   }
+       });
+		
+}
+
+function showmodaldelete(){
+	$("#tablearticle tr").click(function() {//Add a click event to the row of the table
+	    var tr = $(this);//Find tr element
+	    var td = tr.find("td");//Find td element
+        document.getElementById("designation_article").innerHTML =td[0].innerText;
+        $("#Modalconfirmdelete").modal()
+
+
+});
+	
+}
+function suppression_article(designation) {
+        $.ajax({
+        url: "deletearticle/"+designation,
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType : false,
+        success: function (response) {
+        $('.modal-backdrop').hide();
+        $('body').removeClass('modal-open');
+        $('#Modalconfirmdelete').modal('hide');  
+        $("#articlescontainer").load("articles");
+	    }, 
+       error : function() {
+	
+	   }
+       });
+
+
+}
+
+
 
 
 // ***************************************************************** JS paiement 
@@ -912,9 +1027,71 @@ function totaltva () {
 	
 }
 });
-      
-
-
-
-
+     
 }
+
+
+//*********************************************************************************JS profil 
+
+function changeavatar(file) {
+var formData = new FormData();
+formData.append('avatar', file);	
+	 $.ajax({
+	        url: "updateavatar",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+            data: formData,
+	        success: function (response) {
+            $("#containerprofil").load("profile");
+       
+	    },
+        error : function (jqXHR) {
+	    document.getElementById("msgmodalnotifyprofil").innerHTML="<b>"+jqXHR.responseText+ "</b>";
+		document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error update</span>";
+		$("#Modalnotifyprofil").modal();
+        }
+		
+		
+		
+		});
+}
+
+
+function updatepassword () {
+	
+	if ( $("#newpassword").val().localeCompare($("#repeatnewpassword").val()) == 0 ) {
+		if ($("#newpassword").val().length == 0) {
+		document.getElementById("msgmodalnotifyprofil").innerHTML="<b> les deux mots de passes sont vides</b>";
+		document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error update</span>";
+		$("#Modalnotifyprofil").modal();	
+		} else {
+	
+	 $.ajax({
+	        url: "updatepassword/"+$("#login").val()+"/"+$("#newpassword").val(),
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (response) {
+	    document.getElementById("msgmodalnotifyprofil").innerHTML="<b>"+response+ "</b>";
+		document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: green;'><i class='fas fa-user-edit'></i> Confirmation update</span>";
+		$("#Modalnotifyprofil").modal();
+             },
+            error : function (jqXHR) {
+	    document.getElementById("msgmodalnotifyprofil").innerHTML="<b>"+jqXHR.responseText+ "</b>";
+		document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error update</span>";
+		$("#Modalnotifyprofil").modal();
+            }
+	});
+	
+	}
+}else {
+	    document.getElementById("msgmodalnotifyprofil").innerHTML="<b>Les deux mots de passes ne sont pas identiques </b>";
+		document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error</span>";
+		$("#Modalnotifyprofil").modal();
+	
+}
+}
+

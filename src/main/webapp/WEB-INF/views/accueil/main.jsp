@@ -3,6 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Invoicing</title>
+<link rel = "icon" href =  "${pageContext.request.contextPath}/resources/images/logo.png"  type = "image/x-icon"> 
 <style type="text/css">
   <%@include file="/resources/css/main.css" %>
 </style>

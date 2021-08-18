@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.invoicing.dao.ClientDao;
+import com.invoicing.model.Article;
 import com.invoicing.model.Client;
 @Service("ClientService")
 @Transactional
@@ -45,5 +46,12 @@ public class ClientServiceImpl implements ClientService {
 		// TODO Auto-generated method stub
 		return dao.getclientbyemailandraisonsociale(rs, mail);
 	}
+
+	public void updateclient(Client c) {
+		// TODO Auto-generated method stub
+		dao.updateclient(c);
+	}
+
+
 
 }

@@ -26,4 +26,10 @@ public class LoginsServiceImpl  implements LoginsService{
 		return dao.getinfo(login);
 	}
 
+
+	public void updateavatar(String login, byte[] avatar) {
+		// TODO Auto-generated method stub
+		dao.updateavatar(login, avatar);
+	}
+
 }

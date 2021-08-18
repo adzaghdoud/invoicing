@@ -11,4 +11,5 @@ public interface ClientDao {
 	void addclient(Client c);
 	List<Client> getallclients();
 	Long numberclient();
+	void updateclient(Client c);
 }

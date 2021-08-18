@@ -83,7 +83,7 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         CriteriaUpdate<Prestations> criteriaUpdate  = builder.createCriteriaUpdate(Prestations.class);
         criteriaUpdate.from(Prestations.class);
         Root<Prestations> root = criteriaUpdate.from(Prestations.class);
-        criteriaUpdate.set("statut_paiement","validÃ©");
+        criteriaUpdate.set("statut_paiement","validé");
         criteriaUpdate.where(builder.equal(root.get("numfacture"),numfacture));
         getSession().createQuery(criteriaUpdate).executeUpdate();
 

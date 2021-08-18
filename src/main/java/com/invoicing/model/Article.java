@@ -1,5 +1,7 @@
 package com.invoicing.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
@@ -9,8 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="articles")
 public class Article {
-	@Id
-	private int id;
+    @Id
 	private String designation;
 	private String famille;
 	@Column(name="PV_HT")
@@ -23,12 +24,9 @@ public class Article {
 	private int valtaxe;
 	@Column(name="PV_TTC")
 	private double pvttc;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	private Timestamp last_modification;
+	private String bywho;
+
 	public String getDesignation() {
 		return designation;
 	}
@@ -71,5 +69,17 @@ public class Article {
 	public void setPvttc(double pvttc) {
 		this.pvttc = pvttc;
 	}
-
+	public Timestamp getLast_modification() {
+		return last_modification;
+	}
+	public void setLast_modification(Timestamp last_modification) {
+		this.last_modification = last_modification;
+	}
+	public String getBywho() {
+		return bywho;
+	}
+	public void setBywho(String bywho) {
+		this.bywho = bywho;
+	}
+     
 }

@@ -1,30 +1,27 @@
 package com.invoicing.controler;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-
-import javax.imageio.ImageIO;
+import javax.naming.Context;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -38,7 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Logins;
-import com.invoicing.model.Transaction;
 import com.invoicing.service.ArticleService;
 import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
@@ -46,11 +42,11 @@ import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
 import com.invoicing.service.TransactionsService;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Properties;
 @Controller
 public class Dispatcher {
+
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login() {
 		ModelAndView mv = new ModelAndView("/accueil/login");
@@ -58,14 +54,31 @@ public class Dispatcher {
 	}
 	
 	
+	public static boolean checkidldap(String login , String password) {
+		try {
+		
+	        Properties env = new Properties();
+	        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+	        env.put(Context.PROVIDER_URL, "ldap://vmi537338.contaboserver.net:389/ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+	        env.put(Context.SECURITY_PRINCIPAL, "uid="+login+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+	        env.put(Context.SECURITY_CREDENTIALS, password);
+	        DirContext ctx = new InitialDirContext(env); 
+	        ctx.close();
+	        return true;
+			} catch (Exception e) {
+			 System.out.println(ExceptionUtils.getStackTrace(e));
+			 return false;
+			}
+				
+	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView forwordlogin(HttpServletRequest request, HttpServletResponse response , @RequestParam(required = true) String login,@RequestParam(required = true) String password) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
-		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
-		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");	
-	  if (!srvlogins.checkloginpassword(request.getParameter("login"),request.getParameter("password"))) {
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");		
+		
+		if (!checkidldap(login,password)) {
 		ModelAndView mv = new ModelAndView("/accueil/login");
 		mv.addObject("erromsg", "Login ou password invalide");
 		context.close();
@@ -145,6 +158,10 @@ public class Dispatcher {
 		mv.addObject("login", p.getLogin());
 		mv.addObject("tel", p.getTel());
 		mv.addObject("company", p.getCompany());
+		if (!(p.getAvatar() == null) ) {
+		String encodedimage = Base64Utils.encodeToString(p.getAvatar());
+		mv.addObject("avatar",encodedimage);
+		}
 		context.close();	 
 		return mv;
 	
@@ -247,9 +264,9 @@ public class Dispatcher {
 		TransactionsService srvtransaction = (TransactionsService) context.getBean("TransactionsService");
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		ModelAndView mv = new ModelAndView("/bank/transactions_bank");
-		mv.addObject("List_transactions", srvtransaction.getlist());
-			
+		mv.addObject("List_transactions", srvtransaction.getlist());		
 		double in=0;
 		double out=0;
 		for (int i=0 ; i<srvtransaction.getlist().size() ; i++) {
@@ -263,13 +280,10 @@ public class Dispatcher {
 			
 		}
 		DecimalFormat decimalFormat= new DecimalFormat("#.##");
-		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
-		
-		
+		decimalFormat.setRoundingMode(RoundingMode.FLOOR);	
 		mv.addObject("amount_out", decimalFormat.format(out));
 		mv.addObject("amount_in", decimalFormat.format(in));
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		mv.addObject("last_refresh_transaction", formatter.format(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getLast_refresh_transaction()));
+	    mv.addObject("last_refresh_transaction", formatter.format(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getLast_refresh_transaction()));
 		context.close();
 		return mv;
 	

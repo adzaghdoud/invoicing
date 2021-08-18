@@ -33,4 +33,12 @@ public class ArticleServiceImpl implements ArticleService {
 		
 	}
 
+	public void updatearticle(Article a) {
+		dao.updatearticle(a);
+	}
+
+	public void deletearticle(String designation) {
+		dao.deletearticle(designation);
+	}
+
 }

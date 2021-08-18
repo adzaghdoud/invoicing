@@ -11,9 +11,9 @@ public class Logins {
 	private String prenom;
 	private String nom;
 	private String email;
-	private String password;
 	private String tel;
 	private String company;
+	private byte [] avatar;
 	public String getLogin() {
 		return login;
 	}
@@ -38,12 +38,7 @@ public class Logins {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
+
 	public String getTel() {
 		return tel;
 	}
@@ -55,6 +50,12 @@ public class Logins {
 	}
 	public void setCompany(String company) {
 		this.company = company;
+	}
+	public byte[] getAvatar() {
+		return avatar;
+	}
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
 	}
 	
     

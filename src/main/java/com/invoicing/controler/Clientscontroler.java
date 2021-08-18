@@ -2,15 +2,19 @@ package com.invoicing.controler;
 
 import java.sql.SQLException;
 
+
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +26,7 @@ import com.invoicing.model.Client;
 import com.invoicing.service.ClientService;
 @Controller
 public class Clientscontroler {
+	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(Clientscontroler.class);
 	@SuppressWarnings("resource")
 	@RequestMapping(value = "/searchclient", method = RequestMethod.POST)
 	public @ResponseBody Client getinfoclient(@RequestParam Map<String,String> requestParams) {
@@ -66,12 +71,6 @@ public class Clientscontroler {
 		return listc;
 	}
 	
-	
-	
-	
-	
-	
-	
 
 	@RequestMapping(value = "/createclient", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String>  addnewclient(@RequestBody Client c) {
@@ -87,11 +86,46 @@ public class Clientscontroler {
 			}
 			else {
 		    context.close();
-			return ResponseEntity.status(551).body("Erreur Enregistrement en base de donnÃ©es");	
+			return ResponseEntity.status(551).body("Erreur Enregistrement en base de données");	
 			}
 			}
 			context.close();
-		    return ResponseEntity.ok("le nouveau client"+c.getRs()+"a Ã©tÃ© bien crÃ©e");
+		    return ResponseEntity.ok("le nouveau client"+c.getRs()+"a été bien crée");
 		}
+	
+	@RequestMapping(value = "/updateclient", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String>  updateclient(@RequestBody Client c) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		ClientService srvclient = (ClientService) context.getBean("ClientService");		
+		try{
+		   srvclient.updateclient(c);
+		   }catch(Exception e) {
+			context.close();
+			log.error(ExceptionUtils.getStackTrace(e));
+			return ResponseEntity.status(550).body("Erreur Modification en base du client "+c.getRs());
+		  }
+		context.close();
+	    return ResponseEntity.ok("La modification du client "+c.getRs()+" a été bien pris en compte");
 	}
+	
+
+	@RequestMapping(value = "/Getclientbyrs/{rs}", method = RequestMethod.GET)
+	public @ResponseBody Client getinfoclientbyrs(@PathVariable("rs") String rs) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+		ClientService srvclient = (ClientService) context.getBean("ClientService");
+		Client c =srvclient.getclientbyraisonsociale(rs);
+		context.close();
+		return c;
+	}
+	
+
+
+
+
+}
+
+
+
+
+
 

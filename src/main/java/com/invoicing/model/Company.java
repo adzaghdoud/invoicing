@@ -27,6 +27,7 @@ public class Company {
 	private String bic;
 	private byte[] logo;
 	private Timestamp last_refresh_transaction;
+	private String numtva;
 	public String getBankname() {
 		return bankname;
 	}
@@ -110,6 +111,12 @@ public class Company {
 	}
 	public void setLast_refresh_transaction(Timestamp last_refresh_transaction) {
 		this.last_refresh_transaction = last_refresh_transaction;
+	}
+	public String getNumtva() {
+		return numtva;
+	}
+	public void setNumtva(String numtva) {
+		this.numtva = numtva;
 	}
 	
     
