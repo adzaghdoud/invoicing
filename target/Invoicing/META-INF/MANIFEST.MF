@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Implementation-Title: Invoicing
+Implementation-Version: 1.0
+Built-By: AZAGHDOUD
+Implementation-Vendor-Id: stockforme
+Created-By: Apache Maven 3.6.1
+Build-Jdk: 1.8.0_275
+Implementation-URL: http://maven.apache.org
