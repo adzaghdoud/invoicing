@@ -1,6 +1,9 @@
 package com.invoicing.hibernate.configuration;
 
-	import java.util.Properties;
+	import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 
 	 
@@ -40,9 +43,20 @@ package com.invoicing.hibernate.configuration;
 	    public DataSource dataSource() {
 	        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-	        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
-	        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-	        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+	        
+	       
+					
+					if (System.getProperty("invoicing.env").toString().contentEquals("DEV")) {
+				    dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+				    dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+				    dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));	
+					} 
+					
+					if (System.getProperty("invoicing.env").toString().contentEquals("PROD")) {
+					    dataSource.setUsername(environment.getRequiredProperty("prod.jdbc.username"));
+					    dataSource.setUrl(environment.getRequiredProperty("prod.jdbc.url"));
+					    dataSource.setPassword(environment.getRequiredProperty("prod.jdbc.password"));	
+					}  
 	        return dataSource;
 	    }
 	     
