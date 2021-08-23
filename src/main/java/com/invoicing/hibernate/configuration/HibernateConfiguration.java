@@ -8,8 +8,10 @@ import java.util.Properties;
 
 	 
 	import javax.sql.DataSource;
-	 
-	import org.hibernate.SessionFactory;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.hibernate.SessionFactory;
 	import org.springframework.beans.factory.annotation.Autowired;
 	import org.springframework.context.annotation.Bean;
 	import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +28,7 @@ import java.util.Properties;
 	@ComponentScan({ "com.invoicing.hibernate.configuration" })
 	@PropertySource(value = { "classpath:application.properties" })
 	public class HibernateConfiguration {
-	 
+		final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	    @Autowired
 	    private Environment environment;
 	 
@@ -44,9 +46,8 @@ import java.util.Properties;
 	        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
 	        
-	       
-					
-					if (System.getProperty("invoicing.env").toString().contentEquals("DEV")) {
+	           try {	
+	           if (System.getProperty("invoicing.env").toString().contentEquals("DEV")) {
 				    dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
 				    dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
 				    dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));	
@@ -56,7 +57,10 @@ import java.util.Properties;
 					    dataSource.setUsername(environment.getRequiredProperty("prod.jdbc.username"));
 					    dataSource.setUrl(environment.getRequiredProperty("prod.jdbc.url"));
 					    dataSource.setPassword(environment.getRequiredProperty("prod.jdbc.password"));	
-					}  
+					}
+	           } catch (Exception e) {
+	        	log.error(ExceptionUtils.getStackTrace(e));
+	           }
 	        return dataSource;
 	    }
 	     
