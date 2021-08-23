@@ -30,7 +30,7 @@ import com.invoicing.service.TransactionsService;
 
 @Controller
 public class TransactionsControler {
-	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(TransactionsControler.class);
+	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@GetMapping(value = "/refresh_transactions")
 	public @ResponseBody int refresh_transactions (@CookieValue("invoicing_username") String cookielogin){
 		long nbafter=0;

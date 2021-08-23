@@ -83,7 +83,7 @@
                   <a href="#"><i class="fas fa-cogs"></i> Settings <span class="arrow"></span></a>
                  <ul class="sub-menu collapse" id="settings">
                   <li><a class="link" href="Companysettings">Company Settings</a></li>
-                  <li><a class="link" href="Generalsettings">General Settings</a></li>
+                  <li><a class="link" href="General_settings">General Settings</a></li>
                   </ul>
                   </li>           
                  <li data-toggle="collapse" data-target="#messagerie" class="collapsed">

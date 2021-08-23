@@ -1,7 +1,8 @@
 package com.invoicing.controler;
 
 import java.io.FileInputStream;
-
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -25,12 +26,14 @@ import org.apache.logging.log4j.LogManager;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.invoicing.hibernate.configuration.AppConfig;
@@ -45,7 +48,7 @@ import com.invoicing.service.TransactionsService;
 import java.util.Properties;
 @Controller
 public class Dispatcher {
-
+	final org.apache.logging.log4j.Logger logger =  LogManager.getLogger(this.getClass().getName());
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login() {
@@ -296,4 +299,28 @@ public class Dispatcher {
 	
 	}
 
+	@RequestMapping(value = "/General_settings", method = RequestMethod.GET)
+	public ModelAndView GS() {
+		ModelAndView mv = new ModelAndView("/settings/general_settings");
+		try {
+		InputStream input = new FileInputStream(System.getProperty("env.file.ext"));
+		Properties props = new Properties();
+		props.load(input);
+		mv.addObject("smtphost", props.getProperty("SMTP.HOST"));
+		mv.addObject("smptport", props.getProperty("SMTP.PORT"));
+		mv.addObject("smtpusername", props.getProperty("SMTP.USERNAME"));
+		mv.addObject("smtppassword", props.getProperty("SMTP.PASSWORD"));
+		mv.addObject("companyemail", props.getProperty("COMPANY.EMAIL"));
+		mv.addObject("ldaphost", props.getProperty("LDAP.HOST"));
+		mv.addObject("ldapport", props.getProperty("LDAP.PORT"));
+		mv.addObject("ldapadmin", props.getProperty("LDAP.ADMIN"));
+		mv.addObject("ldappassword", props.getProperty("LDAP.ADMIN.PASSWORD"));
+		}catch (Exception e) {	
+		}
+			
+		return mv;
+	}
+	
+	
+	  
 }

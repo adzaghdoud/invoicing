@@ -26,7 +26,7 @@ import com.invoicing.model.Client;
 import com.invoicing.service.ClientService;
 @Controller
 public class Clientscontroler {
-	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(Clientscontroler.class);
+	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@SuppressWarnings("resource")
 	@RequestMapping(value = "/searchclient", method = RequestMethod.POST)
 	public @ResponseBody Client getinfoclient(@RequestParam Map<String,String> requestParams) {

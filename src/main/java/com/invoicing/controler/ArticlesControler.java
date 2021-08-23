@@ -23,7 +23,7 @@ import com.invoicing.model.Article;
 import com.invoicing.service.ArticleService;
 @Controller
 public class ArticlesControler {
-	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(ArticlesControler.class);
+	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@RequestMapping(value = "/articles", method = RequestMethod.GET)
 	public ModelAndView getarticles() {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	

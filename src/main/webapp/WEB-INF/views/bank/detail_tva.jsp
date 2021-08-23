@@ -54,11 +54,18 @@ body {
                               </div>
                               
                               <div class="form-group row" >
-                              <label class="col-sm-2 col-form-label"><b>Total TVA</b></label>
+                              <label class="col-sm-2 col-form-label"><b>Total TVA récoltées</b></label>
                               <div class="col-sm-4">
                               <input type="text"  id ="totaltva" class="form-control"/> 
                               </div>
                               </div>
+                              <div class="form-group row" >
+                              <label class="col-sm-2 col-form-label"><b>Total TVA dû</b></label>
+                              <div class="col-sm-4">
+                              <input type="text"  id ="totaltvadu" class="form-control"/> 
+                              </div>
+                              </div>
+                              
                               
                               
                               

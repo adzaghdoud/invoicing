@@ -34,7 +34,7 @@ import com.invoicing.service.PrestationsService;
 
 @Controller
 public class LoginsControler {
-	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(LoginsControler.class);
+	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@RequestMapping(value = "/getuserinfo", method = RequestMethod.POST)
 	public @ResponseBody Logins getinforuser(HttpServletRequest request,@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);

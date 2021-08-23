@@ -1095,3 +1095,38 @@ function updatepassword () {
 }
 }
 
+//********************************************************************** JS GLOBAL SETTINGS
+
+function update_global_settings(){
+	   var formData = new FormData();
+       formData.append('smtphost', $("#smtphost").val());
+       formData.append('smptport', $("#smptport").val());
+       formData.append('smtpusername', $("#smtpusername").val());
+       formData.append('smtppassword', $("#smtppassword").val());
+       formData.append('companyemail', $("#companyemail").val());
+       formData.append('ldapadmin', $("#ldapadmin").val());
+       formData.append('ldappassword', $("#ldappassword").val());
+       formData.append('ldaphost', $("#ldaphost").val());
+       formData.append('ldapport', $("#ldapport").val());
+	 $.ajax({
+	        url: "update_general_settings",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+            data: formData,
+	        success: function (response) {
+		 document.getElementById("msgmodalnotif").innerHTML="<b>"+response+"</b>";
+         document.getElementById("titleModalnotify").innerHTML="<span style='color: green;'>Confirmation</span>";
+         $("#Modalnotify").modal();	
+		}, 
+		error : function (jqXHR){
+		 document.getElementById("msgmodalnotif").innerHTML="<b>"+jqXHR.responseText+"</b>";
+         document.getElementById("titleModalnotify").innerHTML="<span style='color: red;'>ERROR</span>";
+         $("#Modalnotify").modal();	
+			
+		}
+	
+	});
+}
+
