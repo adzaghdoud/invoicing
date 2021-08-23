@@ -34,7 +34,7 @@ CREATE TABLE articles (
   bywho varchar(45) DEFAULT NULL,
   PRIMARY KEY (designation),
   KEY index_designation (designation)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE clients (
   UNIQUE KEY mail_UNIQUE (mail),
   UNIQUE KEY telephone_UNIQUE (telephone),
   KEY raison_sociale (raison_sociale)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,7 +107,7 @@ CREATE TABLE company (
   logo blob,
   last_refresh_transaction timestamp NULL DEFAULT NULL,
   PRIMARY KEY (raison_sociale)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +139,7 @@ CREATE TABLE logins (
   KEY index_login (login),
   KEY raison_sociale_idx (company),
   CONSTRAINT raison_sociale FOREIGN KEY (company) REFERENCES company (raison_sociale)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,7 +176,7 @@ CREATE TABLE prestations (
   mode_paiement varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   date_paiement_attendue date DEFAULT NULL,
   PRIMARY KEY (id_prestation)
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,41 +190,6 @@ INSERT INTO prestations VALUES (1,NULL,'19-07-2021','Facture19-07-2021-ZAGHDOUD'
 UNLOCK TABLES;
 
 --
--- Table structure for table schema_version
---
-
-DROP TABLE IF EXISTS schema_version;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE schema_version (
-  installed_rank int NOT NULL,
-  version varchar(50) DEFAULT NULL,
-  description varchar(200) NOT NULL,
-  type varchar(20) NOT NULL,
-  script varchar(1000) NOT NULL,
-  checksum int DEFAULT NULL,
-  installed_by varchar(100) NOT NULL,
-  installed_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  execution_time int NOT NULL,
-  success tinyint(1) NOT NULL,
-  PRIMARY KEY (installed_rank),
-  KEY schema_version_s_idx (success)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table schema_version
---
-
-LOCK TABLES schema_version WRITE;
-/*!40000 ALTER TABLE schema_version DISABLE KEYS */;
-INSERT INTO schema_version VALUES (1,'1','<< Flyway Baseline >>','BASELINE','<< Flyway Baseline >>',NULL,'root','2021-08-02 17:58:17',0,1);
-/*!40000 ALTER TABLE schema_version ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table tax
---
 
 DROP TABLE IF EXISTS tax;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -234,7 +199,7 @@ CREATE TABLE tax (
   valeur int DEFAULT NULL,
   PRIMARY KEY (nom),
   KEY index_nom (nom)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='table des taxes';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='table des taxes';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -266,7 +231,7 @@ CREATE TABLE transactions (
   reference varchar(45) DEFAULT NULL,
   amount_HT float DEFAULT '0',
   PRIMARY KEY (transaction_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
