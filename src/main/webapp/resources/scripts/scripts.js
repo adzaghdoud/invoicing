@@ -1000,9 +1000,9 @@ function totaltva () {
 	        async: false,
 	        processData: false,
 	        contentType: false,
-	        success: function (response) {
-            $("#totaltva").val(response)
-	
+	        success: function (data) {
+            $("#totaltva").val(data.totaltvarecoltes);	        
+            $("#totaltvadu").val(data.totaltvadu);
             },
            error : function () {
 	
@@ -1019,7 +1019,12 @@ function totaltva () {
         var trHTML = '';
         $('#tbobytransaction').empty();	
         $.each(data, function (i, item) {
-            trHTML += '<tr><td>' + item.label + '</td><td>'+item.reference +'</td><td>' + item.settled_at + '</td><td>' + item.side + '</td><td>'+item.operation_type+'</td><td>'+ item.amount  +'</td><td>'+item.amount_HT +'</td></tr>' ;
+        if (item.operation_type.localeCompare('income') == 0) {
+         trHTML += '<tr style="color:green"><td>' + item.label + '</td><td>'+item.reference +'</td><td>' + item.settled_at + '</td><td>' + item.side + '</td><td>'+item.operation_type+'</td><td>'+ item.amount  +'</td><td>'+item.amount_HT +'</td></tr>' ;
+        }
+        else {
+	  trHTML += '<tr><td>' + item.label + '</td><td>'+item.reference +'</td><td>' + item.settled_at + '</td><td>' + item.side + '</td><td>'+item.operation_type+'</td><td>'+ item.amount  +'</td><td>'+item.amount_HT +'</td></tr>' ;
+           }
         });
 	       $('#tbobytransaction').append(trHTML);
             },

@@ -173,7 +173,7 @@
         <location>filesystem:src/main/resources/migration/db</location>
         <url>jdbc:mysql://localhost:3306/invoicing</url>
         <user>root</user>
-        <password>09142267</password>
+        <password>@09142267Adza</password>
         <schemas>
         <schema>invoicing</schema>
         </schemas>

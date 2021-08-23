@@ -3,7 +3,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -82,26 +84,47 @@ public class TransactionsControler {
 	}
 
 	@RequestMapping(value = "/totaltva/{date1}/{date2}", method = RequestMethod.GET)
-	public @ResponseBody double tva_collectee(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
+	public @ResponseBody Map<String, Double> tva_collectee(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		 Map<String, Double> tva  = new HashMap<String, Double>();
 		double totaltva=0;
+		double totaltvarecoltes=0;
+		double total_tva_deductible=0;
+		
 		for (int i=0 ; i<srvt.searchtransacbetweentwodates(datedeb, datefin).size() ; i++) {
-			BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount());
-			BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount_HT());
-			BigDecimal result=bd.subtract(bd2);
-			result = result.setScale(2, RoundingMode.DOWN);
-			totaltva=totaltva+(result.doubleValue());
+			 if (srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getOperation_type().toString().contentEquals("income")) {
+				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount());
+					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount_HT());
+					BigDecimal result=bd.subtract(bd2);
+					result = result.setScale(2, RoundingMode.DOWN);
+					totaltvarecoltes=totaltvarecoltes+(result.doubleValue());
+			 }
 		}
 		
+		
+		
+		for (int i=0 ; i<srvt.searchtransacbetweentwodates(datedeb, datefin).size() ; i++) {
+			 if (! srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getOperation_type().toString().contentEquals("income")) {
+				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount());
+					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount_HT());
+					BigDecimal result=bd.subtract(bd2);
+					result = result.setScale(2, RoundingMode.DOWN);
+					total_tva_deductible=total_tva_deductible+(result.doubleValue());
+			 }
+		}
 
 		
+		BigDecimal bd = BigDecimal.valueOf(totaltvarecoltes);
+		BigDecimal bd2 = BigDecimal.valueOf(total_tva_deductible);
+		BigDecimal totaltvadu=bd.subtract(bd2);
+		totaltvadu = totaltvadu.setScale(2, RoundingMode.DOWN);
+	
 		context.close();
-		return totaltva;
+		tva.put("totaltvarecoltes", totaltvarecoltes);
+		tva.put("totaltvadu", totaltvadu.doubleValue());
+		return tva;
 	}
-
-	
-	
 	@RequestMapping(value = "/Getransactionsbetween/{date1}/{date2}", method = RequestMethod.GET)
 	public @ResponseBody List<Transaction> gettransactions(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
@@ -110,9 +133,4 @@ public class TransactionsControler {
 		context.close();
 		return listc;
 	}
-	
-	
-	
-
-
 }
