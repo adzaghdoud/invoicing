@@ -171,19 +171,14 @@
     <version>4.0.3</version>
     <configuration>
         <location>filesystem:src/main/resources/migration/db</location>
-        <url>jdbc:mysql://localhost:3306/invoicing</url>
-        <user>root</user>
+        <url>jdbc:mysql://vmi537338.contaboserver.net:3306/invoicing</url>
+        <user>invoicing</user>
         <password>@09142267Adza</password>
         <schemas>
         <schema>invoicing</schema>
         </schemas>
     </configuration>
-     </plugin>
-     
- 
-     
-      
-      
+     </plugin>    
   </plugins>
   </build>
   
