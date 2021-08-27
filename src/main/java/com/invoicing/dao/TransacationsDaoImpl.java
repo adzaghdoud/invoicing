@@ -1,6 +1,7 @@
 package com.invoicing.dao;
 
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -68,7 +69,7 @@ import com.invoicing.model.Transaction;
 	        return count;
 		}
 
-		public void updatetvatransaction(String setted_at, double amount_ht) {
+		public void updatetvatransaction(String setted_at, double amount_ht,Timestamp t) {
 			// TODO Auto-generated method stub
 			CriteriaBuilder builder = getSession().getCriteriaBuilder();
 	        
@@ -76,6 +77,7 @@ import com.invoicing.model.Transaction;
 	        criteriaUpdate.from(Transaction.class);
 	        Root<Transaction> root = criteriaUpdate.from(Transaction.class);
 	        criteriaUpdate.set("amount_HT",amount_ht);
+	        criteriaUpdate.set("manual_validation",t);
 	        criteriaUpdate.where(builder.equal(root.get("settled_at"),setted_at));
 	        getSession().createQuery(criteriaUpdate).executeUpdate();
 		}
@@ -84,7 +86,7 @@ import com.invoicing.model.Transaction;
 			// TODO Auto-generated method stub
 			javax.persistence.Query query = getSession().createNamedQuery("searchtransactionbetweentwodates", Transaction.class);
 			query.setParameter(1, datedeb);
-			query.setParameter(2, datefin);
+			query.setParameter(2, datefin+" 23:59:59");
 			@SuppressWarnings("unchecked")
 			List<Transaction> list_transactions = query.getResultList();           
 		      return list_transactions;

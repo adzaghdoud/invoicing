@@ -1,5 +1,6 @@
 package com.invoicing.service;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 
@@ -37,9 +38,9 @@ public class TransactionsServiceImpl implements TransactionsService {
 		return dao.countnbtransaction();
 	}
 
-	public void updatetvatransaction(String setted_at, double amountttc) {
+	public void updatetvatransaction(String setted_at, double amountttc,Timestamp t) {
 		// TODO Auto-generated method stub
-		dao.updatetvatransaction(setted_at, amountttc);
+		dao.updatetvatransaction(setted_at, amountttc,t);
 	}
 
 	public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin)  {

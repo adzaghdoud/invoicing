@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name="transactions")
 @NamedNativeQuery(
         name = "searchtransactionbetweentwodates",
-        query = "SELECT * FROM invoicing.transactions  where settled_at >= ? and settled_at <= ? and amount_HT>0",
+        query = "SELECT * FROM invoicing.transactions  where settled_at between ? and  ? and amount_HT>0 ORDER BY settled_at DESC",
                     resultClass=Transaction.class
     )
 public class Transaction {
@@ -30,6 +30,8 @@ public class Transaction {
 	private String updated_at;
 	private String reference;
 	private double amount_HT;
+	private Timestamp manual_validation;
+	private String company;
 	public String getTransaction_id() {
 		return transaction_id;
 	}
@@ -96,7 +98,19 @@ public class Transaction {
 	public void setAmount_HT(double amount_HT) {
 		this.amount_HT = amount_HT;
 	}
+	public Timestamp getManual_validation() {
+		return manual_validation;
+	}
+	public void setManual_validation(Timestamp manual_validation) {
+		this.manual_validation = manual_validation;
+	}
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
 	
-
+   
 }
 

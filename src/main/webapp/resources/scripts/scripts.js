@@ -941,10 +941,11 @@ function addtva(value) {
 	        contentType: false,
 	        data: formData,
 	        success: function () {
-		      $("#container_transaction").load("liste_transactions_bank");
 		      document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été bien appliquée </b>";
               document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i>Confirmation</span>";
-              $("#Modalnotify").modal();
+              $('#Modalnotify').appendTo("body").modal('show');
+              $("#container_transaction").load("liste_transactions_bank");
+        
               
              },
             error : function(){
@@ -976,10 +977,12 @@ function reducetva(value) {
 	        contentType: false,
 	        data: formData,
 	        success: function () {
-		      $("#container_transaction").load("liste_transactions_bank");
+		      
               document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été enlevée </b>";
               document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i> Confirmation</span>";
-              $("#Modalnotify").modal();
+              $('#Modalnotify').appendTo("body").modal('show');
+              $("#container_transaction").load("liste_transactions_bank");
+    
             
              },
             error : function(){
@@ -1033,6 +1036,166 @@ function totaltva () {
 }
 });
      
+}
+
+
+function showmodaltva () {
+	jQuery.noConflict();
+	 var d = new Date();
+     var m = d.getMonth();
+     var y = d.getFullYear();
+    //declaration 1ere trim 
+    if (m+1>=1 && m+1<=3) {
+    $.ajax({
+	        url: "totaltva/"+y+"-01-01/"+y+"-03-31",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+		   $('#tabletva').empty();
+           var trHTML="<tr><td>Déclaration 1ere trimestre</td><td>"+y+"-01-01 au "+y+"-03-30</td><td>En cours</td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+           $('#Modaldeclarationtva').modal('toggle'); 
+		}
+         
+    });
+    }
+    //
+    if (m+1>=4 && m+1<=6) {
+	
+	    $.ajax({
+	        url: "totaltva/"+y+"-01-01/"+y+"-03-31",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+		   $('#tabletva').empty();
+       var trHTML="<tr><td>Déclaration 1ére trimestre</td><td>"+y+"-01-01 au "+y+"-03-30</td><td><span style='color: green;'><i class='far fa-check-circle'></i> Done</span></td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+           
+
+          $.ajax({
+	        url: "totaltva/"+y+"-04-01/"+y+"-06-30",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+           var trHTML="<tr><td>Déclaration 2éme trimestre</td><td>"+y+"-04-01 au "+y+"-06-30</td><td>En cours</td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+		  	
+		}
+    
+    });
+	 $('#Modaldeclarationtva').modal('toggle');
+	}
+	});
+    }
+
+    if (m+1>=7 && m+1<=9) {
+	
+	 $.ajax({
+	        url: "totaltva/"+y+"-01-01/"+y+"-03-31",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+		   $('#tabletva').empty();
+           var trHTML="<tr><td>Déclaration 1ere trimestre</td><td>"+y+"-01-01 au "+y+"-03-30</td><td><span style='color: green;'><i class='far fa-check-circle'></i> Done</td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+	
+	
+	$.ajax({
+	        url: "totaltva/"+y+"-04-01/"+y+"-06-30",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+           var trHTML="<tr><td>Déclaration 2éme trimestre</td><td>"+y+"-04-01 au "+y+"-06-30</td><td><span style='color: green;'><i class='far fa-check-circle'></i> Done</span></td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+	  $.ajax({
+	        url: "totaltva/"+y+"-07-01/"+y+"-09-30",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+           var trHTML="<tr><td>Déclaration 3éme trimestre</td><td>"+y+"-07-01 au "+y+"-09-30</td><td><span style='color: orange;'>En cours</span></td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+		}
+    
+    });
+	}
+	});
+    $('#Modaldeclarationtva').modal('toggle');
+    }
+    });
+  }
+   if (m+1>=10 && m+1<=12) {
+	
+$.ajax({
+	        url: "totaltva/"+y+"-01-01/"+y+"-03-31",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+		   $('#tabletva').empty();
+           var trHTML="<tr><td>Déclaration 1ere trimestre</td><td>"+y+"-01-01 au "+y+"-03-30</td><td><span style='color: green;'><i class='far fa-check-circle'></i> Done</td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+	
+	
+	$.ajax({
+	        url: "totaltva/"+y+"-04-01/"+y+"-06-30",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+           var trHTML="<tr><td>Déclaration 2éme trimestre</td><td>"+y+"-04-01 au "+y+"-06-30</td><td><span style='color: green;'><i class='far fa-check-circle'></i> Done</span></td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+	  $.ajax({
+	        url: "totaltva/"+y+"-07-01/"+y+"-09-30",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+           var trHTML="<tr><td>Déclaration 3éme trimestre</td><td>"+y+"-07-01 au "+y+"-09-30</td><td><span style='color: green;'><i class='far fa-check-circle'></i> Done</span></td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+		
+		 	$.ajax({
+	        url: "totaltva/"+y+"-10-01/"+y+"-12-31",
+	        type: 'GET',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        success: function (data) {
+           var trHTML="<tr><td>Déclaration 4éme trimestre</td><td>"+y+"-07-01 au "+y+"-09-30</td><td><span style='color: orange;'>En cours</span></td> <td>"+data.totaltvadu+"</td></tr>";
+           $('#tabletva').append(trHTML);
+		}
+		
+		
+		});
+		
+    }
+    });
+	}
+	
+	});
+    $('#Modaldeclarationtva').modal('toggle');
+    }
+});
+
+
+
+
+}
+
 }
 
 
@@ -1099,6 +1262,30 @@ function updatepassword () {
 	
 }
 }
+function updateinfo(){
+	
+		 $.ajax({
+	        url: "updateinfo/"+$("#eMail").val()+"/"+$("#phone").val()+"/"+$("#company").val(),
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	       success: function (response) {
+	       document.getElementById("msgmodalnotifyprofil").innerHTML="<b>"+response+ "</b>";
+		   document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: green;'><i class='fas fa-user-edit'></i> Confirmation update</span>";
+		   $("#Modalnotifyprofil").modal();
+             },
+            error : function (jqXHR) {
+	    document.getElementById("msgmodalnotifyprofil").innerHTML="<b>"+jqXHR.responseText+ "</b>";
+		document.getElementById("titlemodalnotifyprofil").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error update</span>";
+		$("#Modalnotifyprofil").modal();
+            }
+	});
+	
+	
+}
+
+
 
 //********************************************************************** JS GLOBAL SETTINGS
 

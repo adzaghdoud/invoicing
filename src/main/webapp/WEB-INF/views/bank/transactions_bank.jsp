@@ -214,6 +214,10 @@ card-counter{
               <input type="radio" >Oui</label>
               <label class="btn btn-default btn-off btn-xs " onclick="javascript:reducetva()">
               <input type="radio" >Non</label>
+                  <br/>
+              <small><i><b>HT ${liste.amount_HT} €</b></i></small>
+              <br/>
+              <small><i><b>TVA 20%</b></i></small>
             </div>
             </c:if>
             
@@ -251,7 +255,9 @@ card-counter{
               <label class="btn btn-default btn-off btn-xs " onclick="javascript:reducetva()">
               <input type="radio" >Non</label>
               <br/>
-              <small><i><b>TVA ${liste.amount_HT} €</b></i></small>
+              <small><i><b>HT ${liste.amount_HT} €</b></i></small>
+              <br/>
+              <small><i><b>TVA 20%</b></i></small>
             </div>
             </c:if>
             
@@ -261,6 +267,10 @@ card-counter{
               <input type="radio" >Oui</label>
               <label class="btn btn-default btn-off btn-xs active " onclick="javascript:reducetva()">
               <input type="radio" >Non</label>
+              <br/>
+              <c:if test = "${empty liste.manual_validation}"> 
+              <span style='color: orange;'><i class="fas fa-star"></i> New</span>
+             </c:if>
             </div>
             </c:if>              
             </td>

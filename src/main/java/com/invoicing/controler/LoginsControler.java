@@ -2,6 +2,7 @@ package com.invoicing.controler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -31,6 +32,7 @@ import com.invoicing.model.Logins;
 import com.invoicing.model.Prestations;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
+import com.invoicing.tools.Ldaptools;
 
 @Controller
 public class LoginsControler {
@@ -86,11 +88,45 @@ public class LoginsControler {
 	  
 	  return ResponseEntity.ok("Le mot de passe  a été bien mis à jour dans LDAP");
 	}
+	
+	
+	@RequestMapping(value = "/updateinfo/{email}/{tel}/{organisation}", method = RequestMethod.POST)
+	public @ResponseBody  ResponseEntity<String> updateinfo( @CookieValue("invoicing_username") String cookielogin,@PathVariable("email") String email,@PathVariable("tel") String tel,@PathVariable("organisation") String organisation) {
+		
+		try {
+			Properties env = new Properties();
+			env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+			env.put(Context.PROVIDER_URL, "ldap://vmi537338.contaboserver.net:389");
+			env.put(Context.SECURITY_PRINCIPAL, "cn=Directory Manager");
+			env.put(Context.SECURITY_CREDENTIALS, "09142267");
+			DirContext ctx = new InitialDirContext(env);
+			Map<String, String> map = Ldaptools.getvalueattibute("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+			
+			if (! map.get("mail").toString().contentEquals(email)) {
+				ModificationItem[] mods = new ModificationItem[1];
+				mods[0]= new ModificationItem(DirContext.REPLACE_ATTRIBUTE , new BasicAttribute("mail",email));
+				ctx.modifyAttributes("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net", mods);
+			}
+			
+			if (! map.get("tel").toString().contentEquals(tel)) {
+				ModificationItem[] mods = new ModificationItem[1];
+				mods[0]= new ModificationItem(DirContext.REPLACE_ATTRIBUTE , new BasicAttribute("telephonenumber",tel));
+				ctx.modifyAttributes("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net", mods);
+				}
+			
+			if (! map.get("o").toString().contentEquals(tel)) {
+				ModificationItem[] mods = new ModificationItem[1];
+				mods[0]= new ModificationItem(DirContext.REPLACE_ATTRIBUTE , new BasicAttribute("o",organisation));
+				ctx.modifyAttributes("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net", mods);
+				}
+			ctx.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				log.error(ExceptionUtils.getStackTrace(e));
+				return ResponseEntity.status(510).body("Erreur mise à jour dans LDAP");
+				
+			}
+		  
+		  return ResponseEntity.ok("Mise à jour ok dans LDAP");
+		}		
 	}
-	
-	
-	
-	
-	
-	
-

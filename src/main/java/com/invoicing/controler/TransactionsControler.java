@@ -1,5 +1,6 @@
 package com.invoicing.controler;
 import java.math.BigDecimal;
+
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -37,12 +38,13 @@ public class TransactionsControler {
 	public @ResponseBody int refresh_transactions (@CookieValue("invoicing_username") String cookielogin){
 		long nbafter=0;
 		long nbbefore=0;
+
 		try {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		 TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
 		 LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
-		 ProcessBuilder processBuilder = new ProcessBuilder(System.getProperty("path.script.import."+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toLowerCase()),System.getProperty("path.json.input"), System.getProperty("path.backend.jar"),srvcompany.getinfo().getRib(),srvcompany.getinfo().getSlug(),srvcompany.getinfo().getToken());
+		 ProcessBuilder processBuilder = new ProcessBuilder(System.getProperty("path.script.import."+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toLowerCase()),System.getProperty("path.json.input")+System.getProperty("file.separator")+"transactions_"+srvlogins.getinfo(cookielogin).getCompany()+".json", System.getProperty("path.backend.jar"),srvcompany.getinfo().getRib(),srvcompany.getinfo().getSlug(),srvcompany.getinfo().getToken(),srvcompany.getinfo().getRs().toUpperCase());
 		 nbbefore = srvt.countnbtransaction();
 		 processBuilder.redirectErrorStream(true);
 		 Process p = processBuilder.start();
@@ -56,8 +58,9 @@ public class TransactionsControler {
          Timestamp ts=new Timestamp(date.getTime());
          srvcompany.updatetimestamprefresh(ts, srvlogins.getinfo(cookielogin).getCompany());
 		 context.close();
-		 
+
 	} catch (Exception e) {
+		 
 	log.error(ExceptionUtils.getStackTrace(e));
 	}
 	   if ( nbafter == 0) {
@@ -71,13 +74,15 @@ public class TransactionsControler {
 	public @ResponseBody void gestiontva (@RequestParam(required = true) String  typeoperation,@RequestParam(required = true) String  amountttc,@RequestParam(required = true) String  settled_at){
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		Date date = new Date();
+        Timestamp ts=new Timestamp(date.getTime());
 		if (typeoperation.contentEquals("add")) {
 		BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(amountttc)/1.2);
 		bd = bd.setScale(2, RoundingMode.DOWN);
-	    srvt.updatetvatransaction(settled_at, bd.doubleValue());
+	    srvt.updatetvatransaction(settled_at, bd.doubleValue(),ts);
 		}
 		if (typeoperation.contentEquals("reduce")) {
-			srvt.updatetvatransaction(settled_at, 0);
+			srvt.updatetvatransaction(settled_at, 0,ts);
 			}
 		
 	context.close();

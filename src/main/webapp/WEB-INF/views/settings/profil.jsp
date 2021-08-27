@@ -31,7 +31,7 @@
 				</div>
 				<input type="file" id="imgupload" style="display:none" accept="image/*"/> 
 				<button type="button" id="buttonmodifyimage"  class="btn btn-success"><i class="fas fa-user-cog"></i> Update Logo</button>
-				<h5 class="user-name">${prenom} ${nom}</h5>
+				<h5 class="user-name">${CN}</h5>
 				<h6 class="user-email">${email}</h6>
 			</div>
 		</div>
@@ -49,7 +49,7 @@
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="fullName">Login</label>
-					<input type="text" class="form-control" id="login" value="${login}">
+					<input type="text" class="form-control" id="login" value="${login}" readonly>
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -74,7 +74,7 @@
 				<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="text-right">
-					<button type="button" id="submit" name="submit" class="btn btn-warning" onclick="updatepassword()">Update Information</button>
+					<button type="button" id="submit" name="submit" class="btn btn-warning" onclick="updateinfo()">Update Information</button>
 				</div>
 			</div>
 		</div>

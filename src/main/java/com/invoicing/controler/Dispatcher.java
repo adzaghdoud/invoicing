@@ -12,6 +12,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
@@ -44,7 +45,9 @@ import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
 import com.invoicing.service.TransactionsService;
+import com.invoicing.tools.Ldaptools;
 
+import java.util.Map;
 import java.util.Properties;
 @Controller
 public class Dispatcher {
@@ -153,14 +156,14 @@ public class Dispatcher {
 	public ModelAndView profile(@CookieValue("invoicing_username") String cookielogin) throws IOException, ParseException {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
-		Logins p = srvlogins.getinfo(cookielogin);
+		Logins p = srvlogins.getinfo(cookielogin);		
 		ModelAndView mv = new ModelAndView("/settings/profil");
-		mv.addObject("prenom", p.getPrenom());
-		mv.addObject("nom", p.getNom());
-		mv.addObject("email", p.getEmail());
-		mv.addObject("login", p.getLogin());
-		mv.addObject("tel", p.getTel());
-		mv.addObject("company", p.getCompany());
+		Map<String, String> map = Ldaptools.getvalueattibute("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+		mv.addObject("CN", map.get("cn"));
+		mv.addObject("email",map.get("mail"));
+		mv.addObject("login", cookielogin);
+		mv.addObject("tel", map.get("tel"));
+		mv.addObject("company", map.get("o"));
 		if (!(p.getAvatar() == null) ) {
 		String encodedimage = Base64Utils.encodeToString(p.getAvatar());
 		mv.addObject("avatar",encodedimage);

@@ -6,7 +6,6 @@
         <Console name="stdout" target="SYSTEM_OUT">
             <PatternLayout pattern="[%t] %-5p | %-60c | %m (%F:%L)%n" />
         </Console>
-        
        <RollingFile name="LOG_FILE" fileName="${sys:catalina.base}/logs/invoicing.log"
 			filePattern="invoicing-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout pattern="%d %-5p [%t] - %m (%F:%L)%n" />

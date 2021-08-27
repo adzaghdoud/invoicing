@@ -1,5 +1,6 @@
 package com.invoicing.service;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 
@@ -10,6 +11,6 @@ public interface TransactionsService {
 	List<Transaction> getlist();
 	boolean checkexistancetransaction(String transactionID);
 	long countnbtransaction();
-	void updatetvatransaction(String setted_at,double amountttc);
+	void updatetvatransaction(String setted_at,double amountttc,Timestamp t);
 	List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin) ;
 }

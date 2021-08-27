@@ -13,7 +13,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
 <script src="https://kit.fontawesome.com/b16c365929.js"></script>
 </head>
 <body>
@@ -84,6 +83,7 @@
                  <ul class="sub-menu collapse" id="settings">
                   <li><a class="link" href="Companysettings">Company Settings</a></li>
                   <li><a class="link" href="General_settings">General Settings</a></li>
+                  
                   </ul>
                   </li>           
                  <li data-toggle="collapse" data-target="#messagerie" class="collapsed">
@@ -105,6 +105,7 @@
                 <ul class="sub-menu collapse" id="bank">
                 <li><a href="liste_transactions_bank" class="link">Liste transactions  ${company_bank_name}</a></li>
                 <li><a href="tva_collectee" class="link">Détail TVA</a></li>
+                <li><a href="#" onclick="showmodaltva()">Déclaration TVA</a></li>
                 </ul>
                 </li>            
                 <li>
@@ -227,6 +228,35 @@
     </div>
   </div>
 </div>
+
+
+  <div class="modal fade" id="Modaldeclarationtva" tabindex="-1"  role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" ><span style='color: green;'><i class="fas fa-university"></i> Historique déclaration TVA</span></h5>
+      </div>
+      <div class="modal-body">
+      <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Déclaration</th>
+        <th>Date </th>
+        <th>Statut</th>
+        <th>Montant</th>
+      </tr>
+    </thead>
+    <tbody id="tabletva">
+    </tbody>
+    </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
      
     
      <script type="text/javascript">  
