@@ -110,6 +110,7 @@ public class Transaction {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+
 	
    
 }

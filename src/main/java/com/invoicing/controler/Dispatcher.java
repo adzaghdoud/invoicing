@@ -307,6 +307,7 @@ public class Dispatcher {
 		ModelAndView mv = new ModelAndView("/settings/general_settings");
 		try {
 		InputStream input = new FileInputStream(System.getProperty("env.file.ext"));
+		
 		Properties props = new Properties();
 		props.load(input);
 		mv.addObject("smtphost", props.getProperty("SMTP.HOST"));
@@ -319,8 +320,22 @@ public class Dispatcher {
 		mv.addObject("ldapadmin", props.getProperty("LDAP.ADMIN"));
 		mv.addObject("ldappassword", props.getProperty("LDAP.ADMIN.PASSWORD"));
 		}catch (Exception e) {	
+		logger.error(ExceptionUtils.getStackTrace(e));
 		}
+		
+		try {
+		InputStream inputbatch = new FileInputStream(System.getProperty("batch.trigger.config.file"));
+		Properties props = new Properties();
+		props.load(inputbatch);
+		mv.addObject("Scheduledtime", props.getProperty("heure")+":"+props.getProperty("minutes")+":"+props.getProperty("seconde"));
 			
+		}catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+		
+		
+		
+		
 		return mv;
 	}
 	

@@ -96,7 +96,17 @@ body {
 					<input type="text" class="form-control" id="ldappassword" value="${ldappassword}">
 				</div>
 			</div>
-			
+			  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<h6 class="mb-2 text-primary">BATCH Settings</h6>
+				<hr>
+			</div>
+			 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="phone"><b>Scheduled Time</b></label>
+					<input type="text" class="form-control" id="ldappassword" value="${Scheduledtime}">
+				</div>
+			</div>
+	
 				
 		</div>
 				<hr>

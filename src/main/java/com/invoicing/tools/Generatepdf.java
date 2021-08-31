@@ -4,8 +4,11 @@ package com.invoicing.tools;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -17,8 +20,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import com.google.common.io.ByteSource;
 import com.invoicing.model.Client;
@@ -37,8 +45,13 @@ import net.sf.jasperreports.engine.JasperReport;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
-
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.OutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 public class Generatepdf extends HttpServlet{
@@ -150,11 +163,26 @@ public class Generatepdf extends HttpServlet{
 			     reportParameters.put("total_HT", prestation.getMontantHT());
 			     reportParameters.put("TVA", prestation.getValtaxe());
 			     reportParameters.put("Total_TTC", prestation.getMontantTTC());
-			     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
-			     JasperExportManager.exportReportToPdfFile(jasperPrint,System.getProperty("pdf.stor")+FileSystems.getDefault().getSeparator()+this.filename+".pdf");	     
-		   } catch (JRException ex) {
-			      
-			      Logger.getLogger(Generatepdf.class.getName()).log(Level.SEVERE, null, ex);
+			    
+				try {
+					
+				     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
+				     response.setContentType("application/x-download");
+				     response.addHeader("Content-disposition", "attachment; filename=StatisticsrReport1.pdf");
+				     JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+				     response.getOutputStream().flush();
+				     response.getOutputStream().close();   
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					 System.out.println(ExceptionUtils.getStackTrace(e));
+				}
+			
+			     
+			     
+			     //JasperExportManager.exportReportToPdfFile(jasperPrint,this.filename+".pdf");	     
+		   } catch (Exception e) {
+			      System.out.println(ExceptionUtils.getStackTrace(e));
+			      //Logger.getLogger(Generatepdf.class.getName()).log(Level.SEVERE, null, ex);
 			     
 			     
 			     return false;

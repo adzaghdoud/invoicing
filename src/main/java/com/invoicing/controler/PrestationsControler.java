@@ -83,6 +83,7 @@ public class PrestationsControler {
 			  
 		  }
 		  context.close();
+		  
 		  return ResponseEntity.ok("La facture "+nomfacture+"a été bien générée");
 		
 	}

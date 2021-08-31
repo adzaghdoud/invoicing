@@ -36,7 +36,7 @@ public class AuthentificationFilter implements Filter {
 		//flase to indicate no create new session if session is invalid
 		HttpSession session = req.getSession(false);
 		
-		if( session==null && ! uri.endsWith("login") && ! uri.endsWith("png")  ){
+		if( session==null && ! uri.endsWith("login") && ! uri.endsWith("png") && ! uri.endsWith("gif") ){
 			this.context.log("Unauthorized access request"+uri);
 			res.sendRedirect("login");
 		}else{

@@ -535,18 +535,18 @@ function Generateinvoice(){
         data: myJSON,
         success: function (response) {
         	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
-            document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
-            $("#Modalnotify").modal();
-            setTimeout(function(){
-            	  $('#Modalnotify').modal('hide')
-            	}, 2000);
+        	//document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
+            //document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+            //$("#Modalnotify").modal();
+            //setTimeout(function(){
+            //	  $('#Modalnotify').modal('hide')
+            //	}, 2000);
         },
         error : function (jqXHR) {
         	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
-            document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
-            $("#Modalnotify").modal();	
+        	//document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
+            //document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
+            //$("#Modalnotify").modal();	
         }
         
 	}); 
