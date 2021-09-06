@@ -123,10 +123,7 @@ public class PrestationsControler {
 		  if ( ! g.generate(response) ) {
 			  context.close();
 			  return false;
-		  }
-	
-		  
-		  
+		  }  
 		  Sendmail s = new Sendmail();
 		  s.setFilename(nomfacture+".pdf");
 		  s.setSystempath("pdf.stor");

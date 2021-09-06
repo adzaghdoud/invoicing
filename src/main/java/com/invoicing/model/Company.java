@@ -28,6 +28,7 @@ public class Company {
 	private byte[] logo;
 	private Timestamp last_refresh_transaction;
 	private String numtva;
+	private String email;
 	public String getBankname() {
 		return bankname;
 	}
@@ -115,9 +116,15 @@ public class Company {
 	public String getNumtva() {
 		return numtva;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public void setNumtva(String numtva) {
 		this.numtva = numtva;
 	}
 	
-    
+    	
 }

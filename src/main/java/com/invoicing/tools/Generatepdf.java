@@ -54,7 +54,7 @@ import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
 
 
-public class Generatepdf extends HttpServlet{
+public class Generatepdf {
 
 	/**
 	 * 
@@ -167,8 +167,10 @@ public class Generatepdf extends HttpServlet{
 				try {
 					
 				     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
+				     
 				     response.setContentType("application/x-download");
-				     response.addHeader("Content-disposition", "attachment; filename=StatisticsrReport1.pdf");
+				     response.setHeader("Content-disposition","inline; filename=userList.pdf");
+
 				     JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
 				     response.getOutputStream().flush();
 				     response.getOutputStream().close();   

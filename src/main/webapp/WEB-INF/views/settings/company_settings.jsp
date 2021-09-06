@@ -21,9 +21,9 @@
                                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png">
                                 </c:when>
                                 <c:otherwise>
-                                <img src="data:image/jpg;base64,${encodedimage}"   style="width:70%;height:70%">
+                                <img src="data:image/jpg;base64,${encodedimage}" style="width:70%;height:70%">
                                 </c:otherwise>
-                                 </c:choose>	                    
+                                </c:choose>	                    
 			                    <input type="file" id="imgupload" style="display:none" accept="image/*"/> 
 			                    <button type="button" id="buttonmodifyimage"  class="btn btn-warning"><i class="fas fa-user-cog"></i> Update Logo</button>
 							</div>
