@@ -6,24 +6,23 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 @Table(name="transactions")
+@NamedNativeQueries({
 @NamedNativeQuery(
         name = "searchtransactionbetweentwodates_with_tva",
         query = "SELECT * FROM invoicing.transactions  where settled_at between ? and  ? and amount_HT>0  and company = ? ORDER BY settled_at DESC",
                     resultClass=Transaction.class
-    )
+    ),
 
 @NamedNativeQuery(
         name = "searchtransactionbetweentwodates_all",
         query = "SELECT * FROM invoicing.transactions  where settled_at between ? and  ?   and company = ? ORDER BY settled_at DESC",
                     resultClass=Transaction.class
     )
-
+})
 public class Transaction {
 	@Id
 	private String transaction_id;
