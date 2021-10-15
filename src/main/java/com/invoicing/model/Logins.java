@@ -14,6 +14,7 @@ public class Logins {
 	private String tel;
 	private String company;
 	private byte [] avatar;
+	private String resetpassword;
 	public String getLogin() {
 		return login;
 	}
@@ -57,7 +58,13 @@ public class Logins {
 	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
 	}
+	public String getResetpassword() {
+		return resetpassword;
+	}
+	public void setResetpassword(String resetpassword) {
+		this.resetpassword = resetpassword;
+	}
 	
-    
+    	
 
 }

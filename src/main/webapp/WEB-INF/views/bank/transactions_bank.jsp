@@ -152,17 +152,19 @@ card-counter{
 <div class="container" id="container_transaction">
     
     <div class="row">
-    <h3>Transactions Bancaires</h3>
+    <h3><i class="far fa-list-alt"></i> Transactions Bancaires</h3>
       <div class="col-md-4">
       <div class="card-counter danger">
      <i class="fas fa-sign-out-alt"></i>
-     <span class="count-numbers">${amount_out} €</span>
+     <span  style="font-size:medium ;" >Sorties du mois</span>
+     <span class="count-numbers" >-${amount_out} €</span>
       </div>
     </div>
         <div class="col-md-4">
       <div class="card-counter success">
          <i class="fas fa-sign-in-alt"></i>
-        <span class="count-numbers">${amount_in} €</span>
+         <span  style="font-size:medium ;" >Entrées du mois</span>
+        <span class="count-numbers">+${amount_in} €</span>
       </div>
     </div>
     </div>

@@ -178,18 +178,17 @@ public class Sendmail {
 	    		Multipart multipart = new MimeMultipart();
 
 	            MimeBodyPart textBodyPart = new MimeBodyPart();
-	            textBodyPart.setContent(this.contain, "text/html; charset=utf-8");
-
+	            textBodyPart.setContent(this.contain, "text/html; charset=utf-8"); 
+	            textBodyPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
+	            if ( this.filename !=null) {
 	            MimeBodyPart attachmentBodyPart= new MimeBodyPart();
 	            FileDataSource source = new FileDataSource(System.getProperty(this.systempath)+FileSystems.getDefault().getSeparator()+this.filename);
 	            attachmentBodyPart.setDataHandler(new DataHandler(source));
 	            attachmentBodyPart.setFileName(this.filename);
-
-	            multipart.addBodyPart(textBodyPart); 
 	            multipart.addBodyPart(attachmentBodyPart);
-
+	            }
+	            multipart.addBodyPart(textBodyPart);
 	            message.setContent(multipart);
-	  
 	    		Transport.send(message);
 	    		} catch (MessagingException e) {
 	    			System.out.print(ExceptionUtils.getStackTrace(e));

@@ -1,6 +1,8 @@
 package com.invoicing.controler;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -11,10 +13,15 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +40,11 @@ import com.invoicing.model.Prestations;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
 import com.invoicing.tools.Ldaptools;
+import com.invoicing.tools.Sendmail;
 
 @Controller
 public class LoginsControler {
+	
 	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@RequestMapping(value = "/getuserinfo", method = RequestMethod.POST)
 	public @ResponseBody Logins getinforuser(HttpServletRequest request,@CookieValue("invoicing_username") String cookielogin) {
@@ -47,46 +56,21 @@ public class LoginsControler {
 	
 	}
 	
-	@RequestMapping(value = "/updateavatar", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> updateavatar(HttpServletRequest request,@CookieValue("invoicing_username") String cookielogin ,@RequestParam(required = true) MultipartFile avatar) {
-		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
-		byte[] newavatar;
-		try {
-			  newavatar = avatar.getBytes();	 
-		      srvlogins.updateavatar(cookielogin, newavatar);	      
-			
-		} catch (Exception e) {
-			context.close();
-			 log.error(ExceptionUtils.getStackTrace(e));
-		}
-			
-		context.close();
-	    return  ResponseEntity.ok("L'avatar a été bien mis à jour");
-	
-	}
+
 	
 	@RequestMapping(value = "/updatepassword/{login}/{password}", method = RequestMethod.POST)
 	public @ResponseBody  ResponseEntity<String> updatepassword(@PathVariable("login") String login,@PathVariable("password") String password) {
-		try {
-		Properties env = new Properties();
-		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-		env.put(Context.PROVIDER_URL, "ldap://vmi537338.contaboserver.net:389");
-		env.put(Context.SECURITY_PRINCIPAL, "cn=Directory Manager");
-		env.put(Context.SECURITY_CREDENTIALS, "09142267");
-		DirContext ctx = new InitialDirContext(env); 		
-		ModificationItem[] mods = new ModificationItem[1];
-		mods[0]= new ModificationItem(DirContext.REPLACE_ATTRIBUTE , new BasicAttribute("userPassword",password));
-		ctx.modifyAttributes("uid="+login+",ou=people,dc=vmi537338,dc=contaboserver,dc=net", mods);
-		ctx.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.error(ExceptionUtils.getStackTrace(e));
-			return ResponseEntity.status(510).body("Erreur mise à jour mot de passe dans LDAP");
-			
-		}
-	  
-	  return ResponseEntity.ok("Le mot de passe  a été bien mis à jour dans LDAP");
+	
+		   if (com.invoicing.tools.Ldaptools.resetpassword(login, password)) {
+				AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		    	LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
+		    	srvlogins.setresetpassword(login, "NO");
+		    	context.close();
+		   return ResponseEntity.ok("Le mot de passe  a été bien mis à jour dans LDAP"); 
+		   }
+		 else {
+           return ResponseEntity.status(510).body("Erreur mise à jour mot de passe dans LDAP");
+		 }	  
 	}
 	
 	
@@ -129,4 +113,50 @@ public class LoginsControler {
 		  
 		  return ResponseEntity.ok("Mise à jour ok dans LDAP");
 		}		
-	}
+	
+	    @RequestMapping(value = "/checkemail/{email}", method = RequestMethod.POST)
+	    public @ResponseBody  boolean updatepassword(@PathVariable("email") String email) {
+	    	AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+	    	LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
+	    	if(srvlogins.checkemail(email)) {
+	    		context.close();
+	    		return true;
+	    	}
+	    	else {
+	    		context.close();
+	    		return false;
+	    	}
+	    }
+
+	
+	    @RequestMapping(value = "/GenerateTempoPassword/{email}", method = RequestMethod.POST)
+	    public @ResponseBody  void gettempopassword(@PathVariable("email") String email,HttpServletRequest request) throws IOException {
+	    	AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+	    	LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
+	    	   RandomStringGenerator generator = new RandomStringGenerator.Builder()
+	                   .withinRange(0, 'z')
+	                   .filteredBy(CharacterPredicates.ASCII_ALPHA_NUMERALS)
+	                   .build();
+        String newtempopassword=generator.generate(15);
+        byte[] fileContent = FileUtils.readFileToByteArray(new File(request.getServletContext().getRealPath("resources/images")+"\\logo.png"));
+        String encodedString = Base64.getEncoder().encodeToString(fileContent);
+        Sendmail s = new Sendmail();
+            s.setMailto(email);
+            s.setSubject("Password Temporaire Invoicing");
+            s.setContain("Bonjour "+srvlogins.getloginbyemail(email).getLogin()+ ",  <br/><br/>"
+            		+ "Ci-dessous le nouveau mot de passe temporaire <br/> <br/>"
+            		+ "<b>"+newtempopassword+"</b><br/><br/>"
+            		+ "Cordialement <br/><br/>"
+            		+"<img src=\"data:image/png;base64,"+encodedString+"\">");
+            s.send();
+            com.invoicing.tools.Ldaptools.resetpassword(srvlogins.getloginbyemail(email).getLogin(), newtempopassword);
+            srvlogins.setresetpassword(srvlogins.getloginbyemail(email).getLogin(),"YES");
+            context.close();
+	    
+	    }
+	    
+	    
+	    
+	    
+
+}

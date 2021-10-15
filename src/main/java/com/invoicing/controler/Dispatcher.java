@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -35,10 +38,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Logins;
+import com.invoicing.model.Prestations;
+import com.invoicing.model.Transaction;
 import com.invoicing.service.ArticleService;
 import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
@@ -47,6 +53,10 @@ import com.invoicing.service.PrestationsService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 @Controller
@@ -83,17 +93,20 @@ public class Dispatcher {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");		
-		
+		ModelAndView mv ;
 		if (!checkidldap(login,password)) {
-		ModelAndView mv = new ModelAndView("/accueil/login");
+		 mv = new ModelAndView("/accueil/login");
 		mv.addObject("erromsg", "Login ou password invalide");
 		context.close();
 		return mv;
 		}
-		ModelAndView mv = new ModelAndView("/accueil/main");
+		;
+	
+		mv = new ModelAndView("/accueil/main");
 		mv.addObject("welcome","Bonjour "+login);
 		mv.addObject("company_name",srvlogins.getinfo(login).getCompany());
 		mv.addObject("company_bank_name",srvcompany.getcompanybyraison(srvlogins.getinfo(login).getCompany()).getBankname());
+        mv.addObject("flag_reset_password", srvlogins.getinfo(login).getResetpassword());
 		Cookie userName = new Cookie("invoicing_username", login);
 		userName.setMaxAge(-1);
 		response.addCookie(userName);
@@ -119,26 +132,28 @@ public class Dispatcher {
 	
 	
 	@RequestMapping(value = "/newinvoice", method = RequestMethod.GET)
-	public ModelAndView newinvoice() {
+	public ModelAndView newinvoice(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		ClientService srvclient = (ClientService) context.getBean("ClientService");	
 		ArticleService srvarticle = (ArticleService) context.getBean("ArticleService");	
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		ModelAndView mv = new ModelAndView("/actions/createinvoice");
-		mv.addObject("listeclients", srvclient.getallclients());
-		mv.addObject("listearticles", srvarticle.getlistarticles());
+		mv.addObject("listeclients", srvclient.getallclients(srvlogins.getinfo(cookielogin).getCompany()));
+		mv.addObject("listearticles", srvarticle.getlistarticles(srvlogins.getinfo(cookielogin).getCompany()));
 		context.close();
 		return mv;
 	}
 	
 	
 	@RequestMapping(value = "/Companysettings", method = RequestMethod.GET)
-	public ModelAndView getCompanysettings() {
+	public ModelAndView getCompanysettings(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");	
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		ModelAndView mv = new ModelAndView("/settings/company_settings");
 		
-		String encodedimage = Base64Utils.encodeToString(srvcompany.getinfo().getLogo());
-		mv.addObject("info", srvcompany.getinfo());
+		String encodedimage = Base64Utils.encodeToString(srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getLogo());
+		mv.addObject("info", srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()));
 		mv.addObject("encodedimage", encodedimage);
 		context.close();
 		return mv;
@@ -175,7 +190,7 @@ public class Dispatcher {
 	
 	
 	@RequestMapping(value = "/charts", method = RequestMethod.GET)
-	public ModelAndView charts(@CookieValue("invoicing_username") String cookielogin) {
+	public ModelAndView charts(@CookieValue("invoicing_username") String cookielogin) throws java.text.ParseException {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		PrestationsService srvprestations = (PrestationsService) context.getBean("PrestationsService");
 		ClientService srvclient = (ClientService) context.getBean("ClientService");
@@ -184,13 +199,13 @@ public class Dispatcher {
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		double in=0;
 		double out=0;
-		for (int i=0 ; i<srvt.getlist().size() ; i++) {
-			if (srvt.getlist().get(i).getSide().contentEquals("debit")) {
-				out = out +srvt.getlist().get(i).getAmount();
+		for (int i=0 ; i<srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
+			if (srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getSide().contentEquals("debit")) {
+				out = out +srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount();
 			}
 			
-			if (srvt.getlist().get(i).getSide().contentEquals("credit")) {
-				in =in +srvt.getlist().get(i).getAmount();
+			if (srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getSide().contentEquals("credit")) {
+				in =in +srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount();
 			}
 			
 		}
@@ -199,13 +214,19 @@ public class Dispatcher {
 		BigDecimal result=bd.subtract(bd2);
 		result = result.setScale(2, RoundingMode.DOWN);
 		ModelAndView mv = new ModelAndView("/dash/dashbord");
-		mv.addObject("ca", srvprestations.chiffre_affaire());
+		double ca=0;
+	    List<Prestations>listp=srvprestations.getlistprestations_until_date_cloture(srvlogins.getinfo(cookielogin).getCompany(),srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getDate_cloture_comptable());
+	    for(int i=0 ; i<listp.size(); i++) {    	
+	    ca+=listp.get(i).getTotalttc();	
+	    }
+		mv.addObject("ca",ca);
 		mv.addObject("nb_paiement_to_validate", srvprestations.number_paiement_to_validate());
 		mv.addObject("nb_paiement_validated", srvprestations.number_paiement_validate());
-		mv.addObject("nb_clients", srvclient.numberclient());
-		mv.addObject("liste_prestations", srvprestations.getlistprestations());
+		mv.addObject("nb_clients", srvclient.numberclient(srvlogins.getinfo(cookielogin).getCompany()));
+		mv.addObject("liste_prestations", srvprestations.getlistprestations(srvlogins.getinfo(cookielogin).getCompany()));
 		mv.addObject("tresorie", result.doubleValue());
-		mv.addObject("bankname", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toUpperCase());
+		mv.addObject("date_cloture", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getDate_cloture_comptable());
+		mv.addObject("bankname", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname());
 		context.close();
 		return mv;
 	
@@ -214,11 +235,12 @@ public class Dispatcher {
 	
 	
 	@RequestMapping(value = "/prestations", method = RequestMethod.GET)
-	public ModelAndView getprestations() {
+	public ModelAndView getprestations(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		PrestationsService srvprestations = (PrestationsService) context.getBean("PrestationsService");	
 		ModelAndView mv = new ModelAndView("/prestations/liste_prestations");
-		mv.addObject("Liste_prestations", srvprestations.getlistprestations());
+		mv.addObject("Liste_prestations", srvprestations.getlistprestations(srvlogins.getinfo(cookielogin).getCompany()));
 		context.close();
 		return mv;
 	
@@ -272,16 +294,32 @@ public class Dispatcher {
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		ModelAndView mv = new ModelAndView("/bank/transactions_bank");
-		mv.addObject("List_transactions", srvtransaction.getlist());		
+		mv.addObject("List_transactions", srvtransaction.getlist(srvlogins.getinfo(cookielogin).getCompany()));		
+		// amout in and out
+		LocalDate todaydate = LocalDate.now();
+		int currentMonth = todaydate.getMonthValue();
+		int currentyear = todaydate.getYear();
+		ArrayList<Transaction> arraylisttransactions = new ArrayList<Transaction>();	
+		if (currentMonth<10) {
+		for (int i=0 ; i<srvtransaction.searchtransacbetweentwodates(currentyear+"-"+"0"+currentMonth+"-01", currentyear+"-"+"0"+currentMonth+"-31", srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
+			arraylisttransactions.add(srvtransaction.searchtransacbetweentwodates(currentyear+"-"+"0"+currentMonth+"-01", currentyear+"-"+"0"+currentMonth+"-31", srvlogins.getinfo(cookielogin).getCompany()).get(i));
+			}	
+		}
+		else {
+			   for (int i=0 ; i<srvtransaction.searchtransacbetweentwodates(currentyear+"-"+currentMonth+"-01", currentyear+"-"+currentMonth+"-31", srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
+				arraylisttransactions.add(srvtransaction.searchtransacbetweentwodates(currentyear+"-"+currentMonth+"-01", currentyear+"-"+currentMonth+"-31", srvlogins.getinfo(cookielogin).getCompany()).get(i));
+				}	
+			
+		}
 		double in=0;
 		double out=0;
-		for (int i=0 ; i<srvtransaction.getlist().size() ; i++) {
-			if (srvtransaction.getlist().get(i).getSide().contentEquals("debit")) {
-				out = out +srvtransaction.getlist().get(i).getAmount();
+		for (int i=0 ; i<arraylisttransactions.size() ; i++) {
+			if (arraylisttransactions.get(i).getSide().contentEquals("debit")) {
+				out = out +arraylisttransactions.get(i).getAmount();
 			}
 			
-			if (srvtransaction.getlist().get(i).getSide().contentEquals("credit")) {
-				in =in +srvtransaction.getlist().get(i).getAmount();
+			if (arraylisttransactions.get(i).getSide().contentEquals("credit")) {
+				in =in +arraylisttransactions.get(i).getAmount();
 			}
 			
 		}
@@ -339,6 +377,33 @@ public class Dispatcher {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/updateavatar", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String> updateavatar(HttpServletRequest request,@CookieValue("invoicing_username") String cookielogin ,@RequestParam(required = true) MultipartFile avatar,@RequestParam(required = true) String applied_to) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		byte[] newavatar;
+		String msg="";
+		try {
+			  newavatar = avatar.getBytes();	 
+		      if (applied_to.contentEquals("avatar")) {
+			  srvlogins.updateavatar(cookielogin, newavatar);
+			  msg="L'avatar a été bien mis à jour";
+		      }	
+		      
+		      if (applied_to.contentEquals("logo")) {
+		    	  srvcompany.updatlogo(srvlogins.getinfo(cookielogin).getCompany(), newavatar); 
+		    	  msg="Le logo a été bien mis à jour";
+			      }	
+		      
+		} catch (Exception e) {
+			context.close();
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+			
+		context.close();
+	    return  ResponseEntity.ok(msg);
 	
+	}
 	  
 }

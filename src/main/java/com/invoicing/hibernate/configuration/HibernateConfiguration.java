@@ -45,15 +45,14 @@ import org.hibernate.SessionFactory;
 	    public DataSource dataSource() {
 	        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-	        
 	           try {	
-	           if (System.getProperty("invoicing.env").toString().contentEquals("DEV")) {
+	           if (System.getProperty("invoicing.env").toUpperCase().contentEquals("DEV")) {
 				    dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
 				    dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
 				    dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));	
 					} 
 					
-					if (System.getProperty("invoicing.env").toString().contentEquals("PROD")) {
+					if (System.getProperty("invoicing.env").toUpperCase().contentEquals("PROD")) {
 					    dataSource.setUsername(environment.getRequiredProperty("prod.jdbc.username"));
 					    dataSource.setUrl(environment.getRequiredProperty("prod.jdbc.url"));
 					    dataSource.setPassword(environment.getRequiredProperty("prod.jdbc.password"));	

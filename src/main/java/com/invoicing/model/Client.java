@@ -19,14 +19,8 @@ private String ville;
 private String telephone;
 private String mail;
 private String siret;
-private String rib;
-
-  public String getRib() {
-	return rib;
-}
-public void setRib(String rib) {
-	this.rib = rib;
-}
+private String ownedcompany;
+private String numtva;
 public String getRs() {
   return this.rs;	
    }
@@ -81,8 +75,20 @@ public String getRs() {
    }
    public void setSiret(String siret) {
    this.siret=siret;
-   } 
+   }
+public String getOwnedcompany() {
+	return ownedcompany;
+}
+public void setOwnedcompany(String ownedcompany) {
+	this.ownedcompany = ownedcompany;
+}
+public String getNumtva() {
+	return numtva;
+}
+public void setNumtva(String numtva) {
+	this.numtva = numtva;
+} 
                 
-                
+           
 
 }

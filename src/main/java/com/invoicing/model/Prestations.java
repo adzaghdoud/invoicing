@@ -1,15 +1,25 @@
 package com.invoicing.model;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NamedNativeQuery;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name="prestations")
+@NamedNativeQuery(
+        name = "search_prestations",
+        query = "SELECT * FROM invoicing.prestations  where date between ? and  ? and company=?",
+                    resultClass=Prestations.class
+    )
+
 public class Prestations {
     @Id
     @Column(name = "id_prestation")
@@ -35,6 +45,7 @@ public class Prestations {
 	@Column(name = "date_paiement_attendue")
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date datepaiementattendue;
+	private String company;
 	public int getId() {
 		return id;
 	}
@@ -124,5 +135,12 @@ public class Prestations {
 	}
 	public void setDatepaiementattendue(Date datepaiementattendue) {
 		this.datepaiementattendue = datepaiementattendue;
+	}
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
 	}	
+	
 }

@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container" id="containtersettings">
 		<div class="main-body">
 			<div class="row">
 				<div class="col-lg-4">
@@ -57,7 +57,16 @@
 									<h6 class="mb-0">Num TVA</h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
-									<input type="text" id="siret" class="form-control" value="${info.numtva}" disabled >
+									<input type="text" id="numtva" class="form-control" value="${info.numtva}" disabled >
+								</div>
+							</div>
+							
+						     <div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">Date clôture exercice</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<input type="text" id="datecloture" class="form-control" value="${info.date_cloture_comptable}" disabled >
 								</div>
 							</div>
 							
@@ -257,7 +266,7 @@
 $('#buttonmodifyimage').click(function(){ $('#imgupload').trigger('click'); 
 });
 $("#imgupload").change(function(){
-changelogo(document.getElementById('imgupload').files[0]) ;   
+changeavatar(document.getElementById('imgupload').files[0],"logo") ; 
 });
 </script>
 

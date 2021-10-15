@@ -21,15 +21,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Article;
 import com.invoicing.service.ArticleService;
+import com.invoicing.service.LoginsService;
 @Controller
 public class ArticlesControler {
 	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@RequestMapping(value = "/articles", method = RequestMethod.GET)
-	public ModelAndView getarticles() {
+	public ModelAndView getarticles(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		ArticleService srvarticles = (ArticleService) context.getBean("ArticleService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
 		ModelAndView mv = new ModelAndView("/articles/liste_article");
-		mv.addObject("Listarticles", srvarticles.getlistarticles());
+		mv.addObject("Listarticles", srvarticles.getlistarticles(srvlogins.getinfo(cookielogin).getCompany()));
 		context.close();
 		return mv;
 	}

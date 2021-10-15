@@ -17,6 +17,8 @@
 <div class="card h-100">
                         
                         <div class="card-body">
+                              <h5><i class="fas fa-search"></i> Recherche des clients</h5>
+                              <br/>
                                 <div class="form-group row">
                                     <label for="id" class="col-sm-2 col-form-label">Nom:</label>
                                     <div class="col-sm-4">
@@ -70,20 +72,19 @@
             <input type="text"  class="form-control" id="siretnvviamodal"  oninput="handleValuesiret()"/>
             </div>
             </div>
-                            
-           <div class="form-group row">
+            <div class="form-group row">
             <label for="nomclient" class="col-sm-4 col-form-label" id="labelnomclient"><b>Nom Client:</b></label> 
             <div class="col-sm-6">
             <input type="text"  class="form-control" id="nomclientnvviamodal" />
             </div>
             </div>
             <div class="form-group row">
-            <label for="nomclient" class="col-sm-4 col-form-label"><b>Email:</b></label> 
+            <label for="numtva" class="col-sm-4 col-form-label"><b>Num TVA:</b></label> 
             <div class="col-sm-6">
-            <input type="email"  class="form-control" id="emailnvviamodal" />
+            <input type="text"  class="form-control" id="numtvanvviamodal" />
             </div>
-            </div>
-            
+            </div>             
+                
             <div class="form-group row">
             <label for="nomclient" class="col-sm-4 col-form-label"><b>Adresse:</b></label> 
             <div class="col-sm-6">
@@ -104,19 +105,25 @@
             <input type="text"  class="form-control" id="codepostalenvviamodal" />
             </div>
             </div>
-             <div class="form-group row">
+            
+            <div class="form-group row">
+            <label for="nomclient" class="col-sm-4 col-form-label"><b>Email:</b></label> 
+            <div class="col-sm-6">
+            <input type="email"  class="form-control" id="emailnvviamodal" />
+            </div>
+            </div>
+            
+            <div class="form-group row">
             <label for="nomclient" class="col-sm-4 col-form-label"><b>TEl:</b></label> 
             <div class="col-sm-6">
             <input type="text"  class="form-control" id="telnvviamodal" />
             </div>
             </div>
             
-            <div class="form-group row">
-            <label for="rib" class="col-sm-4 col-form-label"><b>RIB:</b></label> 
-            <div class="col-sm-6">
-            <input type="text"  class="form-control" id="ribnvviamodal" />
-            </div>
-            </div>
+           
+            
+            
+        
             
           </div>
       
@@ -129,7 +136,7 @@
       </div>
       
       
-  <div class="modal fade" id="Modalnotifyclient" tabindex="-1"  aria-labelledby="titlemodalnotifyclient" role="dialog" aria-hidden="true">
+  <div class="modal fade" id="Modalnotifyclient" tabindex="-1"  role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -169,6 +176,14 @@
 				</div>
 			</div>
 			
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+				<div class="form-group">
+			    <label for="fullName">Num TVA</label>
+			    <input type="text" class="form-control" id="numtva" readonly>
+				</div>
+			    </div>
+			
+			
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="eMail">adresse</label>
@@ -203,12 +218,7 @@
 				</div>
 			</div>
 			
-				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-				<div class="form-group">
-					<label for="rib">Rib</label>
-					<input type="text" class="form-control" id="rib" >
-				</div>
-			</div>
+		
 			
 			
 		</div>

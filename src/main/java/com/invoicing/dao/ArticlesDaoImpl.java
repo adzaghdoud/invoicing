@@ -17,13 +17,13 @@ import com.invoicing.model.Article;
 public class ArticlesDaoImpl extends  AbstractDao implements ArticlesDao {
 
 	
-	public List<Article> getlistarticles() {
+	public List<Article> getlistarticles(String rs) {
 		// TODO Auto-generated method stub
 		
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Article> criteria = builder.createQuery(Article.class);
 		Root<Article> root = criteria.from(Article.class);
-		criteria.select(root);
+		criteria.select(root).where(builder.equal(root.get("rs"), rs));
 		Query<Article> q=getSession().createQuery(criteria);		
 		return q.list();
 	}

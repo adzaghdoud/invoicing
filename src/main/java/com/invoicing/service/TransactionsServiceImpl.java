@@ -23,9 +23,9 @@ public class TransactionsServiceImpl implements TransactionsService {
 		dao.addtransaction(t);
 	}
 
-	public List<Transaction> getlist() {
+	public List<Transaction> getlist(String company) {
 		// TODO Auto-generated method stub
-		return dao.getlist();
+		return dao.getlist(company);
 	}
 
 	public boolean checkexistancetransaction(String transactionID) {
@@ -38,14 +38,18 @@ public class TransactionsServiceImpl implements TransactionsService {
 		return dao.countnbtransaction();
 	}
 
-	public void updatetvatransaction(String setted_at, double amountttc,Timestamp t) {
+	public void updatetvatransaction(String setted_at, double amountttc,Timestamp t,String updated_at) {
 		// TODO Auto-generated method stub
-		dao.updatetvatransaction(setted_at, amountttc,t);
+		dao.updatetvatransaction(setted_at, amountttc,t,updated_at);
 	}
 
-	public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin)  {
+	public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin,String company)  {
 		// TODO Auto-generated method stub
-		return dao.searchtransacbetweentwodates(datedeb, datefin);
+		return dao.searchtransacbetweentwodates(datedeb, datefin,company);
+	}
+
+	public List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb, String datefin, String company) {
+		return dao.searchtransacbetweentwodates_with_tva(datedeb, datefin, company);
 	}
 
 }

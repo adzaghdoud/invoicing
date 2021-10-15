@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
@@ -22,9 +23,9 @@
     transition: .3s linear all;
   }
 
-  .card-counter:hover{
-    box-shadow: 4px 4px 20px #c1c1a7;
-    transition: .3s linear all;
+  .card-counter.treso{
+    background-color: #FFD700;
+    color: #FFF;
   }
 
   .card-counter.primary{
@@ -97,14 +98,20 @@
 </style>
     </head>
     <body>
-  
+<br/>
+<div id="loading" style="display: none">
+<div class="d-flex justify-content-center">
+<br/>
+<img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="25" height="25"  id="refresh_gif_send_tempo" >
+</div>
+</div>
 <div class="container">
     <div class="row">
     <div class="col-md-4">
       <div class="card-counter primary">
         <i class="fas fa-euro-sign"></i>
-        <span class="count-numbers">${ca}</span>
-        <span class="count-name">Chiffre d'affaire</span>
+        <span class="count-numbers">${ca} €</span>
+        <span class="count-name">Chiffre d'affaire , au ${date_cloture}</span>
       </div>
     </div>
 
@@ -133,7 +140,7 @@
     </div>
     
      <div class="col-md-4">
-      <div class="card-counter hover">
+      <div class="card-counter treso">
         <i class="fas fa-money-bill-wave"></i>
         <span class="count-numbers">${tresorie} €</span>
         <span class="count-name">Trésorie ${bankname}</span>
@@ -180,7 +187,9 @@
   <div class="col-sm-6">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title"><span style="color:green;font-weight:bold"><i class="fas fa-chart-line"></i> Evolution chiffre d'affaire</span></h5>
+      <jsp:useBean id="date" class="java.util.Date" />
+      <fmt:formatDate value="${date}" pattern="yyyy" var="currentYear" />
+        <h5 class="card-title"><span style="color:green;font-weight:bold"><i class="fas fa-chart-line"></i> Evolution chiffre d'affaire de l'année ${currentYear}</span></h5>
         <hr>
         <div id ="combodiv"></div>
       </div>

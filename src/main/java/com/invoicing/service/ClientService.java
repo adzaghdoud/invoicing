@@ -8,8 +8,8 @@ import com.invoicing.model.Client;
 public interface ClientService {
 	Client getclientbyraisonsociale(String rs);
 	void addclient(Client c);
-	List<Client> getallclients();
-	Long numberclient();
+	List<Client> getallclients(String ownedcompany);
+	Long numberclient(String company);
 	Client getclientbyemail(String mail);
 	Client getclientbyemailandraisonsociale(String rs , String mail);
 	void updateclient(Client c);

@@ -11,18 +11,19 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.invoicing.model.Company;
+import com.invoicing.model.Logins;
 import com.invoicing.model.Prestations;
 
 @Repository("CompanyDao")
 public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
 
 	
-	public Company getinfo() {
+	public Company getinfo(String rs) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Company> criteria = builder.createQuery(Company.class);
 		Root<Company> root = criteria.from(Company.class);
-		criteria.select(root);
+		criteria.select(root).where(builder.equal(root.get("rs"), rs));	
 		Query<Company> q=getSession().createQuery(criteria);
 		return q.uniqueResult();
 	}
@@ -77,5 +78,17 @@ public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
         criteriaUpdate.where(builder.equal(root.get("rs"),rs));
         getSession().createQuery(criteriaUpdate).executeUpdate();
 	}
+
+
+
+		    public void updatlogo(String rs, byte[] logo) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();    
+	        CriteriaUpdate<Company> criteriaUpdate  = builder.createCriteriaUpdate(Company.class);
+	        criteriaUpdate.from(Company.class);
+	        Root<Company> root = criteriaUpdate.from(Company.class);
+	        criteriaUpdate.where(builder.equal(root.get("rs"),rs));
+	        criteriaUpdate.set("logo", logo);
+	        getSession().createQuery(criteriaUpdate).executeUpdate();
+		}
 
 }

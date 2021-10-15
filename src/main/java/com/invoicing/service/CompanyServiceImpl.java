@@ -14,9 +14,9 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
     private CompanyDao dao;
 	
-	public Company getinfo() {
+	public Company getinfo(String rs) {
 		// TODO Auto-generated method stub
-		return dao.getinfo();
+		return dao.getinfo(rs);
 	}
 
 	public void updatecompany(String field, String value) {
@@ -29,15 +29,17 @@ public class CompanyServiceImpl implements CompanyService {
 		return dao.getcompanybyraison(raison);
 	}
 
-	public void updatelogocompany(byte[] logo, String raison) {
-		// TODO Auto-generated method stub
-		dao.updatelogocompany(logo, raison);
-		
-	}
+
 
 	public void updatetimestamprefresh(Timestamp t, String rs) {
 		// TODO Auto-generated method stub
 		dao.updatetimestamprefresh(t, rs);
 	}
+
+	public void updatlogo(String rs, byte[] logo) {
+		dao.updatlogo(rs, logo);
+	}
+
+
 
 }

@@ -34,12 +34,12 @@ public class ClientDaoImpl  extends  AbstractDao implements ClientDao {
 	}
 
 
-	public List<Client> getallclients() {
+	public List<Client> getallclients(String ownedcompany) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Client> criteria = builder.createQuery(Client.class);
 		Root<Client> root = criteria.from(Client.class);
-		criteria.select(root);
+		criteria.select(root).where(builder.equal(root.get("ownedcompany"), ownedcompany));
 		Query<Client> q=getSession().createQuery(criteria);
 		return q.list();
 		
@@ -47,7 +47,7 @@ public class ClientDaoImpl  extends  AbstractDao implements ClientDao {
 
 
 
-	public Long numberclient() {
+	public Long numberclient(String company) {
 		// TODO Auto-generated method stub
 CriteriaBuilder builder = getSession().getCriteriaBuilder();
         
@@ -55,7 +55,7 @@ CriteriaBuilder builder = getSession().getCriteriaBuilder();
         
         Root<Client> Root = Query.from(Client.class);
         Expression<Long> countExpression = builder.count(Root);
-        Query.select(countExpression);
+        Query.select(countExpression).where(builder.equal(Root.get("ownedcompany"), company));
         TypedQuery<Long> typedQuery = getSession().createQuery(Query);
         Long count = typedQuery.getSingleResult();
         return count;
@@ -94,7 +94,6 @@ CriteriaBuilder builder = getSession().getCriteriaBuilder();
         criteriaUpdate.set("ville",c.getVille());
         criteriaUpdate.set("telephone",c.getTelephone());
         criteriaUpdate.set("mail",c.getMail());
-        criteriaUpdate.set("rib",c.getRib());
         criteriaUpdate.where(builder.equal(root.get("rs"),c.getRs()));
         getSession().createQuery(criteriaUpdate).executeUpdate();
 	}

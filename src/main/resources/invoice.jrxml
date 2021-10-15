@@ -91,7 +91,6 @@
 		<field name="adresse" class="java.lang.String"/>
 		<field name="ville" class="java.lang.String"/>
 		<field name="cp" class="java.lang.Integer"/>
-		<field name="rib" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="Dataset3" uuid="1a47f6af-cdaf-4e35-9776-7ee2993378c2">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -394,7 +393,7 @@
 			<staticText>
 				<reportElement x="0" y="140" width="180" height="30" uuid="267e6b66-db00-4060-9b20-196acc3ad05d"/>
 				<textElement>
-					<font fontName="Serif" isUnderline="true" isBold="true"/>
+					<font fontName="Serif" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Coordonnées bancaires :]]></text>
 			</staticText>

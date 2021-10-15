@@ -2,6 +2,8 @@
 	var url_api_insee="";
 	var url_api_checkiban="";
 	var url_api_bank="";
+	var url_api_insee_unite_legal="";
+	var token_api_insee="";
 	messageResource.init({
 		  // path to directory containing config.properties
 		  filePath : 'resources/config/'
@@ -16,6 +18,8 @@
 		 url_api_insee = messageResource.get('api.insee', 'config');
 		 url_api_checkiban = messageResource.get('api.checkiban', 'config');
 		 url_api_bank = messageResource.get('api.bank', 'config');
+	     url_api_insee_unite_legal = messageResource.get('api.insee.unite.legal', 'config');
+         token_api_insee = messageResource.get('api.insee.token', 'config');
 		 
 		});
 //************************************************JS sharded tools 
@@ -56,16 +60,30 @@ function handleValuesiret() {
 		$.ajax({
 			headers : {
 				 "Accept" : "application/json; charset=utf-8",
-			    "Authorization": "Bearer e91e3e52-d363-333a-b010-5778ea3ea9f5"
+			    "Authorization": "Bearer "+token_api_insee
 			},
 	        url: url_api_insee+'/'+$("#siretnvviamodal").val(),
 	        type: 'GET',
 	        async: false,
 	        success: function (response) { 
-	            document.getElementById('nomclientnvviamodal').value=response.etablissement.uniteLegale.denominationUniteLegale;
-	            document.getElementById('adressenvviamodal').value=response.etablissement.adresseEtablissement.numeroVoieEtablissement+" "+response.etablissement.adresseEtablissement.typeVoieEtablissement+" "+response.etablissement.adresseEtablissement.libelleVoieEtablissement
-	            document.getElementById('villenvviamodal').value=response.etablissement.adresseEtablissement.libelleCommuneEtablissement;
-	            document.getElementById('codepostalenvviamodal').value=response.etablissement.adresseEtablissement.codePostalEtablissement;
+	        document.getElementById('nomclientnvviamodal').value=response.etablissement.uniteLegale.denominationUniteLegale;
+	        document.getElementById('adressenvviamodal').value=response.etablissement.adresseEtablissement.numeroVoieEtablissement+" "+response.etablissement.adresseEtablissement.typeVoieEtablissement+" "+response.etablissement.adresseEtablissement.libelleVoieEtablissement
+	        document.getElementById('villenvviamodal').value=response.etablissement.adresseEtablissement.libelleCommuneEtablissement;
+	        document.getElementById('codepostalenvviamodal').value=response.etablissement.adresseEtablissement.codePostalEtablissement;
+                
+            $.ajax({
+			headers : {
+				 "Accept" : "application/json; charset=utf-8",
+			    "Authorization": "Bearer "+token_api_insee
+			},
+	        url: url_api_insee_unite_legal+'/'+response.etablissement.siren,
+	        type: 'GET',
+	        async: false,
+            success: function (response) { 
+	        document.getElementById('numtvanvviamodal').value=response.unite_legale.numero_tva_intra; 
+	         }
+             });
+               
 	        },
 	        error: function (jqXHR) {
 	       if (jqXHR.status == 404) {
@@ -168,6 +186,7 @@ function Getclient() {
                          $("#tel").val(response.telephone);
                          $("#email").val(response.mail);
                          $("#rib").val(response.rib);
+                         $("#numtva").val(response.numtva);
                          $("#divcontainer").show();             
 	        		  }
 	        		  if (response.nom !== null){
@@ -217,14 +236,13 @@ function createnewclient(){
 	var telm = document.getElementById('telnvviamodal').value;
 	var emailm = document.getElementById('emailnvviamodal').value;
 	var siretm = document.getElementById('siretnvviamodal').value;
-	var ribm = document.getElementById('ribnvviamodal').value;
+	var numtvam = document.getElementById('numtvanvviamodal').value;
 	//client professionnel
 	
 	if (document.getElementById('professionnel').checked  && nomclientm.length > 0 && adressem.length > 0 && siretm.length >0) {
-		if (emailm.length >0  &&  telm.length >0 && ribm.length >0) {
-			if (checkiban(ribm)) {
+		if (emailm.length >0  &&  telm.length >0 ) {
 			$("#spinnerbuttoncreatenewclient").show();
-			var ItemJSON = {"rs": nomclientm,"adresse":adressem,"cp": codepostalem,"ville":villem,"telephone":telm,"mail":emailm,"siret":siretm,"rib":ribm};
+			var ItemJSON = {"rs": nomclientm,"adresse":adressem,"cp": codepostalem,"ville":villem,"telephone":telm,"mail":emailm,"siret":siretm,"numtva":numtvam};
 		    var myJSON = JSON.stringify(ItemJSON);	 
 		    $.ajax({
 			      type: "POST",
@@ -232,9 +250,8 @@ function createnewclient(){
 			      url: "createclient",
 			      data: myJSON,
 			      success :function(response) {
-			    	 $("#spinnerbuttoncreatenewclient").hide();
-			    	 $("#modalnvclient").hide();
-			    	 document.getElementById("msgmodalnotifyclient").innerHTML="<b> Le nouveau client "+nomclientm+" a été rajouté avec succés</b>";
+			    	  $("#spinnerbuttoncreatenewclient").hide();
+			    	  document.getElementById("msgmodalnotifyclient").innerHTML="<b> Le nouveau client "+nomclientm+" a été rajouté avec succés</b>";
 				      document.getElementById("titlemodalnotifyclient").innerHTML=" <span style='color: green;'><i class='far fa-check-square'></i> Confirmation</span>";
 				      $("#Modalnotifyclient").modal(); 
 			      },
@@ -256,11 +273,7 @@ function createnewclient(){
 			  });	
 			
 		
-			}else {
-				  document.getElementById("msgmodalnotifyclient").innerHTML="<b>Le rib que vous avez saisi est invalide : "+ribm+"</b>";  
-				  document.getElementById("titlemodalnotifyclient").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-triangle'></i> ERREUR</span>";
-				  $("#Modalnotifyclient").modal();   		  
-		    	  } 
+		
 			
 			
 			
@@ -334,6 +347,7 @@ function showmodalcompany(){
 	$("#raisonsocialemodal").val($("#raisonsociale").val());
 	$("#siretmodal").val($("#siret").val());
 	$("#ribmodal").val($("#rib").val());
+	$("#numtvamodal").val($("#numtva").val());
 	$("#adressemodal").val($("#adresse").val());
 	$("#villemodal").val($("#ville").val());
 	$("#cpmodal").val($("#cp").val());
@@ -456,7 +470,7 @@ function getclientemail(client_name) {
 function saveupdateclient() {
 	
 	
-    var ItemJSON = {"rs": $("#rs").val(),"siret":$("#siret").val(),"adresse": $("#adresse").val(),"cp":$("#cp").val(),"ville":$("#ville").val(),"telephone":$("#tel").val(),"mail":$("#email").val(),"rib":$("#rib").val()};
+    var ItemJSON = {"rs": $("#rs").val(),"siret":$("#siret").val(),"adresse": $("#adresse").val(),"cp":$("#cp").val(),"ville":$("#ville").val(),"telephone":$("#tel").val(),"mail":$("#email").val()};
     var myJSON = JSON.stringify(ItemJSON);
 	$.ajax({
         url: "updateclient",
@@ -535,18 +549,18 @@ function Generateinvoice(){
         data: myJSON,
         success: function (response) {
         	$("#loader").hide();
-        	//document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
-            //document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
-            //$("#Modalnotify").modal();
-            //setTimeout(function(){
-            //	  $('#Modalnotify').modal('hide')
-            //	}, 2000);
+        	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+            $("#Modalnotify").modal();
+            setTimeout(function(){
+            	  $('#Modalnotify').modal('hide')
+           	}, 2000);
         },
         error : function (jqXHR) {
         	$("#loader").hide();
-        	//document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
-            //document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
-            //$("#Modalnotify").modal();	
+        	document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
+            $("#Modalnotify").modal();	
         }
         
 	}); 
@@ -812,9 +826,10 @@ function relance_paiement (){
 //*************************************************************charts
 
 function drawcharts() {
+	$("#loading").show();
 	$.ajax({
 		type : 'GET',
-		url : 'liste_prestations',
+		url : 'liste_prestations_by_year',
 		sync: true,
 	     processData: false,
 	     contentType: false,
@@ -826,6 +841,7 @@ function drawcharts() {
 				drawChartca(result);
 			
 			});
+		$("#loading").hide();
 		}
 		
 	});
@@ -833,14 +849,14 @@ function drawcharts() {
 function drawChartca(result) {
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'date');
-	data.addColumn('number', 'totalttc');
+	data.addColumn('number', 'total');
 	var dataArray = [];
 	$.each(result, function(i,obj) {
 		if (obj.date.localeCompare('') !== 0) {	
-		var datesub=obj.date.toString().substring(0,10);
+		var datesub=obj.date.toString().substring(0,7);
 		var somme=0;
 		$.each(result, function(i,obj) {
-		 var date=obj.date.toString().substring(0,10);
+		 var date=obj.date.toString().substring(0,7);
 		 if (date.localeCompare(datesub) == 0) {
 			somme=somme+obj.totalttc; 
 			obj.date="";
@@ -854,9 +870,9 @@ function drawChartca(result) {
 	
 	 
 	var combochart_options = {
-			title : 'Evolution CA ',
+			title : 'Evolution Chiffre affaire en Euro',
 			vAxis: {title: 'Chiffre affaire en euro'},
-	        hAxis: {title: 'Date facture'},
+	        hAxis: {title: 'Mois'},
 	        seriesType: 'bars',
 	        series: {5: {type: 'line'} }};
 	       
@@ -924,15 +940,14 @@ console.log("****************ko");
 function addtva(value) {
 
 	  
-		$("#table_transactions tr").click(function() {//Add a click event to the row of the table
-
-        var tr = $(this);//Find tr element
-	    var td = tr.find("td");//Find td element
-        
+	   $("#table_transactions tr").click(function() {//Add a click event to the row of the table
+       var tr = $(this);//Find tr element
+	   var td = tr.find("td");//Find td element 
        var formData = new FormData();
        formData.append('typeoperation', 'add');
        formData.append('amountttc', td[0].innerText);
        formData.append('settled_at', td[6].innerText);
+       formData.append('updated_at', td[7].innerText);
 		$.ajax({
 	        url: "GestionTVA",
 	        type: 'POST',
@@ -960,15 +975,17 @@ function addtva(value) {
 	
 function reducetva(value) {
 	  
-		$("#table_transactions tr").click(function() {//Add a click event to the row of the table
-
-        var tr = $(this);//Find tr element
-	    var td = tr.find("td");//Find td element
-        
+	   $("#table_transactions tr").click(function() {//Add a click event to the row of the table
+       var tr = $(this);//Find tr element
+	   var td = tr.find("td");//Find td element
        var formData = new FormData();
        formData.append('typeoperation', 'reduce');
        formData.append('amountttc', td[0].innerText);
        formData.append('settled_at', td[6].innerText);
+       formData.append('updated_at', td[7].innerText); 
+
+
+
 		$.ajax({
 	        url: "GestionTVA",
 	        type: 'POST',
@@ -976,8 +993,7 @@ function reducetva(value) {
 	        processData: false,
 	        contentType: false,
 	        data: formData,
-	        success: function () {
-		      
+	         success: function () {   
               document.getElementById("msgModalnotify").innerHTML="<b> La TVA a été enlevée </b>";
               document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='far fa-check-circle'></i> Confirmation</span>";
               $('#Modalnotify').appendTo("body").modal('show');
@@ -1013,7 +1029,7 @@ function totaltva () {
 });
 
             $.ajax({
-	        url: "Getransactionsbetween/"+$('#datedeb').val()+"/"+$('#datefin').val(),
+	        url: "Getransactionsbetween_with_tva/"+$('#datedeb').val()+"/"+$('#datefin').val(),
 	        type: 'GET',
 	        async: false,
 	        processData: false,
@@ -1039,8 +1055,27 @@ function totaltva () {
 }
 
 
+
+
 function showmodaltva () {
-	jQuery.noConflict();
+	
+const settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://thirdparty.qonto.com/v2/organizations/zohratec-7289",
+  "method": "GET",
+  "dataType": "jsonp",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "zohratec-7289:9843cd2bbe87db673e74817b3f89960f"
+  }
+};
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+	
+	
 	 var d = new Date();
      var m = d.getMonth();
      var y = d.getFullYear();
@@ -1201,9 +1236,10 @@ $.ajax({
 
 //*********************************************************************************JS profil 
 
-function changeavatar(file) {
+function changeavatar(file,applied_to) {
 var formData = new FormData();
 formData.append('avatar', file);	
+formData.append('applied_to', applied_to);
 	 $.ajax({
 	        url: "updateavatar",
 	        type: 'POST',
@@ -1211,9 +1247,12 @@ formData.append('avatar', file);
 	        processData: false,
 	        contentType: false,
             data: formData,
-	        success: function (response) {
+	        success: function () {
+            if (applied_to.localeCompare("avatar") == 0) {
             $("#containerprofil").load("profile");
-       
+            }else {
+            $("#containtersettings").load("Companysettings");
+            }
 	    },
         error : function (jqXHR) {
 	    document.getElementById("msgmodalnotifyprofil").innerHTML="<b>"+jqXHR.responseText+ "</b>";
@@ -1322,3 +1361,4 @@ function update_global_settings(){
 	});
 }
 
+//********************************************************* JS reset login password */

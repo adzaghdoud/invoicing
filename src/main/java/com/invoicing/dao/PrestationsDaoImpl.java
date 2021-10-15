@@ -1,5 +1,7 @@
 package com.invoicing.dao;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,8 +14,14 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Repository;
+
+import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Prestations;
+import com.invoicing.model.Transaction;
+import com.invoicing.service.CompanyService;
 
 @Repository("PrestationsDao")
 public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
@@ -43,12 +51,12 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 	}
 
 
-	public List<Prestations> getlistprestations() {
+	public List<Prestations> getlistprestations(String company) {
 		// TODO Auto-generated method stub
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Prestations> criteria = builder.createQuery(Prestations.class);
 		Root<Prestations> root = criteria.from(Prestations.class);
-		criteria.select(root);
+		criteria.select(root).where(builder.equal(root.get("company"), company));;
 		criteria.orderBy(builder.desc(root.get("id")));
 		Query<Prestations> q=getSession().createQuery(criteria);
 		return q.list();
@@ -92,20 +100,6 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 	}
 
 
-	public double chiffre_affaire() {
-		// TODO Auto-generated method stub
-		CriteriaBuilder builder = getSession().getCriteriaBuilder();
-		CriteriaQuery<Double> query = builder.createQuery(Double.class);
-		Root<Prestations> root = query.from(Prestations.class);
-	    query.select(builder.sum(root.<Double>get("totalttc")));
-		TypedQuery<Double> typedQuery = getSession().createQuery(query);
-	    Double sum = typedQuery.getSingleResult();
-	      
-		  return sum;
-        
-     
-	}
-
 
 	public long number_paiement_to_validate() {
 		// TODO Auto-generated method stub
@@ -132,11 +126,45 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
         Root<Prestations> Root = Query.from(Prestations.class);
         Expression<Long> countExpression = builder.count(Root);
         Query.select(countExpression);
-        Query.where(builder.equal(Root.get("statut_paiement"),"validÃ©"));
+        Query.where(builder.equal(Root.get("statut_paiement"),"validé"));
         TypedQuery<Long> typedQuery = getSession().createQuery(Query);
         Long count = typedQuery.getSingleResult();
         return count;
 	}
+
+
+	public List<Prestations> getlistprestationsbyyear(String company) {
+		javax.persistence.Query query = getSession().createNamedQuery("search_prestations", Prestations.class);
+		LocalDate todaydate = LocalDate.now();
+		int currentyear = todaydate.getYear();
+		query.setParameter(1, currentyear+"-01-01");
+		query.setParameter(2, currentyear+"-12-31"+" 23:59:59");
+		query.setParameter(3, company);
+	
+		@SuppressWarnings("unchecked")
+		List<Prestations> list_prestations = query.getResultList(); 
+	    return list_prestations;
+	}
+
+
+	public List<Prestations> getlistprestations_until_date_cloture(String company, String datecloture) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		javax.persistence.Query query = getSession().createNamedQuery("search_prestations", Prestations.class);
+		LocalDate todaydate = LocalDate.now();
+		int currentyear = todaydate.getYear();
+		query.setParameter(1, currentyear+"-01-01");
+		query.setParameter(2, srvcompany.getcompanybyraison(company).getDate_cloture_comptable().toString().substring(0,9)+" 23:59:59");
+		query.setParameter(3, company);
+		@SuppressWarnings("unchecked")
+		List<Prestations> list_prestations = query.getResultList(); 
+		context.close();
+	    return list_prestations;
+	}
+
+
+
+
 
 
 		

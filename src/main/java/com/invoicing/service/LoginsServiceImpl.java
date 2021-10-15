@@ -32,4 +32,19 @@ public class LoginsServiceImpl  implements LoginsService{
 		dao.updateavatar(login, avatar);
 	}
 
+
+	public boolean checkemail(String email) {
+		return dao.checkemail(email);
+	}
+
+
+	public Logins getloginbyemail(String email) {
+		return dao.getloginbyemail(email);
+	}
+
+
+	public void setresetpassword(String login,String value) {
+		dao.setresetpassword(login,value);
+	}
+
 }

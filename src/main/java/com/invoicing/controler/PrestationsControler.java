@@ -15,6 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ import com.invoicing.model.Company;
 import com.invoicing.model.Prestations;
 import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
+import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
 import com.invoicing.tools.Generatepdf;
 import com.invoicing.tools.Sendmail;
@@ -37,12 +39,13 @@ import com.invoicing.tools.Sendmail;
 @Controller
 public class PrestationsControler {
 	@PostMapping(value = "/generateinvoice")
-	public  @ResponseBody ResponseEntity<String> generateinvoice(@RequestBody Prestations p ,HttpServletResponse response ){	
+	public  @ResponseBody ResponseEntity<String> generateinvoice(@RequestBody Prestations p ,HttpServletResponse response ,@CookieValue("invoicing_username") String cookielogin){	
 		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
 		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		  LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		  ClientService srvclient = (ClientService) context.getBean("ClientService");
-         
+          p.setCompany(srvlogins.getinfo(cookielogin).getCompany());
 		  Date date = new Date();
           Timestamp ts=new Timestamp(date.getTime());
           SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -72,7 +75,7 @@ public class PrestationsControler {
 		  }
 		  
 		  Generatepdf pdf = new Generatepdf();
-		  pdf.setCompany(srvcompany.getinfo());
+		  pdf.setCompany(srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()));
 		  pdf.setFilename(nomfacture);
 		  pdf.setFiletype("invoice");
 		  pdf.setClient(srvclient.getclientbyraisonsociale(p.getClient()));
@@ -106,13 +109,14 @@ public class PrestationsControler {
 
 	
 	@PostMapping(value = "/relance_paiement/{nomfacture}/{nomclient}")
-	public  @ResponseBody  boolean validatepaiement (@PathVariable("nomfacture") String nomfacture , @PathVariable("nomclient") String nomclient,HttpServletResponse response){
+	public  @ResponseBody  boolean validatepaiement (@PathVariable("nomfacture") String nomfacture , @PathVariable("nomclient") String nomclient,HttpServletResponse response,@CookieValue("invoicing_username") String cookielogin){
 		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
 		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		  ClientService srvclient = (ClientService) context.getBean("ClientService");
+		  LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		  Client c = srvclient.getclientbyraisonsociale(nomclient);
-		  Company company = srvcompany.getinfo();
+		  Company company = srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany());
 		  Prestations p = srvprestation.getperstationbynomfacture(nomfacture);
 		  Generatepdf g = new Generatepdf();
 		  g.setClient(c);
@@ -143,11 +147,12 @@ public class PrestationsControler {
 		
 	}
 	
-	@RequestMapping(value = "/liste_prestations", method = RequestMethod.GET)
-	public @ResponseBody List<Prestations> getprestations() {
+	@RequestMapping(value = "/liste_prestations_by_year", method = RequestMethod.GET)
+	public @ResponseBody List<Prestations> getprestations(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		PrestationsService srvprestations = (PrestationsService) context.getBean("PrestationsService");	
-	    List<Prestations> p = srvprestations.getlistprestations();
+		PrestationsService srvprestations = (PrestationsService) context.getBean("PrestationsService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+	    List<Prestations> p = srvprestations.getlistprestationsbyyear(srvlogins.getinfo(cookielogin).getCompany());
 	    context.close();
 		return p;
 	

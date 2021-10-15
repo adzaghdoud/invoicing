@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
+
 <head>
 <title>Invoicing</title>
 <link rel = "icon" href =  "${pageContext.request.contextPath}/resources/images/logo.png"  type = "image/x-icon"> 
@@ -27,6 +29,10 @@
     <span style="font-size:smaller ;">Version : <%=applVersion%></span>
     <div>${welcome}</div>
     </div>
+ 
+   
+ 
+ 
  
     <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
   
@@ -60,7 +66,6 @@
                 
                 <ul class="sub-menu collapse" id="new">
                   <li><a class="link" href="prestations">Liste de prestations</a></li>
-                  <li >Chiffre d'affaire</li>
                 </ul>
                 </li>
                  <li>
@@ -73,8 +78,9 @@
                   <a href="#"><i class="far fa-plus-square"></i> Actions <span class="arrow"></span></a>
                 
                 <ul class="sub-menu collapse" id="action">
+                  <li><a class="link"href="newinvoice">Créer une facture</a></li> 
                   <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>
-                  <li><a class="link"href="newinvoice">Créer une facture</a></li>   
+                    
                 </ul>
                 </li>
                 
@@ -283,5 +289,15 @@ $('#modalmessagerie').on('hidden.bs.modal', function () {
     $("#alertko").hide();
 })
 </script>
+
+<c:if test = "${flag_reset_password == 'YES'}"> 
+<script>
+document.getElementById("msgmodalnotif").innerHTML="<b> Merci de modifier votre password </b>";
+document.getElementById("titleModalnotify").innerHTML="<span style='color: orange;'><i class='fas fa-bell'></i> Information</span>";
+$("#Modalnotify").modal();
+</script>
+</c:if>
+
+
 </body>
 </html>

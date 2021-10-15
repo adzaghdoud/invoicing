@@ -1,5 +1,6 @@
 package com.invoicing.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.invoicing.model.Prestations;
@@ -7,11 +8,12 @@ import com.invoicing.model.Prestations;
 public interface PrestationsService {
 	void addprestation(Prestations p);
 	Long getlast_id_prestation();
-	List<Prestations> getlistprestations();
+	List<Prestations> getlistprestations(String company);
 	Prestations getperstationbynomfacture(String nomfacture);
+	List<Prestations> getlistprestationsbyyear(String company);
+	List<Prestations> getlistprestations_until_date_cloture(String company,String datecloture);
 	List<Prestations> getpendingpaiement();
 	void validate_paiement(String numfacture);
-	double chiffre_affaire();
 	long number_paiement_to_validate();
 	long number_paiement_validate();
 

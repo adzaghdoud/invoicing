@@ -84,7 +84,7 @@
 </style>
 <body>
 <div class="container" id="articlescontainer">
-    <h3>Liste des Articles</h3>
+    <h3><i class="far fa-list-alt"></i> Liste des Articles</h3>
     <hr>
     <div class="row">
         <div class="panel panel-primary filterable">

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Client;
 import com.invoicing.service.ClientService;
+import com.invoicing.service.LoginsService;
 @Controller
 public class Clientscontroler {
 	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
@@ -63,20 +65,23 @@ public class Clientscontroler {
 	}
 	
 	@RequestMapping(value = "/Getallclients", method = RequestMethod.GET)
-	public @ResponseBody List<Client> Getallclients() {
+	public @ResponseBody List<Client> Getallclients(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		ClientService srvclient = (ClientService) context.getBean("ClientService");
-		List<Client> listc= srvclient.getallclients();
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
+		List<Client> listc= srvclient.getallclients(srvlogins.getinfo(cookielogin).getCompany());
 		context.close();
 		return listc;
 	}
 	
 
 	@RequestMapping(value = "/createclient", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String>  addnewclient(@RequestBody Client c) {
+	public @ResponseBody ResponseEntity<String>  addnewclient(@RequestBody Client c,@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		ClientService srvclient = (ClientService) context.getBean("ClientService");		
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		try{
+	    c.setOwnedcompany(srvlogins.getinfo(cookielogin).getCompany());
 		srvclient.addclient(c);	
 		}catch (Exception e) {
 			if (e.getMessage().contains("org.hibernate.exception.ConstraintViolationException: ")) {

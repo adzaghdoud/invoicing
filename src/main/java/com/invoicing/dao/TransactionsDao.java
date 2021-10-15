@@ -11,7 +11,8 @@ public interface TransactionsDao {
 void addtransaction(Transaction t);
 boolean checkexistancetransaction(String transactionID);
 long countnbtransaction();
-List<Transaction> getlist();
-void updatetvatransaction(String setted_at,double amountttc,Timestamp t);
-List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin) ;
+List<Transaction> getlist(String company);
+void updatetvatransaction(String setted_at,double amountttc,Timestamp t,String updated_at);
+List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb , String datefin,String company) ;
+List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin,String company) ;
 }

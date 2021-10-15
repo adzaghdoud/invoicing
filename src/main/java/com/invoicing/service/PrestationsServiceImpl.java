@@ -1,5 +1,6 @@
 package com.invoicing.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -27,9 +28,9 @@ public class PrestationsServiceImpl implements PrestationsService{
 	}
 
 	
-	public List<Prestations> getlistprestations() {
+	public List<Prestations> getlistprestations(String company) {
 		// TODO Auto-generated method stub
-		return dao.getlistprestations();
+		return dao.getlistprestations(company);
 	}
 
 	
@@ -51,10 +52,7 @@ public class PrestationsServiceImpl implements PrestationsService{
 	}
 
 
-	public double chiffre_affaire() {
-		// TODO Auto-generated method stub
-		return dao.chiffre_affaire();
-	}
+
 
 
 	public long number_paiement_to_validate() {
@@ -67,5 +65,18 @@ public class PrestationsServiceImpl implements PrestationsService{
 		// TODO Auto-generated method stub
 		return dao.number_paiement_validate();
 	}
+
+
+	public List<Prestations> getlistprestationsbyyear(String company) {
+		return dao.getlistprestationsbyyear(company);
+	}
+
+
+	public List<Prestations> getlistprestations_until_date_cloture(String company, String datecloture) {
+		return dao.getlistprestations_until_date_cloture(company, datecloture);
+	}
+
+
+
 
 }

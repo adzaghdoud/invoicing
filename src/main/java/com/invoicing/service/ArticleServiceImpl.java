@@ -17,9 +17,9 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
     private ArticlesDao dao;
 	
-	public List<Article> getlistarticles() {
+	public List<Article> getlistarticles(String rs) {
 		// TODO Auto-generated method stub
-		return dao.getlistarticles();
+		return dao.getlistarticles( rs);
 	}
 	
 	public Article getarticlebydesignation(String designation) {

@@ -44,7 +44,7 @@ public class TransactionsControler {
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		 TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
 		 LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
-		 ProcessBuilder processBuilder = new ProcessBuilder(System.getProperty("path.script.import."+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toLowerCase()),System.getProperty("path.json.input")+System.getProperty("file.separator")+"transactions_"+srvlogins.getinfo(cookielogin).getCompany()+".json", System.getProperty("path.backend.jar"),srvcompany.getinfo().getRib(),srvcompany.getinfo().getSlug(),srvcompany.getinfo().getToken(),srvcompany.getinfo().getRs().toUpperCase());
+		 ProcessBuilder processBuilder = new ProcessBuilder(System.getProperty("path.script.import."+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toLowerCase()),System.getProperty("path.json.input")+System.getProperty("file.separator")+"transactions_"+srvlogins.getinfo(cookielogin).getCompany()+".json", System.getProperty("path.backend.jar"),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getRib(),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getSlug(),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getToken(),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getRs().toUpperCase());
 		 nbbefore = srvt.countnbtransaction();
 		 processBuilder.redirectErrorStream(true);
 		 Process p = processBuilder.start();
@@ -71,7 +71,7 @@ public class TransactionsControler {
    
 
 	@PostMapping(value = "/GestionTVA")
-	public @ResponseBody void gestiontva (@RequestParam(required = true) String  typeoperation,@RequestParam(required = true) String  amountttc,@RequestParam(required = true) String  settled_at){
+	public @ResponseBody void gestiontva (@RequestParam(required = true) String  typeoperation,@RequestParam(required = true) String  amountttc,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at){
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
 		Date date = new Date();
@@ -79,28 +79,29 @@ public class TransactionsControler {
 		if (typeoperation.contentEquals("add")) {
 		BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(amountttc)/1.2);
 		bd = bd.setScale(2, RoundingMode.DOWN);
-	    srvt.updatetvatransaction(settled_at, bd.doubleValue(),ts);
+	    srvt.updatetvatransaction(settled_at,bd.doubleValue(),ts,updated_at);
 		}
 		if (typeoperation.contentEquals("reduce")) {
-			srvt.updatetvatransaction(settled_at, 0,ts);
+			srvt.updatetvatransaction(settled_at, 0,ts,updated_at);
 			}
 		
 	context.close();
 	}
 
 	@RequestMapping(value = "/totaltva/{date1}/{date2}", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Double> tva_collectee(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
+	public @ResponseBody Map<String, Double> tva_collectee(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin,@CookieValue("invoicing_username") String cookielogin ) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		 Map<String, Double> tva  = new HashMap<String, Double>();
-		double totaltva=0;
+		
 		double totaltvarecoltes=0;
 		double total_tva_deductible=0;
 		
-		for (int i=0 ; i<srvt.searchtransacbetweentwodates(datedeb, datefin).size() ; i++) {
-			 if (srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getOperation_type().toString().contentEquals("income")) {
-				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount());
-					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount_HT());
+		for (int i=0 ; i<srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
+			 if (srvt.searchtransacbetweentwodates(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getOperation_type().toString().contentEquals("income")) {
+				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount());
+					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount_HT());
 					BigDecimal result=bd.subtract(bd2);
 					result = result.setScale(2, RoundingMode.DOWN);
 					totaltvarecoltes=totaltvarecoltes+(result.doubleValue());
@@ -109,10 +110,10 @@ public class TransactionsControler {
 		
 		
 		
-		for (int i=0 ; i<srvt.searchtransacbetweentwodates(datedeb, datefin).size() ; i++) {
-			 if (! srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getOperation_type().toString().contentEquals("income")) {
-				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount());
-					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates(datedeb, datefin).get(i).getAmount_HT());
+		for (int i=0 ; i<srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
+			 if (! srvt.searchtransacbetweentwodates(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getOperation_type().toString().contentEquals("income")) {
+				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount());
+					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount_HT());
 					BigDecimal result=bd.subtract(bd2);
 					result = result.setScale(2, RoundingMode.DOWN);
 					total_tva_deductible=total_tva_deductible+(result.doubleValue());
@@ -127,14 +128,15 @@ public class TransactionsControler {
 	
 		context.close();
 		tva.put("totaltvarecoltes", totaltvarecoltes);
-		tva.put("totaltvadu", totaltvadu.doubleValue());
+		tva.put("totaltvadu", java.lang.Math.abs(totaltvadu.doubleValue()));
 		return tva;
 	}
-	@RequestMapping(value = "/Getransactionsbetween/{date1}/{date2}", method = RequestMethod.GET)
-	public @ResponseBody List<Transaction> gettransactions(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin ) {
+	@RequestMapping(value = "/Getransactionsbetween_with_tva/{date1}/{date2}", method = RequestMethod.GET)
+	public @ResponseBody List<Transaction> gettransactions(@PathVariable("date1") String datedeb,@PathVariable("date2") String datefin,@CookieValue("invoicing_username") String cookielogin ) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
-	    List<Transaction> listc=srvt.searchtransacbetweentwodates(datedeb, datefin);		
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+	    List<Transaction> listc=srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany());		
 		context.close();
 		return listc;
 	}

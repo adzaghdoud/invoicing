@@ -27,12 +27,12 @@ import com.invoicing.model.Transaction;
 			persist(t);
 		}
 
-		public List<Transaction> getlist() {
+		public List<Transaction> getlist(String company) {
 			// TODO Auto-generated method stub
 			CriteriaBuilder builder = getSession().getCriteriaBuilder();
 			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
 			Root<Transaction> root = criteria.from(Transaction.class);
-			criteria.select(root);
+			criteria.select(root).where(builder.equal(root.get("company"), company));
 			criteria.orderBy(builder.desc(root.get("updated_at")));
 			Query<Transaction> q=getSession().createQuery(criteria);		
 			
@@ -69,26 +69,37 @@ import com.invoicing.model.Transaction;
 	        return count;
 		}
 
-		public void updatetvatransaction(String setted_at, double amount_ht,Timestamp t) {
+		public void updatetvatransaction(String setted_at, double amount_ht,Timestamp t,String updated_at) {
 			// TODO Auto-generated method stub
 			CriteriaBuilder builder = getSession().getCriteriaBuilder();
-	        
 	        CriteriaUpdate<Transaction> criteriaUpdate  = builder.createCriteriaUpdate(Transaction.class);
 	        criteriaUpdate.from(Transaction.class);
 	        Root<Transaction> root = criteriaUpdate.from(Transaction.class);
 	        criteriaUpdate.set("amount_HT",amount_ht);
 	        criteriaUpdate.set("manual_validation",t);
 	        criteriaUpdate.where(builder.equal(root.get("settled_at"),setted_at));
+	        criteriaUpdate.where(builder.equal(root.get("updated_at"),updated_at));
 	        getSession().createQuery(criteriaUpdate).executeUpdate();
 		}
 
-		public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin)  {
+		public List<Transaction> searchtransacbetweentwodates(String datedeb, String datefin ,String company)  {
 			// TODO Auto-generated method stub
-			javax.persistence.Query query = getSession().createNamedQuery("searchtransactionbetweentwodates", Transaction.class);
+			javax.persistence.Query query = getSession().createNamedQuery("searchtransactionbetweentwodates_all", Transaction.class);
 			query.setParameter(1, datedeb);
 			query.setParameter(2, datefin+" 23:59:59");
+			query.setParameter(3, company);
 			@SuppressWarnings("unchecked")
-			List<Transaction> list_transactions = query.getResultList();           
+			List<Transaction> list_transactions = query.getResultList();  
+		    return list_transactions;
+		}
+
+		public List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb, String datefin, String company) {
+			javax.persistence.Query query = getSession().createNamedQuery("searchtransactionbetweentwodates_with_tva", Transaction.class);
+			query.setParameter(1, datedeb);
+			query.setParameter(2, datefin+" 23:59:59");
+			query.setParameter(3, company);
+			@SuppressWarnings("unchecked")
+			List<Transaction> list_transactions = query.getResultList();  
 		      return list_transactions;
 		}
 		

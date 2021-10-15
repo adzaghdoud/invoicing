@@ -63,7 +63,7 @@
 <body>
  <div class="card card-outline-secondary">
                         <div class="card-header">
-                            <h5 class="mb-0">Création  nouvelle facture</h5>
+                            <h5 class="mb-0"><i class="far fa-plus-square"></i> Création  nouvelle facture</h5>
                         </div>
                         <div class="card-body">
                               

@@ -5,7 +5,7 @@ import java.util.List;
 import com.invoicing.model.Article;
 
 public interface ArticleService {
-	List<Article> getlistarticles();
+	List<Article> getlistarticles(String rs);
 	Article getarticlebydesignation(String designation);
 	void addarticle(Article a);
 	void updatearticle(Article a);

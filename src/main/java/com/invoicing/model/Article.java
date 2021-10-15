@@ -26,6 +26,7 @@ public class Article {
 	private double pvttc;
 	private Timestamp last_modification;
 	private String bywho;
+	private String rs;
 
 	public String getDesignation() {
 		return designation;
@@ -81,5 +82,11 @@ public class Article {
 	public void setBywho(String bywho) {
 		this.bywho = bywho;
 	}
-     
+	public String getRs() {
+		return rs;
+	}
+	public void setRs(String rs) {
+		this.rs = rs;
+	}
+    
 }

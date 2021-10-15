@@ -13,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name="transactions")
 @NamedNativeQuery(
-        name = "searchtransactionbetweentwodates",
-        query = "SELECT * FROM invoicing.transactions  where settled_at between ? and  ? and amount_HT>0 ORDER BY settled_at DESC",
+        name = "searchtransactionbetweentwodates_with_tva",
+        query = "SELECT * FROM invoicing.transactions  where settled_at between ? and  ? and amount_HT>0  and company = ? ORDER BY settled_at DESC",
                     resultClass=Transaction.class
     )
+
+@NamedNativeQuery(
+        name = "searchtransactionbetweentwodates_all",
+        query = "SELECT * FROM invoicing.transactions  where settled_at between ? and  ?   and company = ? ORDER BY settled_at DESC",
+                    resultClass=Transaction.class
+    )
+
 public class Transaction {
 	@Id
 	private String transaction_id;

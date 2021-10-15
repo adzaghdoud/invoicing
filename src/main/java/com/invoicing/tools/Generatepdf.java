@@ -129,7 +129,7 @@ public class Generatepdf {
 		      File file = new File(classLoader.getResource("invoice.jrxml").getFile());
 			  jasperDesign = JRXmlLoader.load(file);
 		      jasperReport = JasperCompileManager.compileReport(jasperDesign);
-		
+		      
 		     /**
 		      * Get report DataSource.
 		      */
@@ -164,35 +164,30 @@ public class Generatepdf {
 			     reportParameters.put("TVA", prestation.getValtaxe());
 			     reportParameters.put("Total_TTC", prestation.getMontantTTC());
 			    
-				try {
+			
 					
 				     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
 				     
-				     response.setContentType("application/x-download");
-				     response.setHeader("Content-disposition","inline; filename=userList.pdf");
+				     //response.setContentType("application/x-download");
+				     //response.setHeader("Content-disposition","inline; filename=userList.pdf");
 
-				     JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-				     response.getOutputStream().flush();
-				     response.getOutputStream().close();   
-				} catch (Exception e) {
+				     //JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+				     //response.getOutputStream().flush();
+				     //response.getOutputStream().close();   
+				//} catch (Exception e) {
 					// TODO Auto-generated catch block
-					 System.out.println(ExceptionUtils.getStackTrace(e));
-				}
+					 //System.out.println(ExceptionUtils.getStackTrace(e));
+				//}
 			
+				     
 			     
-			     
-			     //JasperExportManager.exportReportToPdfFile(jasperPrint,this.filename+".pdf");	     
+			     JasperExportManager.exportReportToPdfFile(jasperPrint,System.getProperty("pdf.stor")+FileSystems.getDefault().getSeparator()+this.filename+".pdf");	     
 		   } catch (Exception e) {
 			      System.out.println(ExceptionUtils.getStackTrace(e));
-			      //Logger.getLogger(Generatepdf.class.getName()).log(Level.SEVERE, null, ex);
-			     
-			     
 			     return false;
 		        }
 	
-	
-               return true;
-}
-}
+	 return true;
 
-	
+	}
+	}

@@ -26,15 +26,15 @@ public class ClientServiceImpl implements ClientService {
 		
 	}
 	
-	public List<Client> getallclients() {
+	public List<Client> getallclients(String ownedcompany) {
 		// TODO Auto-generated method stub
-		return dao.getallclients();
+		return dao.getallclients(ownedcompany);
 	}
 
 
-	public Long numberclient() {
+	public Long numberclient(String company) {
 		// TODO Auto-generated method stub
-		return dao.numberclient();
+		return dao.numberclient(company);
 	}
 
 	public Client getclientbyemail(String mail) {

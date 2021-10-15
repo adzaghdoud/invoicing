@@ -85,14 +85,14 @@
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
-					<label for="Street">Nouveau password</label>
-					<input type="password" class="form-control" id="newpassword" >
+					<label>Nouveau password</label>
+					<input type="password" class="form-control" id="newpassword">
 				</div>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
-					<label for="ciTy">confirmer password</label>
-					<input type="password" class="form-control" id="repeatnewpassword">
+					<label >confirmer password</label>
+					<input type="password" class="form-control" id="repeatnewpassword" >
 				</div>
 			</div>
 		</div>
@@ -113,7 +113,7 @@
 $('#buttonmodifyimage').click(function(){ $('#imgupload').trigger('click'); 
 });
 $("#imgupload").change(function(){
-changeavatar(document.getElementById('imgupload').files[0]) ;   
+changeavatar(document.getElementById('imgupload').files[0],"avatar") ;   
 });
 </script>
 

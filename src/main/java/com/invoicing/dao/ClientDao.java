@@ -9,7 +9,7 @@ public interface ClientDao {
 	Client getclientbyemail(String mail);
 	Client getclientbyemailandraisonsociale(String rs , String mail);
 	void addclient(Client c);
-	List<Client> getallclients();
-	Long numberclient();
+	List<Client> getallclients(String ownedcompany);
+	Long numberclient(String company);
 	void updateclient(Client c);
 }

@@ -36,7 +36,7 @@
 </style>
 <body>
 <div class="container">
-    <h3>Liste des prestations</h3>
+    <h3><i class="fas fa-list"></i> Liste des prestations</h3>
     <hr>
     <div class="row">
         <div class="panel panel-primary filterable">
