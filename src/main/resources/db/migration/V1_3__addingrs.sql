@@ -1,24 +1,3 @@
-ALTER TABLE `invoicing`.`articles` 
-ADD COLUMN `rs` VARCHAR(45) NULL AFTER `bywho`,
-ADD INDEX `rs_idx` (`rs` ASC) VISIBLE;
-;
-ALTER TABLE `invoicing`.`articles` 
-ADD CONSTRAINT `rs`
-  FOREIGN KEY (`rs`)
-  REFERENCES `invoicing`.`company` (`raison_sociale`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-  ALTER TABLE `invoicing`.`clients` 
-ADD COLUMN `ownedcompany` VARCHAR(45) NULL AFTER `rib`,
-ADD INDEX `ownedcompany_idx` (`ownedcompany` ASC) VISIBLE;
-;
-ALTER TABLE `invoicing`.`clients` 
-ADD CONSTRAINT `ownedcompany`
-  FOREIGN KEY (`ownedcompany`)
-  REFERENCES `invoicing`.`company` (`raison_sociale`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-  
 ALTER TABLE `invoicing`.`logins` 
 ADD COLUMN `resetpassword` VARCHAR(3) DEFAULT 'NO' ;
 
