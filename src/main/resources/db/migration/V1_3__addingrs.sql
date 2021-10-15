@@ -20,7 +20,7 @@ ADD CONSTRAINT `ownedcompany`
   ON UPDATE NO ACTION;
   
 ALTER TABLE `invoicing`.`logins` 
-ADD COLUMN `resetpassword` VARCHAR(3) NULL AFTER `avatar` DEFAULT 'NO' ;
+ADD COLUMN `resetpassword` VARCHAR(3) DEFAULT 'NO' ;
 
 ALTER TABLE `invoicing`.`prestations` 
 ADD COLUMN `company` VARCHAR(45) NULL AFTER `date_paiement_attendue`,
