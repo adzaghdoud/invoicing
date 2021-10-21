@@ -573,7 +573,9 @@ function sendmail(mailto,subject,contain){
 	formData.append('subject', subject);
 	formData.append('contain', contain);
 	formData.append('attached_file', $('input[type=file]')[0].files[0]);
+	if (typeof document.getElementById('file').files[0] !== 'undefined') {
 	formData.append('attached_file_name', document.getElementById('file').files[0].name);
+	}
 	$.ajax({
         url: "sendmail",
         type: 'POST',

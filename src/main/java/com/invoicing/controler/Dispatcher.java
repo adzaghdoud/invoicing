@@ -34,6 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +53,7 @@ import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
+import com.invoicing.tools.Sendmail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -405,5 +407,19 @@ public class Dispatcher {
 	    return  ResponseEntity.ok(msg);
 	
 	}
-	  
+	@PostMapping(value = "/sendmail")
+	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) {
+	Sendmail s= new Sendmail();
+	s.setContain(contain);
+	s.setSubject(subject);
+	s.setMailto(mailto);
+	if (attached_file !=null ) {
+	s.setFile(attached_file);
+	s.setFilename(attached_file_name);
+	}
+	if (! s.send() ) {
+	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du mail");	
+	}
+	return ResponseEntity.ok("Le mail a été bien envoyée à "+mailto);	
+	} 
 }

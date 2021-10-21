@@ -130,7 +130,6 @@ public class PrestationsControler {
 		  }  
 		  Sendmail s = new Sendmail();
 		  s.setFilename(nomfacture+".pdf");
-		  s.setSystempath("pdf.stor");
 		  s.setMailto(c.getMail());
 		  s.setSubject("Relance Facture "+nomfacture);
 		  s.setContain("Merci de penser de régler la facture ci-jointe , Cordialement ");

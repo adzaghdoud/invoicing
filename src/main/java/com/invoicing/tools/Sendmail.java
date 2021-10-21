@@ -31,7 +31,6 @@ public class Sendmail {
 	private String contain;
 	private MultipartFile file;
 	private String filename;
-	private String systempath;
 	private String filetype;
 
 	
@@ -98,22 +97,6 @@ public class Sendmail {
  
 	
 	
-	
-	
-	public String getSystempath() {
-		return systempath;
-	}
-
-
-	public void setSystempath(String systempath) {
-		this.systempath = systempath;
-	}
-
-    
-	
-	
-	
-	
 	public String getFiletype() {
 		return filetype;
 	}
@@ -162,13 +145,9 @@ public class Sendmail {
 	    		}
 	    		});
 	    		try {
-	    		
-
-	    	    
 	    		if (this.file != null) {		
-	    	   multipartToFile(this.file, this.filename);
-	    		}
-	    			
+	    	    multipartToFile(this.file, this.filename);
+	    		}	
 	    	    Message message = new MimeMessage(session);
 	    		message.setFrom(new InternetAddress(prop.getProperty("COMPANY.EMAIL")));
 	    		message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(this.mailto));	
@@ -182,7 +161,7 @@ public class Sendmail {
 	            textBodyPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
 	            if ( this.filename !=null) {
 	            MimeBodyPart attachmentBodyPart= new MimeBodyPart();
-	            FileDataSource source = new FileDataSource(System.getProperty(this.systempath)+FileSystems.getDefault().getSeparator()+this.filename);
+	            FileDataSource source = new FileDataSource(System.getProperty("java.io.tmpdir")+FileSystems.getDefault().getSeparator()+this.filename);
 	            attachmentBodyPart.setDataHandler(new DataHandler(source));
 	            attachmentBodyPart.setFileName(this.filename);
 	            multipart.addBodyPart(attachmentBodyPart);
@@ -202,5 +181,4 @@ public class Sendmail {
 	           return true;
 	
 	}
-	
 }

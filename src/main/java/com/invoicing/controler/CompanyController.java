@@ -145,18 +145,5 @@ public class CompanyController {
 	}
 
 
-	@PostMapping(value = "/sendmail")
-	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) {
-	Sendmail s= new Sendmail();
-	s.setContain(contain);
-	s.setSubject(subject);
-	s.setMailto(mailto);
-	s.setFile(attached_file);
-	s.setFilename(attached_file_name);
-	s.setSystempath("pdf.stor");
-	if (! s.send() ) {
-	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du mail");	
-	}
-	return ResponseEntity.ok("Le mail a été bien envoyée à "+mailto);	
-	}
+
 }
