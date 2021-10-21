@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="template_invoice" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="template.engine" value="tabular_template"/>
@@ -72,6 +72,7 @@
 			<defaultValueExpression><![CDATA[$P{DS1}]]></defaultValueExpression>
 		</parameter>
 		<parameter name="logo" class="java.awt.Image"/>
+		<parameter name="tel" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
@@ -80,6 +81,7 @@
 		<field name="ville" class="java.lang.String"/>
 		<field name="cp" class="java.lang.Integer"/>
 		<field name="rcs" class="java.lang.String"/>
+		<field name="tel" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="Dataset2" uuid="cffe5ab5-6ec8-4053-b34b-7192a39fce5b">
 		<parameter name="DS2" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource">
@@ -132,7 +134,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<title>
-		<band height="180" splitType="Stretch">
+		<band height="210" splitType="Stretch">
 			<componentElement>
 				<reportElement x="323" y="70" width="230" height="110" uuid="8a41db1e-1884-42ec-a112-de3070ec4d09"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
@@ -164,12 +166,12 @@
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="0" y="70" width="220" height="107" uuid="0e5c74d0-e2fe-4e1c-b0e2-ee9d09023d1b"/>
+				<reportElement x="0" y="80" width="220" height="130" uuid="0e5c74d0-e2fe-4e1c-b0e2-ee9d09023d1b"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="Dataset1" uuid="8f6558fd-3135-40dd-8785-1a2be95bfe93">
 						<dataSourceExpression><![CDATA[$P{DS1}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="107" width="220">
+					<jr:listContents height="130" width="220">
 						<textField>
 							<reportElement x="0" y="0" width="200" height="20" uuid="96bad0a4-cd65-4a6a-8bd1-f9997e4e33b8"/>
 							<textElement>
@@ -201,6 +203,14 @@
 						<textField>
 							<reportElement x="0" y="80" width="200" height="20" uuid="ca7d6302-0828-4cdb-852b-e9fcf2ddc155"/>
 							<textFieldExpression><![CDATA[$F{rcs}]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement x="0" y="100" width="160" height="20" uuid="230462dc-1322-49ec-a476-32b004bfbafb"/>
+							<text><![CDATA[Tel: ]]></text>
+						</staticText>
+						<textField>
+							<reportElement x="20" y="100" width="100" height="20" uuid="d9571846-4e48-41d2-b62b-3f774360e59d"/>
+							<textFieldExpression><![CDATA[$F{tel}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
 				</jr:list>
@@ -235,7 +245,7 @@
 	<detail>
 		<band height="300">
 			<componentElement>
-				<reportElement isPrintRepeatedValues="false" x="3" y="100" width="550" height="90" uuid="b8b5ed74-b87e-4b5b-934b-e406fef3b766">
+				<reportElement isPrintRepeatedValues="false" x="6" y="60" width="550" height="90" uuid="b8b5ed74-b87e-4b5b-934b-e406fef3b766">
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
@@ -274,7 +284,7 @@
 								<textElement>
 									<font fontName="Arial" size="12" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Quantité]]></text>
+								<text><![CDATA[QuantitÃ©]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -344,7 +354,7 @@
 				</jr:table>
 			</componentElement>
 			<line>
-				<reportElement x="-3" y="0" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
+				<reportElement x="0" y="0" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -396,7 +406,7 @@
 				<textElement>
 					<font fontName="Serif" isBold="true" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Coordonnées bancaires :]]></text>
+				<text><![CDATA[CoordonnÃ©es bancaires :]]></text>
 			</staticText>
 			<componentElement>
 				<reportElement x="0" y="170" width="550" height="30" uuid="a2910606-9c83-422f-a43a-2ea857cf8356"/>

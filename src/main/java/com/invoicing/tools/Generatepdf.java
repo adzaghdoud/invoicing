@@ -163,9 +163,8 @@ public class Generatepdf {
 			     reportParameters.put("total_HT", prestation.getMontantHT());
 			     reportParameters.put("TVA", prestation.getValtaxe());
 			     reportParameters.put("Total_TTC", prestation.getMontantTTC());
-			
-					
-				     JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
+			     reportParameters.put("tel", company.getTel());	
+				 JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
 				     
 				     //response.setContentType("application/x-download");
 				     //response.setHeader("Content-disposition","inline; filename=userList.pdf");
