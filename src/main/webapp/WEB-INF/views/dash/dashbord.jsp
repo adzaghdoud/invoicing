@@ -171,7 +171,7 @@
             <c:set var = "datereformatted" value = "${fn:substring(date, 0, 19)}" />
             <td><c:out value="${datereformatted}"></c:out></td>
             <td>${prestation.client}</td>
-            <td>${prestation.totalttc}   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
+            <td>${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
      </tr>          
    </c:forEach>
   </tbody>
@@ -247,14 +247,14 @@ drawcharts();
                                  </div>
                                  
                                  <div class="form-group row" >
-                                <label class="col-sm-4 col-form-label"><b>Montant HT</b></label>
+                                <label class="col-sm-4 col-form-label"><b>Montant HT <i class="fas fa-euro-sign"></i></b></label>
                                  <div class="col-sm-8">
-                                 <input type="text" id="montantht" class="form-control" /> 
+                                 <input type="text" id="montantht" class="form-control" />
                                  </div>
                                  </div>
                                  
                                  <div class="form-group row" >
-                                 <label class="col-sm-4 col-form-label"><b>Total TTC</b></label>
+                                 <label class="col-sm-4 col-form-label"><b>Total TTC <i class="fas fa-euro-sign"></i></b></label>
                                  <div class="col-sm-8">
                                  <input type="text" id="totalttc" class="form-control" placeholder="0"/> 
                                  </div>

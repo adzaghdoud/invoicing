@@ -84,7 +84,7 @@
 </style>
 <body>
 <div class="container" id="articlescontainer">
-    <h3><i class="far fa-list-alt"></i> Liste des Articles</h3>
+    <h3><i class="far fa-list-alt"></i>  Liste des Articles</h3>
     <hr>
     <div class="row">
         <div class="panel panel-primary filterable">
@@ -99,7 +99,7 @@
             <table  class="table" id="tablearticle">
                 <thead>
                     <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="Designation" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Designation"  disabled></th>
                         <th><input type="text" class="form-control" placeholder="Famille" disabled></th>
                         <th><input type="text" class="form-control" placeholder="PV HT" disabled></th>
                         <th><input type="text" class="form-control" placeholder="PA HT" disabled></th>
@@ -114,11 +114,11 @@
             <tr>
             <td>${liste.designation}</td>
             <td>${liste.famille}</td>
-            <td>${liste.pvht}</td>
-            <td>${liste.paht}</td>
+            <td>${liste.pvht} <i class="fas fa-euro-sign"></i></td>
+            <td>${liste.paht} <i class="fas fa-euro-sign"></i></td>
             <td>${liste.taxe}</td>
             <td>${liste.valtaxe} %</td>
-            <td>${liste.pvttc}</td>
+            <td>${liste.pvttc} <i class="fas fa-euro-sign"></i></td>
             <td><a href="#" onclick="showupdatemodal()"><span style="color:green"><i class="far fa-edit" ></i></span></a> <a href="#" onclick="showmodaldelete()"><span style="color:red"><i class="far fa-trash-alt"></i></span></a></td>
             </c:forEach>
                 </tbody>

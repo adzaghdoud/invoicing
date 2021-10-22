@@ -43,7 +43,7 @@
 
     <!-- Remind Passowrd -->
     <div id="formFooter">
-      <a class="underlineHover" href="#" onclick="javascript:$('#pwdModal').modal()">Forgot Password?</a>
+      <a class="underlineHover" href="#" onclick="javascript:$('#pwdModal').modal()"><i class="fas fa-unlock-alt"></i> Forgot Password?</a>
         <%
         java.util.Properties prop = new java.util.Properties();
         prop.load(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF"));

@@ -196,7 +196,7 @@
         </form>
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val())">Send message <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif"></button>
+      <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val())">Send message <i class="far fa-paper-plane"></i> <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif"></button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
       
