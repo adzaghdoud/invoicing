@@ -34,9 +34,9 @@ public class PrestationsServiceImpl implements PrestationsService{
 	}
 
 	
-	public Prestations getperstationbynomfacture(String nomfacture) {
+	public Prestations getperstationbynumfacture(String numfacture,String company) {
 		// TODO Auto-generated method stub
-		return dao.getperstationbynomfacture(nomfacture);
+		return dao.getperstationbynumfacture(numfacture, company);
 	}
 
 	

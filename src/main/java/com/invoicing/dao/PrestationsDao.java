@@ -12,7 +12,7 @@ public interface PrestationsDao {
 	List<Prestations> getlistprestations(String company);
 	List<Prestations> getlistprestationsbyyear(String company);
 	List<Prestations> getlistprestations_until_date_cloture(String company,String datecloture);
-	Prestations getperstationbynomfacture(String nomfacture);
+	Prestations getperstationbynumfacture(String numfacture,String company);
 	List<Prestations> getpendingpaiement();
 	void validate_paiement(String numfacture);
 	long number_paiement_to_validate();

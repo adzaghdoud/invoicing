@@ -16,6 +16,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,7 +80,7 @@ public class PrestationsControler {
 		  pdf.setFilename(nomfacture);
 		  pdf.setFiletype("invoice");
 		  pdf.setClient(srvclient.getclientbyraisonsociale(p.getClient()));
-		  pdf.setPrestation(srvprestation.getperstationbynomfacture(nomfacture));
+		  pdf.setPrestation(srvprestation.getperstationbynumfacture(numfacture,srvlogins.getinfo(cookielogin).getCompany()));
 		  if (! pdf.generate(response)) {
 		      context.close();
 			  return ResponseEntity.status(506).body("Erreur génération facture : Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient()); 
@@ -117,7 +118,7 @@ public class PrestationsControler {
 		  LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		  Client c = srvclient.getclientbyraisonsociale(nomclient);
 		  Company company = srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany());
-		  Prestations p = srvprestation.getperstationbynomfacture(nomfacture);
+		  Prestations p = srvprestation.getperstationbynumfacture(nomfacture,srvlogins.getinfo(cookielogin).getCompany());
 		  Generatepdf g = new Generatepdf();
 		  g.setClient(c);
 		  g.setCompany(company);
@@ -157,7 +158,18 @@ public class PrestationsControler {
 	
 	}
 	
+	@GetMapping(value = "/Get_Prestation_by_numfacture/{numfacture}")
+	public  @ResponseBody  Prestations Getprestation (@PathVariable("numfacture") String numfacture,@CookieValue("invoicing_username") String cookielogin){
+		
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		PrestationsService srvprestations = (PrestationsService) context.getBean("PrestationsService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		Prestations p = srvprestations.getperstationbynumfacture(numfacture, srvlogins.getinfo(cookielogin).getCompany());
+		context.close();
+		return p;
+	
+	
+	}
+	}
 	
 
-
-}

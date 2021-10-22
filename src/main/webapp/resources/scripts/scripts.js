@@ -883,6 +883,39 @@ function drawChartca(result) {
 
 		
 }
+
+function show_modal_prestation() {
+	
+	$("#tableprestations tr").click(function() {//Add a click event to the row of the table
+	var tr = $(this);//Find tr element
+	var td = tr.find("td");//Find td element
+   $.ajax({
+   type : 'GET',
+   url : 'Get_Prestation_by_numfacture'+"/"+td[0].innerText,
+   async: true,
+   processData: false,
+   contentType: false,
+   success : function(response) {
+	document.getElementById('numfacture').value=response.numfacture;
+	document.getElementById('nomfacture').value=response.nomfacture;
+	document.getElementById('client').value=response.client;
+	document.getElementById('date').value=response.date;
+	document.getElementById('article').value=response.article;
+	document.getElementById('quantite').value=response.quantite;
+	document.getElementById('montantht').value=response.montantHT;
+	document.getElementById('totalttc').value=response.totalttc;
+	document.getElementById('statutpaiement').value=response.statut_paiement;
+	document.getElementById('modepaiement').value=response.modepaiement;
+	$("#Modalprestation").modal();
+	}
+    });
+});
+	
+	
+}
+
+
+
 //**********************************************JS bank
 var slug="zohratec-7289";
 var iban= "FR7616958000018388151027285";

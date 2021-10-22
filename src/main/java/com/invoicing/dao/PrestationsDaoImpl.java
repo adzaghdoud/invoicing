@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
@@ -63,13 +64,16 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 	}
 
 
-	public Prestations getperstationbynomfacture(String nomfacture) {
+	public Prestations getperstationbynumfacture(String numfacture,String company) {
 		// TODO Auto-generated method stub
+		
 		CriteriaBuilder builder = getSession().getCriteriaBuilder();
 		CriteriaQuery<Prestations> criteria = builder.createQuery(Prestations.class);
 		Root<Prestations> root = criteria.from(Prestations.class);
-		criteria.select(root).where(builder.equal(root.get("nomfacture"), nomfacture));
-		Query<Prestations> q=getSession().createQuery(criteria);
+		Predicate cond = null;
+		criteria.select(root).where(builder.equal(root.get("numfacture"), numfacture));
+		cond = builder.and(builder.equal(root.get("numfacture"), numfacture), builder.equal(root.get("company"), company));
+		Query<Prestations> q=getSession().createQuery(criteria.select(root).where(cond));
         return q.getSingleResult();
 	}
 

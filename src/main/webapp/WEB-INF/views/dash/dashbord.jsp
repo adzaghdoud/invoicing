@@ -8,7 +8,6 @@
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-<script src="https://code.jquery.com/jquery-3.6.0.js" ></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script type="text/javascript"src="https://www.gstatic.com/charts/loader.js" ></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 
@@ -155,13 +154,13 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title"><span style="color:green;font-weight:bold"><i class="fas fa-receipt"></i> Factures récentes</span></h5>
-        <table class="table table-borderless table-striped">
+        <table class="table table-borderless table-striped" id="tableprestations">
   <thead>
     <tr >
       <th scope="col">Num Facture</th>
       <th scope="col">date</th>
       <th scope="col">client</th>
-      <th scope="col">Montant TTC</th>
+      <th scope="col">Total TTC</th>
     </tr>
   </thead>
   <tbody>
@@ -172,14 +171,11 @@
             <c:set var = "datereformatted" value = "${fn:substring(date, 0, 19)}" />
             <td><c:out value="${datereformatted}"></c:out></td>
             <td>${prestation.client}</td>
-            <td>${prestation.totalttc}</td>
+            <td>${prestation.totalttc}   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
      </tr>          
    </c:forEach>
   </tbody>
 </table>
-<div style="display: flex; justify-content: flex-end">
- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalprestations" >Détails factures</button>
-</div>
       </div>
     </div>
   </div>
@@ -199,5 +195,95 @@
 <script>
 drawcharts();
 </script>
+
+
+   <div class="modal fade" id="Modalprestation" tabindex="-1"  role="dialog" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+   <div class="modal-content">
+   <div class="modal-header">
+   <h4 class="modal-title"> <span style="color:green">Détail Prestation</span></h4>
+   </div>
+   <div class="modal-body">  
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Num facture</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="numfacture" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Nom Fichier</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="nomfacture" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Client</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="client" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Date</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="date" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                <label class="col-sm-4 col-form-label"><b>Article</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="article" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                  <div class="form-group row" >
+                                <label class="col-sm-4 col-form-label"><b>Quantite</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="quantite" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                <label class="col-sm-4 col-form-label"><b>Montant HT</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="montantht" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Total TTC</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="totalttc" class="form-control" placeholder="0"/> 
+                                 </div>
+                                 </div>
+                                
+                                <div class="form-group row" >
+                                <label class="col-sm-4 col-form-label"><b>Statut Paiement</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="statutpaiement" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                <label class="col-sm-4 col-form-label"><b>Mode Paiement</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="modepaiement" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                                            
+      
+       </div>
+       <div class="modal-footer">
+       <button type="button" class="btn btn-primary" data-dismiss="modal">close</button>
+       </div>
+       </div>
+       </div>
+       </div>
+
+
  </body>
 </html>

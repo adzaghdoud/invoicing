@@ -9,7 +9,7 @@ public interface PrestationsService {
 	void addprestation(Prestations p);
 	Long getlast_id_prestation();
 	List<Prestations> getlistprestations(String company);
-	Prestations getperstationbynomfacture(String nomfacture);
+	Prestations getperstationbynumfacture(String numfacture,String company);
 	List<Prestations> getlistprestationsbyyear(String company);
 	List<Prestations> getlistprestations_until_date_cloture(String company,String datecloture);
 	List<Prestations> getpendingpaiement();

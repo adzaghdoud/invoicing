@@ -127,7 +127,7 @@
      </div>
      
       <div class="brand">
-       ${company_name}
+       <i class="far fa-building"></i> ${company_name}
       </div>
      
      
