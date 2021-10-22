@@ -678,7 +678,7 @@ function showupdatemodal() {
 	$("#tablearticle tr").click(function() {//Add a click event to the row of the table
 	    var tr = $(this);//Find tr element
 	    var td = tr.find("td");//Find td element
-       document.getElementById("titlemodalmodifyarticle").innerHTML="<b> <span style='color: green;'> Modificaion Article "+td[0].innerText+"</span></b>"
+       document.getElementById("titlemodalmodifyarticle").innerHTML="<b> <span style='color: green;'><i class='fas fa-edit'></i> Modificaion Article "+td[0].innerText+"</span></b>"
        $("#designationmodify").val(td[0].innerText);
        $("#famillemodify").val(td[1].innerText);
        $("#pvhtmodify").val(td[2].innerText);
@@ -897,7 +897,7 @@ function show_modal_prestation() {
    contentType: false,
    success : function(response) {
 	document.getElementById('numfacture').value=response.numfacture;
-	document.getElementById('nomfacture').value=response.nomfacture;
+	document.getElementById('nomfacture').value=response.nomfacture+".pdf";
 	document.getElementById('client').value=response.client;
 	document.getElementById('date').value=response.date;
 	document.getElementById('article').value=response.article;

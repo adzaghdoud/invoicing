@@ -158,8 +158,8 @@
   <thead>
     <tr >
       <th scope="col">Num Facture</th>
-      <th scope="col">date</th>
-      <th scope="col">client</th>
+      <th scope="col">Date</th>
+      <th scope="col">Client</th>
       <th scope="col">Total TTC</th>
     </tr>
   </thead>
@@ -201,7 +201,7 @@ drawcharts();
    <div class="modal-dialog" role="document">
    <div class="modal-content">
    <div class="modal-header">
-   <h4 class="modal-title"> <span style="color:green">Détail Prestation</span></h4>
+   <h6 class="modal-title"> <span style="color:green"><i class="fas fa-info-circle"></i>  Détail Prestation</span></h6>
    </div>
    <div class="modal-body">  
                                  <div class="form-group row" >

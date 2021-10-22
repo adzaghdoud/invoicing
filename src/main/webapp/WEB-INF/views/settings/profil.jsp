@@ -43,7 +43,7 @@
 	<div class="card-body">
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<h6 class="mb-2 text-primary">Information du compte</h6>
+				<h6 class="mb-2 text-primary"><i class="fas fa-info-circle"></i> Information du compte</h6>
 				<hr>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -78,10 +78,11 @@
 				</div>
 			</div>
 		</div>
-		<hr/>
+		
 		<div class="row gutters">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<h6 class="mt-3 mb-2 text-primary">Mise à jour password</h6>
+				<h6 class="mt-3 mb-2 text-primary"><i class="fas fa-key"></i> Mise à jour password</h6>
+			    <hr>
 			</div>
 			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 				<div class="form-group">
