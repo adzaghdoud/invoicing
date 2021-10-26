@@ -242,7 +242,7 @@
 				<text><![CDATA[Facture ]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="290" y="13" width="140" height="30" uuid="64d361fe-38c5-45f8-b32b-c926a6f11a07"/>
+				<reportElement x="280" y="13" width="140" height="30" uuid="64d361fe-38c5-45f8-b32b-c926a6f11a07"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="Dataset5" uuid="ddf3a160-6e16-4903-bf43-209b5e55d09e">
 						<dataSourceExpression><![CDATA[$P{DSinvoiceheader}]]></dataSourceExpression>
