@@ -94,6 +94,7 @@
 		<field name="adresse" class="java.lang.String"/>
 		<field name="ville" class="java.lang.String"/>
 		<field name="cp" class="java.lang.Integer"/>
+		<field name="siret" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="Dataset3" uuid="1a47f6af-cdaf-4e35-9776-7ee2993378c2">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -158,6 +159,14 @@
 							<reportElement x="0" y="60" width="100" height="20" uuid="520bfcf6-c9a4-4fc6-9065-f2b5a78587b1"/>
 							<textFieldExpression><![CDATA[$F{cp}]]></textFieldExpression>
 						</textField>
+						<staticText>
+							<reportElement x="0" y="80" width="30" height="30" uuid="462994fc-38f9-460e-a2b8-bd471b5b7336"/>
+							<text><![CDATA[Siret:]]></text>
+						</staticText>
+						<textField>
+							<reportElement x="30" y="80" width="170" height="30" uuid="3c4d19c3-f432-452f-8dac-c2827e94fb35"/>
+							<textFieldExpression><![CDATA[$F{siret}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
@@ -166,12 +175,12 @@
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="0" y="80" width="220" height="130" uuid="0e5c74d0-e2fe-4e1c-b0e2-ee9d09023d1b"/>
+				<reportElement x="0" y="80" width="300" height="130" uuid="0e5c74d0-e2fe-4e1c-b0e2-ee9d09023d1b"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="Dataset1" uuid="8f6558fd-3135-40dd-8785-1a2be95bfe93">
 						<dataSourceExpression><![CDATA[$P{DS1}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="130" width="220">
+					<jr:listContents height="130" width="300">
 						<textField>
 							<reportElement x="0" y="0" width="200" height="20" uuid="96bad0a4-cd65-4a6a-8bd1-f9997e4e33b8"/>
 							<textElement>
@@ -201,17 +210,27 @@
 							<textFieldExpression><![CDATA[$F{cp}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="0" y="80" width="200" height="20" uuid="ca7d6302-0828-4cdb-852b-e9fcf2ddc155"/>
+							<reportElement x="30" y="80" width="160" height="20" uuid="ca7d6302-0828-4cdb-852b-e9fcf2ddc155"/>
 							<textFieldExpression><![CDATA[$F{rcs}]]></textFieldExpression>
 						</textField>
 						<staticText>
 							<reportElement x="0" y="100" width="160" height="20" uuid="230462dc-1322-49ec-a476-32b004bfbafb"/>
+							<textElement>
+								<font isBold="true"/>
+							</textElement>
 							<text><![CDATA[Tel: ]]></text>
 						</staticText>
 						<textField>
 							<reportElement x="20" y="100" width="100" height="20" uuid="d9571846-4e48-41d2-b62b-3f774360e59d"/>
 							<textFieldExpression><![CDATA[$F{tel}]]></textFieldExpression>
 						</textField>
+						<staticText>
+							<reportElement x="0" y="80" width="30" height="20" uuid="d3dccd20-a283-4bb1-95ab-7b8abc6fa9cb"/>
+							<textElement>
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Siret:]]></text>
+						</staticText>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
