@@ -117,6 +117,8 @@ public class Generatepdf {
 		
 		
 		//regeneration Facture
+		   
+		
 		   JasperReport jasperReport;
 		   JasperDesign jasperDesign;
 		   JRDataSource reportSource1;

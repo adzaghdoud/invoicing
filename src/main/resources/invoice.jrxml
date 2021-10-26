@@ -61,7 +61,7 @@
 			<![CDATA[]]>
 		</queryString>
 		<field name="article" class="java.lang.String"/>
-		<field name="quantite" class="java.lang.Integer"/>
+		<field name="quantite" class="java.lang.Float"/>
 		<field name="montantHT" class="java.lang.Double"/>
 		<field name="totalttc" class="java.lang.Double"/>
 		<field name="valtaxe" class="java.lang.Double"/>

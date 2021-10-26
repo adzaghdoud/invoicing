@@ -28,7 +28,7 @@ public class Prestations {
 	private String nomfacture;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Europe/Paris")
 	private Timestamp date;
-	private int quantite;
+	private float quantite;
 	@Column(name = "montant_HT")
 	private Double montantHT;
 	@Column(name = "montant_TTC")
@@ -64,10 +64,10 @@ public class Prestations {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
-	public int getQuantite() {
+	public float getQuantite() {
 		return quantite;
 	}
-	public void setQuantite(int quantite) {
+	public void setQuantite(float quantite) {
 		this.quantite = quantite;
 	}
 	public Double getMontantHT() {
