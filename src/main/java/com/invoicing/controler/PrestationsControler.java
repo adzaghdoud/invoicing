@@ -59,8 +59,9 @@ public class PrestationsControler {
 		  p.setNumfacture(numfacture);
 	      }
 		  else {
-		  numfacture=formatter.format(date)+"-"+srvprestation.getlast_id_prestation();
-	      nomfacture= "Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient();
+		  long numseq=srvprestation.getlast_id_prestation()+1;
+		  numfacture=formatter.format(date)+"-"+numseq;
+	      nomfacture= "Facture"+formatter.format(date)+"-"+numseq+"-"+p.getClient();
 		  p.setNumfacture(numfacture);
 		  p.setNomfacture(nomfacture);
 		  }
