@@ -565,6 +565,37 @@ function Generateinvoice(){
         
 	}); 
 }
+
+function Generate_post_invoice() {
+$("#Prestation_table tr").click(function() {//Add a click event to the row of the table
+	var tr = $(this);//Find tr element
+	var td = tr.find("td");//Find td element
+   $.ajax({
+   type : 'POST',
+   url : 'Generate_Post_Invoice'+"/"+td[1].innerText,
+   async: true,
+   processData: false,
+   contentType: false,
+   success : function(response) {	
+	$("#loader").hide();
+        	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
+            $("#Modalnotify").modal();
+            setTimeout(function(){
+            	  $('#Modalnotify').modal('hide')
+           	}, 2000);
+        },
+        error : function (jqXHR) {
+        	$("#loader").hide();
+        	document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
+            $("#Modalnotify").modal();	
+        }
+}); 
+});
+}
+
+
 //****************************************************** JS send mail 
 function sendmail(mailto,subject,contain){
 	$("#refresh_gif").show();

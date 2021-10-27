@@ -171,6 +171,35 @@ public class PrestationsControler {
 	
 	
 	}
+
+	@PostMapping(value = "/Generate_Post_Invoice/{nomfacture}")
+	public  @ResponseBody ResponseEntity<String> GeneratePostinvoice(@PathVariable("nomfacture") String nomfacture,HttpServletResponse response ,@CookieValue("invoicing_username") String cookielogin){	
+		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
+		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		  LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		  ClientService srvclient = (ClientService) context.getBean("ClientService");
+		  Prestations P = srvprestation.getperstationbynomfacture(nomfacture, srvlogins.getinfo(cookielogin).getCompany());
+		  Client c = srvclient.getclientbyraisonsociale(P.getClient());
+		  Generatepdf pdf = new Generatepdf();
+		  pdf.setCompany(srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()));
+		  pdf.setFilename(nomfacture);
+		  pdf.setFiletype("invoice");
+		  pdf.setClient(c);
+		  pdf.setPrestation(P);
+		  if (! pdf.generate(response)) {
+		  context.close();
+	      return ResponseEntity.status(506).body("Erreur génération facture : Facture " +nomfacture);			  
+		  }
+		  context.close();
+		  return ResponseEntity.ok("La facture "+nomfacture+" a été bien générée");
+		
 	}
+
+
+
+
+
+}
 	
 

@@ -167,6 +167,18 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 	}
 
 
+	public Prestations getperstationbynomfacture(String nomfacture, String company) {
+		CriteriaBuilder builder = getSession().getCriteriaBuilder();
+		CriteriaQuery<Prestations> criteria = builder.createQuery(Prestations.class);
+		Root<Prestations> root = criteria.from(Prestations.class);
+		Predicate cond = null;
+		criteria.select(root).where(builder.equal(root.get("nomfacture"), nomfacture));
+		cond = builder.and(builder.equal(root.get("nomfacture"), nomfacture), builder.equal(root.get("company"), company));
+		Query<Prestations> q=getSession().createQuery(criteria.select(root).where(cond));
+        return q.getSingleResult();
+	}
+
+
 
 
 

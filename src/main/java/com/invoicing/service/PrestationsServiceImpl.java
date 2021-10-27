@@ -77,6 +77,11 @@ public class PrestationsServiceImpl implements PrestationsService{
 	}
 
 
+	public Prestations getperstationbynomfacture(String nomfacture, String company) {
+		return dao.getperstationbynomfacture(nomfacture, company);
+	}
+
+
 
 
 }

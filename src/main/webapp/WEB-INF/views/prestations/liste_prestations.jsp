@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://kit.fontawesome.com/b16c365929.js"></script>
 <style>
 .filterable {
@@ -48,7 +47,7 @@
              
                 
             </div>
-            <table class="table table-striped">
+            <table class="table table-striped" id="Prestation_table">
                 <thead>
                     <tr class="filters">
                         <th><input type="text" class="form-control" placeholder="Article" disabled></th>
@@ -82,13 +81,37 @@
             <td>${prestation.valtaxe} %</td>
             <td>${prestation.montantTTC}</td>
             <td>${prestation.totalttc}</td>
-            <td><a href="#"><span style='color: green;'><i class="far fa-file-pdf"></i></span></a></td>
+            <td><a href="#" onclick="javascript:Generate_post_invoice()"><span style='color: green;'><i class="far fa-file-pdf"></i></span></a></td>
             </c:forEach>
                 </tbody>
             </table>
         </div>
     </div>
     </div>
+    
+    
+   <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titlemodal"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <span id="msgModalnotify"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+    
+    
     <script>
     /*
     Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
@@ -136,5 +159,6 @@
         });
     });
     </script>
+    
 </body>
 </html>
