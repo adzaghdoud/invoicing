@@ -146,7 +146,7 @@ public class Generatepdf {
 		    	 reportSource5 = new JRBeanCollectionDataSource(listprestation);
 		    	 java.io.InputStream logo;
 		    	 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
-		    	 String condition_paiement=this.prestation.getTotalttc()+" € à payer par "+this.prestation.getModepaiement()+" le "+formatter.format(this.prestation.getDatepaiementattendue());
+		    	 String condition_paiement=this.prestation.getTotalttc()+" à payer par "+this.prestation.getModepaiement()+" le "+formatter.format(this.prestation.getDatepaiementattendue());
 				try {
 					logo = ByteSource.wrap(company.getLogo()).openStream();
 					BufferedImage logoimage = ImageIO.read(logo);
@@ -162,9 +162,9 @@ public class Generatepdf {
 			     reportParameters.put("DS4", reportSource4);
 			     reportParameters.put("DSinvoiceheader", reportSource5);
 			     reportParameters.put("condition_paiement", condition_paiement);
-			     reportParameters.put("total_HT", prestation.getMontantHT());
+			     reportParameters.put("total_HT", prestation.getMontantHT()*prestation.getQuantite());
 			     reportParameters.put("TVA", prestation.getValtaxe());
-			     reportParameters.put("Total_TTC", prestation.getMontantTTC());
+			     reportParameters.put("Total_TTC", prestation.getTotalttc());
 			     reportParameters.put("tel", company.getTel());	
 				 JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
 				     

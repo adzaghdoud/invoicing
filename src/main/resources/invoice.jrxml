@@ -387,7 +387,7 @@
 			</staticText>
 			<staticText>
 				<reportElement x="330" y="200" width="100" height="20" uuid="d99273ae-3331-4198-9cab-aa3c61b7dfae"/>
-				<text><![CDATA[Total HT]]></text>
+				<text><![CDATA[Total HT € :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="330" y="220" width="100" height="20" uuid="86ab051e-4c02-4cec-aaf1-39418f9f2fae"/>
@@ -395,7 +395,7 @@
 			</staticText>
 			<staticText>
 				<reportElement x="330" y="240" width="100" height="20" uuid="139c8219-0282-4a46-8e08-918740206072"/>
-				<text><![CDATA[Total TTC:]]></text>
+				<text><![CDATA[Total TTC € :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="430" y="200" width="84" height="20" uuid="5d68adeb-8b2c-4b7d-b730-86573f48c8d4"/>
