@@ -100,7 +100,7 @@ import com.invoicing.model.Transaction;
 			query.setParameter(3, company);
 			@SuppressWarnings("unchecked")
 			List<Transaction> list_transactions = query.getResultList();  
-		      return list_transactions;
+		    return list_transactions;
 		}
 		
 		

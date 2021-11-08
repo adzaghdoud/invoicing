@@ -110,7 +110,7 @@
                 <a href="#"><i class="fas fa-university"></i>Transactions bancaires<span class="arrow"></span></a>
                 <ul class="sub-menu collapse" id="bank">
                 <li><a href="liste_transactions_bank" class="link">Liste transactions  ${company_bank_name}</a></li>
-                <li><a href="#" class="link">Suivi Batch Import</a></li>
+                <li><a href="Get_Tracking_Batch" class="link">Suivi Batch Import</a></li>
                 <li><a href="tva_collectee" class="link">Détail TVA</a></li>
                 <li><a href="#" onclick="showmodaltva()">Déclaration TVA</a></li>
                 </ul>

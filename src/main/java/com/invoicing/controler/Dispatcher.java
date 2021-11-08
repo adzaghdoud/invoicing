@@ -51,6 +51,7 @@ import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
+import com.invoicing.service.TrackingService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
@@ -334,6 +335,25 @@ public class Dispatcher {
 		return mv;
 	
 	}
+	
+	@RequestMapping(value = "/Get_Tracking_Batch", method = RequestMethod.GET)
+	public ModelAndView GetTracking(@CookieValue("invoicing_username") String cookielogin) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		TrackingService srvt = (TrackingService) context.getBean("TrackingService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		ModelAndView mv = new ModelAndView("/bank/tracking_import");
+		mv.addObject("list_tracked_batch", srvt.GetTracking(srvlogins.getinfo(cookielogin).getCompany()));
+		mv.addObject("bank_name", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname());
+		context.close();
+		return mv;
+	}
+	
+	
+	
+	
+	
+	
 
 	@RequestMapping(value = "/tva_collectee", method = RequestMethod.GET)
 	public ModelAndView tva_collectee() {
