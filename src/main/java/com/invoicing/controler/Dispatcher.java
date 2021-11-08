@@ -52,7 +52,7 @@ import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.PrestationsService;
-import com.invoicing.service.TrackingService;
+//import com.invoicing.service.TrackingService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
@@ -335,7 +335,7 @@ public class Dispatcher {
 	
 	}
 	
-	@RequestMapping(value = "/Get_Tracking_Batch", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/Get_Tracking_Batch", method = RequestMethod.GET)
 	public ModelAndView GetTracking(@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		TrackingService srvt = (TrackingService) context.getBean("TrackingService");
@@ -346,7 +346,7 @@ public class Dispatcher {
 		mv.addObject("bank_name", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname());
 		context.close();
 		return mv;
-	}
+	}*/
 	
 	
 	
