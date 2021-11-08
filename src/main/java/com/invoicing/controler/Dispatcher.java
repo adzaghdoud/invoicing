@@ -1,6 +1,7 @@
 package com.invoicing.controler;
 
 import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,8 +58,6 @@ import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
