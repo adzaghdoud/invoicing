@@ -337,14 +337,14 @@ public class Dispatcher {
 	
 	@RequestMapping(value = "/Get_Tracking_Batch", method = RequestMethod.GET)
 	public ModelAndView GetTracking(@CookieValue("invoicing_username") String cookielogin) {
-		/*AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		TrackingService srvt = (TrackingService) context.getBean("TrackingService");
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
-		*/ModelAndView mv = new ModelAndView("/bank/tracking_import"); /*
+	    ModelAndView mv = new ModelAndView("/bank/tracking_import"); 
 		mv.addObject("list_tracked_batch", srvt.GetTracking(srvlogins.getinfo(cookielogin).getCompany()));
 		mv.addObject("bank_name", srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname());
-		context.close(); */
+		context.close();
 		return mv;
 	}
 	
