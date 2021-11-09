@@ -201,13 +201,14 @@ public class Dispatcher {
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		double in=0;
 		double out=0;
-		for (int i=0 ; i<srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
-			if (srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getSide().contentEquals("debit")) {
-				out = out +srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount();
+		List<Transaction> list_t= srvt.getlist(srvlogins.getinfo(cookielogin).getCompany());
+		for (int i=0 ; i<list_t.size() ; i++) {
+			if (list_t.get(i).getSide().contentEquals("debit")) {
+				out = out +list_t.get(i).getAmount();
 			}
 			
-			if (srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getSide().contentEquals("credit")) {
-				in =in +srvt.getlist(srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount();
+			if (list_t.get(i).getSide().contentEquals("credit")) {
+				in =in +list_t.get(i).getAmount();
 			}
 			
 		}
