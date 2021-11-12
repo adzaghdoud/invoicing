@@ -22,3 +22,5 @@ CHANGE COLUMN `nb_credit` `nb_credit` INT NULL DEFAULT NULL AFTER `nb_transactio
 CHANGE COLUMN `nb_debit` `nb_debit` INT NULL DEFAULT NULL AFTER `nb_credit`;
 ALTER TABLE `invoicing`.`suivi_import` 
 ADD COLUMN `old_balance` DOUBLE NULL AFTER `total_debit`;
+ALTER TABLE `invoicing`.`suivi_import` 
+ADD COLUMN `old_balance` DOUBLE NULL AFTER `total_debit`;
