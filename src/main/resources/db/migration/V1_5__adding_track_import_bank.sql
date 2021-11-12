@@ -23,12 +23,12 @@ CHANGE COLUMN `nb_debit` `nb_debit` INT NULL DEFAULT NULL AFTER `nb_credit`;
 ALTER TABLE `invoicing`.`suivi_import` 
 ADD COLUMN `old_balance` DOUBLE NULL AFTER `total_debit`;*/
 ALTER TABLE `invoicing`.`suivi_import` 
-ADD COLUMN `total_credit` DOUBLE 0 AFTER `nb_debit`;
+ADD COLUMN `total_credit` DOUBLE NULL DEFAULT 0 AFTER `nb_debit`;
 
 ALTER TABLE `invoicing`.`suivi_import` 
-ADD COLUMN `total_debit` DOUBLE 0 AFTER `total_credit`;
+ADD COLUMN `total_debit` DOUBLE NULL DEFAULT 0 AFTER `total_credit`;
 ALTER TABLE `invoicing`.`suivi_import` 
-ADD COLUMN `old_balance` DOUBLE 0 AFTER `total_debit`;
+ADD COLUMN `old_balance` DOUBLE NULL DEFAULT 0 AFTER `total_debit`;
 
 ALTER TABLE `invoicing`.`suivi_import` 
-ADD COLUMN `new_balance` DOUBLE 0 AFTER `old_balance`;
+ADD COLUMN `new_balance` DOUBLE NULL DEFAULT 0 AFTER `old_balance`;
