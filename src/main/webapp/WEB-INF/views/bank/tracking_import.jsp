@@ -54,6 +54,10 @@
                         <th><input type="text" class="form-control" placeholder="New Trancations" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Nb Credits" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Nb Debits" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Total Credits" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Total Debits" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Old Balance" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="New Balance" disabled></th>
                         <th><input type="text" class="form-control" placeholder="State" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Comment" disabled></th>
                     </tr>
@@ -65,6 +69,10 @@
             <td>${tracking.nb_transaction_imported}</td>
             <td>${tracking.nb_credit}</td>
             <td>${tracking.nb_debit}</td>
+            <td>${tracking.total_credit}</td>
+            <td>${tracking.total_debit}</td>
+            <td>${tracking.old_balance}</td>
+            <td>${tracking.new_balance}</td>
             <c:if test = "${tracking.state == 'OK'}"> 
             <td><span class="label label-success">${tracking.state}</span></td>
             </c:if>
