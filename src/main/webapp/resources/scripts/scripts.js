@@ -721,6 +721,10 @@ function showupdatemodal() {
    });	
 }
 
+function show_new_article_modal() {
+$("#Modalnewarticle").modal();	
+}
+
 function saveupdatearticle () {
 	
 	var pvht = parseFloat($("#pvhtmodify").val());
@@ -977,9 +981,11 @@ async: true,
 processData: false,
 contentType: false,
 success : function(response) {
-	$("#refresh").hide();
-	if (response > 0) {
-	            document.getElementById("msgModalnotify").innerHTML="<b>"+response+" Nouvelles transactions ont été importées avec succés</b>";
+	$("#refresh").hide();	
+	if (response.nb_credit > 0 ||  response.nb_debit > 0) {
+	            document.getElementById("msgModalnotify").innerHTML="<b> Nouvelles transactions ont été importées avec succés</b>: <br/>"+
+                +response.nb_credit+ " <b>Crédits</b> <br/>"+
+                +response.nb_debit+" <b>Débits</b>"
 		        document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-file-upload'></i> Confirmation</span>";
                 $("#container_transaction").load("liste_transactions_bank");
                 $("#Modalnotify").modal();
@@ -987,7 +993,7 @@ success : function(response) {
 
 
 	}
-	if (response == 0) {
+	if (response.nb_credit == 0 && response.nb_debit == 0) {
 	            document.getElementById("msgModalnotify").innerHTML="<b> Pas de nouvelles transactions à importer</b>";
 		        document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-file-upload'></i> Confirmation</span>"; 
                 $("#Modalnotify").modal();	

@@ -126,13 +126,13 @@
             
         </div>
            <div>
-                   <button class="btn btn-success" data-toggle="modal" data-target="#Modalnewarticle"><i class="fas fa-plus"></i> Nouveau Article </button>
+                   <button class="btn btn-success" onclick="javascript:show_new_article_modal()"><i class="fas fa-plus"></i> Nouveau Article </button>
             </div>
             
           </div>
     </div>     
             
-   <div class="modal fade" id="Modalnewarticle" tabindex="-1"  aria-labelledby="titleModalnewarticle" role="dialog" aria-hidden="true">
+   <div class="modal fade" id="Modalnewarticle" tabindex="-1"  role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

@@ -10,13 +10,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
-
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-
+import com.invoicing.model.Company;
 import com.invoicing.model.Transaction;
 
 @Repository("TransactionDaoImpl")
@@ -101,6 +101,26 @@ import com.invoicing.model.Transaction;
 			@SuppressWarnings("unchecked")
 			List<Transaction> list_transactions = query.getResultList();  
 		    return list_transactions;
+		}
+
+		@Override
+		public long count_debit_trancactions(String company) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+			Root<Transaction> root = criteria.from(Transaction.class);
+			Predicate cond = null;
+			cond = builder.and(builder.equal(root.get("company"), company), builder.equal(root.get("side"), "debit"));
+			return  getSession().createQuery(criteria.select(root).where(cond)).getResultList().size();
+		}
+
+		@Override
+		public long count_credit_trancactions(String company) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+			Root<Transaction> root = criteria.from(Transaction.class);
+			Predicate cond = null;
+			cond = builder.and(builder.equal(root.get("company"), company), builder.equal(root.get("side"), "credit"));
+			return  getSession().createQuery(criteria.select(root).where(cond)).getResultList().size();
 		}
 		
 		

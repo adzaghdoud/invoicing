@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
+import org.json.simple.JSONObject;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -34,18 +35,23 @@ import com.invoicing.service.TransactionsService;
 @Controller
 public class TransactionsControler {
 	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
+	@SuppressWarnings("unchecked")
 	@GetMapping(value = "/refresh_transactions")
-	public @ResponseBody int refresh_transactions (@CookieValue("invoicing_username") String cookielogin){
-		long nbafter=0;
-		long nbbefore=0;
-
-		try {
+	public @ResponseBody JSONObject refresh_transactions (@CookieValue("invoicing_username") String cookielogin){
+		
+		JSONObject json = new JSONObject();
+		long nb_credit_before=0;
+		long nb_debit_before=0;
+		long nb_credit_after=0;
+		long nb_debit_after=0;
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
 		 TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
-		 LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
+		 LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		try {	
 		 ProcessBuilder processBuilder = new ProcessBuilder(System.getProperty("path.script.import."+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getBankname().toLowerCase()),System.getProperty("path.json.input")+System.getProperty("file.separator")+"transactions_"+srvlogins.getinfo(cookielogin).getCompany()+".json", System.getProperty("path.backend.jar"),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getRib(),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getSlug(),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getToken(),srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getRs().toUpperCase());
-		 nbbefore = srvt.countnbtransaction();
+		 nb_credit_before = srvt.count_credit_trancactions(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getRs());
+		 nb_debit_before = srvt.count_debit_trancactions(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getRs());
 		 processBuilder.redirectErrorStream(true);
 		 Process p = processBuilder.start();
 		 log.info(new String(IOUtils.toByteArray(p.getInputStream()))); 
@@ -53,20 +59,21 @@ public class TransactionsControler {
 		 log.error(new String(IOUtils.toByteArray(p.getErrorStream()))); 
 	     }
 		 p.waitFor();
-		 nbafter= srvt.countnbtransaction();
 		 Date date = new Date();
          Timestamp ts=new Timestamp(date.getTime());
          srvcompany.updatetimestamprefresh(ts, srvlogins.getinfo(cookielogin).getCompany());
-		 context.close();
 
 	} catch (Exception e) {
 		 
 	log.error(ExceptionUtils.getStackTrace(e));
 	}
-	   if ( nbafter == 0) {
-		return 0;   
-	   }
-		return (int) (nbafter-nbbefore);
+	  
+		nb_credit_after = srvt.count_credit_trancactions(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getRs());
+		nb_debit_after = srvt.count_debit_trancactions(srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getRs());
+		json.put("nb_credit", nb_credit_after - nb_credit_before);
+		json.put("nb_debit", nb_debit_after - nb_debit_before);
+		context.close();
+	    return json;	 
 	}
    
 

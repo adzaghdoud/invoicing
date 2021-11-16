@@ -11,6 +11,8 @@ public interface TransactionsService {
 	List<Transaction> getlist(String company);
 	boolean checkexistancetransaction(String transactionID);
 	long countnbtransaction();
+	long count_debit_trancactions(String company);
+	long count_credit_trancactions(String company);
 	void updatetvatransaction(String setted_at,double amountttc,Timestamp t,String updated_at);
 	List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin,String company) ;
 	List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb , String datefin,String company) ;

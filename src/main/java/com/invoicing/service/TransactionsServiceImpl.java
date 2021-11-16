@@ -52,4 +52,14 @@ public class TransactionsServiceImpl implements TransactionsService {
 		return dao.searchtransacbetweentwodates_with_tva(datedeb, datefin, company);
 	}
 
+	@Override
+	public long count_debit_trancactions(String company) {
+		return dao.count_debit_trancactions(company);
+	}
+
+	@Override
+	public long count_credit_trancactions(String company) {
+		return dao.count_credit_trancactions(company);
+	}
+
 }
