@@ -720,11 +720,6 @@ function showupdatemodal() {
        $("#Modalmodifyarticle").modal();
    });	
 }
-
-function show_new_article_modal() {
-$("#Modalnewarticle").modal();	
-}
-
 function saveupdatearticle () {
 	
 	var pvht = parseFloat($("#pvhtmodify").val());
