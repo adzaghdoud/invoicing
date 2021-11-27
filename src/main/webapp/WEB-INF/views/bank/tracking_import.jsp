@@ -69,22 +69,19 @@
             <td>${tracking.nb_transaction_imported}</td>
             <td>${tracking.nb_credit}</td>
             <td>${tracking.nb_debit}</td>
-            <c:choose>
-            <c:when test = "${tracking.total_credit >0}">
+        
+            <c:if test = "${tracking.total_credit >0}">
             <td><span style="color:green">${tracking.total_credit}</span></td>
-            </c:when>
-            <c:when test = "${tracking.total_credit == 0}">
+            </c:if>
+            <c:if test = "${tracking.total_credit == 0 }">
             <td>${tracking.total_credit}</td>
-            </c:when>
-            
-            <c:when test = "${tracking.total_debit >0}">
+            </c:if>
+            <c:if test = "${tracking.total_debit >0}">
             <td><span style="color:red">${tracking.total_debit}</span></td>
-            </c:when>
-            <c:when test = "${tracking.total_debit == 0}">
+            </c:if>
+            <c:if test = "${tracking.total_debit  == 0}">
             <td>${tracking.total_debit}</td>
-            </c:when>
-            </c:choose>
-                  
+            </c:if> 
             <td>${tracking.old_balance}</td>
             <td>${tracking.new_balance}</td>
             <c:if test = "${tracking.state == 'OK'}"> 
