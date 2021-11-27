@@ -1,18 +1,25 @@
 package com.invoicing.controler;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -26,6 +33,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.S3Object;
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Client;
 import com.invoicing.model.Company;
@@ -39,8 +53,10 @@ import com.invoicing.tools.Sendmail;
 
 @Controller
 public class PrestationsControler {
+	@SuppressWarnings("unchecked")
 	@PostMapping(value = "/generateinvoice")
-	public  @ResponseBody ResponseEntity<String> generateinvoice(@RequestBody Prestations p ,HttpServletResponse response ,@CookieValue("invoicing_username") String cookielogin){	
+	public  @ResponseBody JSONObject generateinvoice(@RequestBody Prestations p ,HttpServletResponse response ,@CookieValue("invoicing_username") String cookielogin){	
+		  JSONObject jsonresult = new JSONObject();
 		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
 		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
@@ -73,7 +89,8 @@ public class PrestationsControler {
 		  catch (Exception e) {  
 		  System.out.println(ExceptionUtils.getStackTrace(e));	 
 		  context.close();
-		  return ResponseEntity.status(505).body("Erreur saisie nouvelle prestation en BDD");
+		  jsonresult.put("msg", "Erreur saisie nouvelle prestation en BDD");
+		  return jsonresult;
 		  }
 		  
 		  Generatepdf pdf = new Generatepdf();
@@ -82,14 +99,19 @@ public class PrestationsControler {
 		  pdf.setFiletype("invoice");
 		  pdf.setClient(srvclient.getclientbyraisonsociale(p.getClient()));
 		  pdf.setPrestation(srvprestation.getperstationbynumfacture(numfacture,srvlogins.getinfo(cookielogin).getCompany()));
-		  if (! pdf.generate(response)) {
+		  JSONObject json = pdf.generate(response);
+		  
+		  if (json.get("msg").toString().contains("Error")) {
 		      context.close();
-			  return ResponseEntity.status(506).body("Erreur génération facture : Facture"+formatter.format(date)+"-"+srvprestation.getlast_id_prestation()+"-"+p.getClient()); 
+		      jsonresult.put("msg", json.get("msg").toString());
+			  return jsonresult;
 			  
 		  }
+		  jsonresult.put("Invoice_path",srvlogins.getinfo(cookielogin).getCompany()+"/INVOICES/"+nomfacture+".pdf");
+		  jsonresult.put("Invoice_name",nomfacture+".pdf");
+		  jsonresult.put("msg","La facture "+nomfacture+".pdf a été bien générée");
 		  context.close();
-		  
-		  return ResponseEntity.ok("La facture "+nomfacture+"a été bien générée");
+		  return jsonresult;
 		
 	}
 
@@ -126,10 +148,10 @@ public class PrestationsControler {
 		  g.setFilename(nomfacture);
 		  g.setPrestation(p);
 	
-		  if ( ! g.generate(response) ) {
+		  /*if ( ! g.generate(response) ) {
 			  context.close();
 			  return false;
-		  }  
+		  } */ 
 		  Sendmail s = new Sendmail();
 		  s.setFilename(nomfacture+".pdf");
 		  s.setMailto(c.getMail());
@@ -187,17 +209,36 @@ public class PrestationsControler {
 		  pdf.setFiletype("invoice");
 		  pdf.setClient(c);
 		  pdf.setPrestation(P);
-		  if (! pdf.generate(response)) {
+		  pdf.generate(response);
+		  /*if (! pdf.generate(response)) {
 		  context.close();
 	      return ResponseEntity.status(506).body("Erreur génération facture : Facture " +nomfacture);			  
-		  }
+		  }*/
 		  context.close();
 		  return ResponseEntity.ok("La facture "+nomfacture+" a été bien générée");
 		
 	}
 
+	@GetMapping(value = "/Download_Invoice_From_Amazone/{company}/{typedocument}/{invoicename}",produces = "application/pdf")
+	 public @ResponseBody byte[] Download_Invoice_From_Amazone(@PathVariable("company") String company ,@PathVariable("typedocument") String typedocument ,@PathVariable("invoicename") String invoicename) throws Exception {
+		    S3Object s3Object = null;
+			InputStream input;
+			final Properties prop = new Properties();
+			input = new FileInputStream(System.getProperty("env.file.ext"));	           
+			prop.load(input);  
+		    /*Retrieve file as object from S3*/
+		    AWSCredentials credentials = new BasicAWSCredentials(prop.getProperty("AmazoneS3.KeyID"),prop.getProperty("AmazoneS3.SecretKey"));
+			   AmazonS3 s3client = AmazonS3ClientBuilder
+						  .standard()
+						  .withCredentials(new AWSStaticCredentialsProvider(credentials))
+						  .withRegion(Regions.EU_WEST_2)
+						  .build();
+		       s3Object = s3client.getObject(prop.getProperty("AmazoneS3.Bucket"),company+"/"+typedocument+"/"+java.time.Year.now().getValue()+"/"+invoicename);
 
-
+		       byte[] bytes = IOUtils.toByteArray(s3Object.getObjectContent());
+		       return bytes;
+		    		   
+		   }
 
 
 }

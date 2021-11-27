@@ -84,7 +84,7 @@ public class LoginsControler {
 			env.put(Context.SECURITY_PRINCIPAL, "cn=Directory Manager");
 			env.put(Context.SECURITY_CREDENTIALS, "09142267");
 			DirContext ctx = new InitialDirContext(env);
-			Map<String, String> map = Ldaptools.getvalueattibute("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+			Map<String, String> map = Ldaptools.getvaluesattibutes("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
 			
 			if (! map.get("mail").toString().contentEquals(email)) {
 				ModificationItem[] mods = new ModificationItem[1];

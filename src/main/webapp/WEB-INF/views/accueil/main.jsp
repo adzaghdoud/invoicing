@@ -57,7 +57,8 @@
                   <a href="#"><i class="fas fa-shopping-cart"></i> Articles <span class="arrow"></span></a>
                  
                 <ul class="sub-menu collapse" id="articles">
-                  <li ><a  class="link"href="articles">Liste Articles</a></li>
+                  <li ><a  class="link"href="document">Liste Articles</a></li>
+                  <!--  <li ><a  class="link"href="articles">Liste Articles</a></li>-->
                 </ul>
                 </li> 
 
@@ -78,8 +79,10 @@
                   <a href="#"><i class="far fa-plus-square"></i> Actions <span class="arrow"></span></a>
                 
                 <ul class="sub-menu collapse" id="action">
-                  <li><a class="link"href="newinvoice">Créer une facture</a></li> 
-                  <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>
+                  <li><a class="link"href="newinvoice">Création nouvelle facture</a></li> 
+                   <!--  <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>-->
+                   <li> <a href=demo-file-download >Relancer une facture </a> </li>
+                   
                     
                 </ul>
                 </li>

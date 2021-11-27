@@ -1,13 +1,17 @@
 package com.invoicing.controler;
 
-import java.io.FileInputStream;
+import java.io.File;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +19,10 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ContentDisposition;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -25,12 +33,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
@@ -43,6 +52,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Logins;
 import com.invoicing.model.Prestations;
@@ -112,11 +130,12 @@ public class Dispatcher {
 		Cookie userName = new Cookie("invoicing_username", login);
 		userName.setMaxAge(-1);
 		response.addCookie(userName);
-		context.close();
+		context.close();		
 		return mv;
 	} 
 	
 	
+
 	
 	
 	
@@ -175,12 +194,18 @@ public class Dispatcher {
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");	
 		Logins p = srvlogins.getinfo(cookielogin);		
 		ModelAndView mv = new ModelAndView("/settings/profil");
-		Map<String, String> map = Ldaptools.getvalueattibute("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+		Map<String, String> map = Ldaptools.getvaluesattibutes("uid="+cookielogin+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
+		
+			 for (String key : map.keySet()) {
+			        System.out.println(key + "=" + map.get(key));
+			    }
+		
 		mv.addObject("CN", map.get("cn"));
 		mv.addObject("email",map.get("mail"));
 		mv.addObject("login", cookielogin);
 		mv.addObject("tel", map.get("tel"));
 		mv.addObject("company", map.get("o"));
+		mv.addObject("fonction", map.get("employeetype"));
 		if (!(p.getAvatar() == null) ) {
 		String encodedimage = Base64Utils.encodeToString(p.getAvatar());
 		mv.addObject("avatar",encodedimage);
@@ -442,4 +467,22 @@ public class Dispatcher {
 	}
 	return ResponseEntity.ok("Le mail a été bien envoyée à "+mailto);	
 	} 
+    
+	@GetMapping(value = "/demo-file-download", produces = "application/pdf")
+    public ResponseEntity<byte[]> demo(byte[] bytes) throws IOException { // (1) Return byte array response
+    	   Path pdfPath = Paths.get("C:\\Users\\adem\\Downloads\\CamScanner 11-23-2021 22.16.pdf");
+    	   byte[] pdf = Files.readAllBytes(pdfPath);
+    
+    	   HttpHeaders headers = new HttpHeaders();
+    	   headers.add("content-disposition", "attachment; filename=" + "adem.pdf");
+    	   ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
+    			   pdf, headers, HttpStatus.OK);
+    	   
+	       return response;
+    }
+
+
+
+
+
 }

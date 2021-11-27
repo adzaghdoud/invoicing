@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.json.simple.JSONObject;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -59,6 +61,7 @@ public class Generatepdf {
 	/**
 	 * 
 	 */
+	static org.apache.logging.log4j.Logger logger =  LogManager.getLogger(Generatepdf.class);
 	private static final long serialVersionUID = 1L;
 	private String filetype;
 	private String filename;
@@ -113,12 +116,13 @@ public class Generatepdf {
 		this.prestation = prestation;
 	}
 
-	public boolean generate(HttpServletResponse response) {
+	@SuppressWarnings("unchecked")
+	public JSONObject generate(HttpServletResponse response) {
 		
 		
 		//regeneration Facture
 		   
-		
+		   JSONObject jsonresult = new JSONObject();
 		   JasperReport jasperReport;
 		   JasperDesign jasperDesign;
 		   JRDataSource reportSource1;
@@ -167,27 +171,24 @@ public class Generatepdf {
 			     reportParameters.put("Total_TTC", prestation.getTotalttc());
 			     reportParameters.put("tel", company.getTel());	
 				 JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
-				     
-				     //response.setContentType("application/x-download");
-				     //response.setHeader("Content-disposition","inline; filename=userList.pdf");
-
-				     //JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-				     //response.getOutputStream().flush();
-				     //response.getOutputStream().close();   
-				//} catch (Exception e) {
-					// TODO Auto-generated catch block
-					 //System.out.println(ExceptionUtils.getStackTrace(e));
-				//}
-			
-				     
-			     
-			     JasperExportManager.exportReportToPdfFile(jasperPrint,System.getProperty("pdf.stor")+FileSystems.getDefault().getSeparator()+this.filename+".pdf");	     
-		   } catch (Exception e) {
-			      System.out.println(ExceptionUtils.getStackTrace(e));
-			     return false;
-		        }
+				   
 	
-	 return true;
-
+		         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();	
+			     JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);
+		         try {
+			     S3Amazonetools.Putdocument(company.getRs(), "INVOICES", byteArrayOutputStream,filename+".pdf");
+		         } catch (Exception e) { 
+		        	 logger.error(ExceptionUtils.getStackTrace(e));
+		        	 jsonresult.put("msg","Error Uplaod invoice in Amazone S3");
+		        	 return jsonresult;
+		         }
+		         }  catch (Exception e) {
+		         logger.error(ExceptionUtils.getStackTrace(e));
+			     jsonresult.put("msg","Error Generation invoice "+filename);
+	        	 return jsonresult;
+		         }		   
+		   
+		         jsonresult.put("msg","Génération Facture "+filename+".pdf"+"OK \n Upload invoice in Amazone S3 OK"); 
+	 return jsonresult;
 	}
 	}

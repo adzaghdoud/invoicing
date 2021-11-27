@@ -15,6 +15,7 @@ public class Logins {
 	private String company;
 	private byte [] avatar;
 	private String resetpassword;
+	private String fonction;
 	public String getLogin() {
 		return login;
 	}
@@ -64,7 +65,11 @@ public class Logins {
 	public void setResetpassword(String resetpassword) {
 		this.resetpassword = resetpassword;
 	}
+	public String getFonction() {
+		return fonction;
+	}
+	public void setFonction(String fonction) {
+		this.fonction = fonction;
+	}
 	
-    	
-
 }

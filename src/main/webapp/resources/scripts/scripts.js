@@ -549,22 +549,56 @@ function Generateinvoice(){
         data: myJSON,
         success: function (response) {
         	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
+            // download pdf from Amazone S3
+       var resultmsg=response.msg;
+       if (resultmsg.includes("ERROR")) {
+	        document.getElementById("msgModalnotify").innerHTML="<b> "+response.msg+"</b>";
+            document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
+            $("#Modalnotify").modal()
+        
+        }else {
+	
+	      document.getElementById("msgModalnotify").innerHTML="<b>"+response.msg+"</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
             $("#Modalnotify").modal();
             setTimeout(function(){
             	  $('#Modalnotify').modal('hide')
            	}, 2000);
-        },
-        error : function (jqXHR) {
-        	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
-            document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
-            $("#Modalnotify").modal();	
-        }
+	      
+     
         
-	}); 
+
+var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'Download_Invoice_From_Amazone/'+response.Invoice_path, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function(e) {
+       if (this.status == 200) {
+          var blob=new Blob([this.response], {type:"application/pdf"});
+          var link=document.createElement('a');
+          link.href=window.URL.createObjectURL(blob);
+          link.download=response.Invoice_name;
+          link.click();
+       }
+    };
+xhr.send();
+
+
 }
+}
+});
+}
+
+function checkdate(date){
+var today = new Date().toISOString().slice(0, 10);
+if (date < today) {
+ document.getElementById("msgModalnotify").innerHTML="<b> Merci de choisir une date supérieure ou égale à celle d'aujourd'hui</b>";
+ document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
+ $("#Modalnotify").modal()	
+}
+}
+
+
+
 
 function Generate_post_invoice() {
 $("#Prestation_table tr").click(function() {//Add a click event to the row of the table

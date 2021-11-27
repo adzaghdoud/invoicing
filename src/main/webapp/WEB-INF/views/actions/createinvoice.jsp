@@ -159,7 +159,7 @@
                                  <label class="col-sm-2 col-form-label"><b>Date dû</b></label>
                                  <div class="col-sm-4">
                                 <div class="datepicker date input-group">
-                              <input type="date" placeholder="Choisir une date" class="form-control" id="date_attendue">
+                              <input type="date" placeholder="Choisir une date" class="form-control" id="date_attendue" onchange="checkdate(this.value)">
                              <div class="input-group-append"><span class="input-group-text px-4"><i class="fa fa-calendar"></i></span></div>
                             </div>
                            </div>

@@ -17,12 +17,13 @@ import org.apache.logging.log4j.LogManager;
 
 public class Ldaptools {
 	
-	public static Map<String, String> getvalueattibute(String uid) {
+	public static Map<String, String> getvaluesattibutes(String uid) {
 		   final org.apache.logging.log4j.Logger logger =  LogManager.getLogger(Ldaptools.class);
 		   Attribute mail;
 		   Attribute cn;
 		   Attribute tel;
 		   Attribute o;
+		   Attribute employeetype;
 		   Map<String, String> map = new HashMap<String, String>();
 		   try {
 			Properties env = new Properties();
@@ -37,10 +38,12 @@ public class Ldaptools {
 		    cn = attrs.get("cn");
 		    tel = attrs.get("telephonenumber");
 		    o = attrs.get("o");
+		    employeetype =attrs.get("employeetype");  
 		    map.put("mail", (String)mail.get());
 		    map.put("cn", (String)cn.get());
 		    map.put("tel", (String)tel.get());
 		    map.put("o", (String)o.get());
+		    map.put("employeetype", (String)employeetype.get());
 			} catch (Exception e) {				
 				logger.error(ExceptionUtils.getStackTrace(e));	
 				return null;
