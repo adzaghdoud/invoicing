@@ -7,14 +7,19 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.service.CompanyService;
+import com.invoicing.service.LoginsService;
 import com.invoicing.tools.Sendmail;
 
 @Controller
@@ -144,6 +149,18 @@ public class CompanyController {
 		return ResponseEntity.ok("La modification a été bien prise en compte pour "+listoffields);
 	}
 
-
+	@RequestMapping(value = "/Companysettings", method = RequestMethod.GET)
+	public ModelAndView getCompanysettings(@CookieValue("invoicing_username") String cookielogin) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		ModelAndView mv = new ModelAndView("/settings/company_settings");
+		
+		String encodedimage = Base64Utils.encodeToString(srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getLogo());
+		mv.addObject("info", srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()));
+		mv.addObject("encodedimage", encodedimage);
+		context.close();
+		return mv;
+	}
 
 }

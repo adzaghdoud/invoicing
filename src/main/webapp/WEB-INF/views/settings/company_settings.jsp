@@ -137,6 +137,18 @@
 							</div>
 							
 							
+								<div class="row mb-3">
+								<div class="col-sm-3">
+									<h6 class="mb-0">KBIS</h6>
+								</div>
+								<div class="col-sm-9 text-secondary">
+									<a href="#" onclick="downloadkbis()" >${info.kbis_file_name}</a>
+									
+								</div>
+							</div>
+							
+							
+							
 							<div class="row">
 								<div class="col-sm-3"></div>
 								<div class="col-sm-9 text-secondary">

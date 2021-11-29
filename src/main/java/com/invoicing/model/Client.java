@@ -88,7 +88,7 @@ public String getNumtva() {
 public void setNumtva(String numtva) {
 	this.numtva = numtva;
 } 
-                
+               
            
 
 }

@@ -166,19 +166,7 @@ public class Dispatcher {
 	}
 	
 	
-	@RequestMapping(value = "/Companysettings", method = RequestMethod.GET)
-	public ModelAndView getCompanysettings(@CookieValue("invoicing_username") String cookielogin) {
-		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
-		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
-		ModelAndView mv = new ModelAndView("/settings/company_settings");
-		
-		String encodedimage = Base64Utils.encodeToString(srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()).getLogo());
-		mv.addObject("info", srvcompany.getinfo(srvlogins.getinfo(cookielogin).getCompany()));
-		mv.addObject("encodedimage", encodedimage);
-		context.close();
-		return mv;
-	}
+
 	
 	
 	@RequestMapping(value = "/Generalsettings", method = RequestMethod.GET)

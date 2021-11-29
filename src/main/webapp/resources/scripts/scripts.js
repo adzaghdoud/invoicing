@@ -151,6 +151,34 @@ if (size>20000000) {
      $("#Modalnotify").modal();
 }
 }
+
+
+
+
+function downloadkbis() {
+var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'Download_Kbis', true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function(e) {
+       if (this.status == 200) {
+          var blob=new Blob([this.response], {type:"application/pdf"});
+          var link=document.createElement('a');
+          link.href=window.URL.createObjectURL(blob);
+          link.download=xhr.getResponseHeader('content-disposition').split('filename=')[1].split(';')[0];
+          link.click();
+       }
+         if (this.status == 404) {
+                  document.getElementById("msgmodalnotif").innerHTML="<b>Erreur Téléchargement Kbis , voir log</b>";    
+		          document.getElementById("titleModalnotify").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-triangle'></i> ERREUR</span>";
+				  $("#Modalnotify").modal(); 
+       }
+
+    };
+xhr.send();
+}
+
+
+
 //*********************************************** JS clients
 
 function Getclient() {

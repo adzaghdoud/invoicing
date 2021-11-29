@@ -31,6 +31,7 @@ public class Company {
 	private String numtva;
 	private String email;
 	private String date_cloture_comptable;
+	private String kbis_file_name;
 	public String getBankname() {
 		return bankname;
 	}
@@ -132,6 +133,12 @@ public class Company {
 	}
 	public void setDate_cloture_comptable(String date_cloture_comptable) {
 		this.date_cloture_comptable = date_cloture_comptable;
+	}
+	public String getKbis_file_name() {
+		return kbis_file_name;
+	}
+	public void setKbis_file_name(String kbis_file_name) {
+		this.kbis_file_name = kbis_file_name;
 	}
 	
     	
