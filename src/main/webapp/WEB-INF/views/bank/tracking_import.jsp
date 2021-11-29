@@ -64,24 +64,25 @@
                 </thead>
                 <tbody>
                               <c:forEach var="tracking" items="${ list_tracked_batch }">
+            <c:if test="${(tracking.nb_credit >0)  || (tracking.nb_debit > 0)}">
             <tr>
             <td>${tracking.date}</td>
             <td>${tracking.nb_transaction_imported}</td>
             <td>${tracking.nb_credit}</td>
             <td>${tracking.nb_debit}</td>
-        
+            
             <c:if test = "${tracking.total_credit >0}">
             <td><span style="color:green">${tracking.total_credit}</span></td>
             </c:if>
-            <c:if test = "${tracking.total_credit == 0 }">
+            <c:if test = "${tracking.total_credit  == 0}">
             <td>${tracking.total_credit}</td>
             </c:if>
             <c:if test = "${tracking.total_debit >0}">
             <td><span style="color:red">${tracking.total_debit}</span></td>
             </c:if>
-            <c:if test = "${tracking.total_debit  == 0}">
+            <c:if test = "${tracking.total_debit == 0}">
             <td>${tracking.total_debit}</td>
-            </c:if> 
+            </c:if>
             <td>${tracking.old_balance}</td>
             <td>${tracking.new_balance}</td>
             <c:if test = "${tracking.state == 'OK'}"> 
@@ -93,6 +94,7 @@
             
             <td>${tracking.comment}</td>
             </tr>
+            </c:if>
             </c:forEach>
                 </tbody>
             </table>

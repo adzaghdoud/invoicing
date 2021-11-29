@@ -219,26 +219,7 @@ public class PrestationsControler {
 		
 	}
 
-	@GetMapping(value = "/Download_Invoice_From_Amazone/{company}/{typedocument}/{invoicename}",produces = "application/pdf")
-	 public @ResponseBody byte[] Download_Invoice_From_Amazone(@PathVariable("company") String company ,@PathVariable("typedocument") String typedocument ,@PathVariable("invoicename") String invoicename) throws Exception {
-		    S3Object s3Object = null;
-			InputStream input;
-			final Properties prop = new Properties();
-			input = new FileInputStream(System.getProperty("env.file.ext"));	           
-			prop.load(input);  
-		    /*Retrieve file as object from S3*/
-		    AWSCredentials credentials = new BasicAWSCredentials(prop.getProperty("AmazoneS3.KeyID"),prop.getProperty("AmazoneS3.SecretKey"));
-			   AmazonS3 s3client = AmazonS3ClientBuilder
-						  .standard()
-						  .withCredentials(new AWSStaticCredentialsProvider(credentials))
-						  .withRegion(Regions.EU_WEST_2)
-						  .build();
-		       s3Object = s3client.getObject(prop.getProperty("AmazoneS3.Bucket"),company+"/"+typedocument+"/"+java.time.Year.now().getValue()+"/"+invoicename);
-
-		       byte[] bytes = IOUtils.toByteArray(s3Object.getObjectContent());
-		       return bytes;
-		    		   
-		   }
+	
 
 
 }
