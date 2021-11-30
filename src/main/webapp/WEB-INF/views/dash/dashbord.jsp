@@ -163,7 +163,6 @@
   <thead>
     <tr >
       <th scope="col">Num Facture</th>
-      <th scope="col">Date</th>
       <th scope="col">Client</th>
       <th scope="col">Total TTC</th>
     </tr>
@@ -172,11 +171,8 @@
    <c:forEach var="prestation" items="${liste_prestations }" begin="0" end="4">
      <tr>
             <td>${prestation.numfacture}</td>
-            <c:set var = "date" value = "${prestation.date}"/>
-            <c:set var = "datereformatted" value = "${fn:substring(date, 0, 19)}" />
-            <td width="40%"><c:out value="${datereformatted}"></c:out></td>
-            <td width="30%">${prestation.client}</td>
-            <td width="30%">${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
+            <td >${prestation.client}</td>
+            <td >${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
      </tr>          
    </c:forEach>
   </tbody>
