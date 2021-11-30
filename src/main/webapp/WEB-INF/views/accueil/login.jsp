@@ -2,9 +2,11 @@
     pageEncoding="utf-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
+
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invoicing</title>
 <link rel = "icon" href =  "${pageContext.request.contextPath}/resources/images/logo.png" type = "image/x-icon">  
 <style type="text/css">

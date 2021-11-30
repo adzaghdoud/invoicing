@@ -6,6 +6,7 @@
 
 <head>
 <title>Invoicing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel = "icon" href =  "${pageContext.request.contextPath}/resources/images/logo.png"  type = "image/x-icon"> 
 <style type="text/css">
   <%@include file="/resources/css/main.css" %>
@@ -80,8 +81,7 @@
                 
                 <ul class="sub-menu collapse" id="action">
                   <li><a class="link"href="newinvoice">Création nouvelle facture</a></li> 
-                   <!--  <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>-->
-                   <li> <a href=demo-file-download >Relancer une facture </a> </li>
+                   <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>
                    
                     
                 </ul>

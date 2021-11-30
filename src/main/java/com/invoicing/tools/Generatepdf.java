@@ -191,4 +191,74 @@ public class Generatepdf {
 		         jsonresult.put("msg","Génération Facture "+filename+".pdf"+"OK \n Upload invoice in Amazone S3 OK"); 
 	 return jsonresult;
 	}
+
+	
+	@SuppressWarnings("unchecked")
+	public byte[] GenerateInvoiceAsBytes() {
+		
+		
+		//regeneration Facture
+		   ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		   JasperReport jasperReport;
+		   JasperDesign jasperDesign;
+		   JRDataSource reportSource1;
+		   JRDataSource reportSource2;
+		   JRDataSource reportSource3;
+		   JRDataSource reportSource4;
+		   JRDataSource reportSource5;
+		   try {
+		      ClassLoader classLoader = getClass().getClassLoader();	 
+		      File file = new File(classLoader.getResource("invoice.jrxml").getFile());
+			  jasperDesign = JRXmlLoader.load(file);
+		      jasperReport = JasperCompileManager.compileReport(jasperDesign);
+		      
+		     /**
+		      * Get report DataSource.
+		      */
+		         Map<String, Object> reportParameters = new HashMap<String, Object>();
+		         List<Company> listcompany = Arrays.asList(company);
+		         List<Client> listclient = Arrays.asList(this.client);
+		         List<Prestations> listprestation = Arrays.asList(this.prestation);
+		    	 reportSource1 = new JRBeanCollectionDataSource(listcompany); 
+		    	 reportSource2 = new JRBeanCollectionDataSource(listclient); 
+		    	 reportSource3 = new JRBeanCollectionDataSource(listprestation);
+		    	 reportSource4 = new JRBeanCollectionDataSource(listcompany);
+		    	 reportSource5 = new JRBeanCollectionDataSource(listprestation);
+		    	 java.io.InputStream logo;
+		    	 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
+		    	 String condition_paiement=this.prestation.getTotalttc()+" Euros à payer par "+this.prestation.getModepaiement()+" le "+formatter.format(this.prestation.getDatepaiementattendue());
+				try {
+					logo = ByteSource.wrap(company.getLogo()).openStream();
+					BufferedImage logoimage = ImageIO.read(logo);
+					reportParameters.put("logo", logoimage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                        
+			     reportParameters.put("DS1", reportSource1);
+			     reportParameters.put("DS2", reportSource2);
+			     reportParameters.put("DS3", reportSource3);
+			     reportParameters.put("DS4", reportSource4);
+			     reportParameters.put("DSinvoiceheader", reportSource5);
+			     reportParameters.put("condition_paiement", condition_paiement);
+			     reportParameters.put("total_HT", prestation.getMontantHT()*prestation.getQuantite());
+			     reportParameters.put("TVA", prestation.getValtaxe());
+			     reportParameters.put("Total_TTC", prestation.getTotalttc());
+			     reportParameters.put("tel", company.getTel());	
+				 JasperPrint jasperPrint= JasperFillManager.fillReport( jasperReport,reportParameters, new JREmptyDataSource());
+			     JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);
+		     
+		         }  catch (Exception e) {
+		         logger.error(ExceptionUtils.getStackTrace(e));
+		         }		   
+
+	 return byteArrayOutputStream.toByteArray();
 	}
+
+
+
+
+
+
+}

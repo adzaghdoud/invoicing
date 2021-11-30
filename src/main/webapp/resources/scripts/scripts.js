@@ -565,7 +565,7 @@ function showinfoarticle(quantite,namearticle){
 }
 
 function Generateinvoice(){
-	$("#loader").show();
+	$('#cover-spin').show(0);
 	var ItemJSON = {"quantite": $("#quantite").val(),"montantHT":$("#prix_HT").val(),"montantTTC": $("#prixttc").val(),"totalttc":$("#totalprixttc").val(),"article":$("#article").val(),"client":$("#nomclient").val(),"taxe":$("#taxe").val(),"valtaxe":$("#valtaxe").val(),"modepaiement":$("#modepaiement").val(),"datepaiementattendue":$("#date_attendue").val()};
     var myJSON = JSON.stringify(ItemJSON);
 	$.ajax({
@@ -576,7 +576,7 @@ function Generateinvoice(){
         contentType: "application/json; charset=utf-8",
         data: myJSON,
         success: function (response) {
-        	$("#loader").hide();
+        	$('#cover-spin').hide();
             // download pdf from Amazone S3
        var resultmsg=response.msg;
        if (resultmsg.includes("ERROR")) {
@@ -585,7 +585,7 @@ function Generateinvoice(){
             $("#Modalnotify").modal()
         
         }else {
-	
+	       $('#cover-spin').hide();
 	      document.getElementById("msgModalnotify").innerHTML="<b>"+response.msg+"</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
             $("#Modalnotify").modal();
@@ -629,35 +629,38 @@ if (date < today) {
 
 
 function Generate_post_invoice() {
-$("#Prestation_table tr").click(function() {//Add a click event to the row of the table
+   $('#cover-spin').show(0);
+   $("#Prestation_table tr").click(function() {//Add a click event to the row of the table
 	var tr = $(this);//Find tr element
 	var td = tr.find("td");//Find td element
-   $.ajax({
-   type : 'POST',
-   url : 'Generate_Post_Invoice'+"/"+td[1].innerText,
-   async: true,
-   processData: false,
-   contentType: false,
-   success : function(response) {	
-	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b>"+response+"</b>";
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'Generate_Post_Invoice'+"/"+td[1].innerText, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function(response) {
+       if (this.status == 200) {
+	      $('#cover-spin').hide();
+          var blob=new Blob([this.response], {type:"application/pdf"});
+          var link=document.createElement('a');
+          link.href=window.URL.createObjectURL(blob);
+          link.download=td[1].innerText+".pdf";
+          link.click();
+            document.getElementById("msgModalnotify").innerHTML="<b> "+td[1].innerText+" a été bien générée</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
             $("#Modalnotify").modal();
             setTimeout(function(){
             	  $('#Modalnotify').modal('hide')
            	}, 2000);
-        },
-        error : function (jqXHR) {
-        	$("#loader").hide();
-        	document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
+
+
+       }else {
+	        document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
             $("#Modalnotify").modal();	
-        }
-}); 
+       }
+    };
+xhr.send();
 });
 }
-
-
 //****************************************************** JS send mail 
 function sendmail(mailto,subject,contain){
 	$("#refresh_gif").show();

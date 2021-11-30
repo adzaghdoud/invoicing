@@ -3,64 +3,50 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/messageResource.js"></script> 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/scripts.js" ></script> 
 <style><style>
-.loader{
-    width: 70px;
-    height: 70px;
-    margin: 40px auto;
+#cover-spin {
+    position:fixed;
+    width:100%;
+    left:0;right:0;top:0;bottom:0;
+    background-color: rgba(255,255,255,0.7);
+    z-index:9999;
+    display:none;
 }
-.loader p{
-    font-size: 16px;
-    color: #777;
+
+@-webkit-keyframes spin {
+	from {-webkit-transform:rotate(0deg);}
+	to {-webkit-transform:rotate(360deg);}
 }
-.loader .loader-inner{
-    display: inline-block;
-    width: 15px;
-    border-radius: 15px;
-    background: #74d2ba;
+
+@keyframes spin {
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
 }
-.loader .loader-inner:nth-last-child(1){
-    -webkit-animation: loading 1.5s 1s infinite;
-    animation: loading 1.5s 1s infinite;
-}
-.loader .loader-inner:nth-last-child(2){
-    -webkit-animation: loading 1.5s .5s infinite;
-    animation: loading 1.5s .5s infinite;
-}
-.loader .loader-inner:nth-last-child(3){
-    -webkit-animation: loading 1.5s 0s infinite;
-    animation: loading 1.5s 0s infinite;
-}
-@-webkit-keyframes loading{
-    0%{
-        height: 15px;
-    }
-    50%{
-        height: 35px;
-    }
-    100%{
-        height: 15px;
-    }
-}
-@keyframes loading{
-    0%{
-        height: 15px;
-    }
-    50%{
-        height: 35px;
-    }
-    100%{
-        height: 15px;
-    }
+
+#cover-spin::after {
+    content:'';
+    display:block;
+    position:absolute;
+    left:48%;top:40%;
+    width:40px;height:40px;
+    border-style:solid;
+    border-color:black;
+    border-top-color:transparent;
+    border-width: 4px;
+    border-radius:50%;
+    -webkit-animation: spin .8s linear infinite;
+    animation: spin .8s linear infinite;
 }
 </style>
 
 </head>
 <body>
+<div id="cover-spin"></div>
  <div class="card card-outline-secondary">
                         <div class="card-header">
                             <h5 class="mb-0"><i class="far fa-plus-square"></i> Création  nouvelle facture</h5>
@@ -165,7 +151,7 @@
                            </div>
                            </div>     
                                 <div class="form-group row">
-                                 <button class="btn btn-success" onclick="javascirpt:Generateinvoice()"  id="button_generate"disabled><i class="fas fa-file-invoice-dollar"></i> Générer facture <span class="spinner-border spinner-border-sm"  id="spinnerbutton" style="display:none;"></span> </button> 
+                                 <button class="btn btn-success" onclick="javascirpt:Generateinvoice()"  id="button_generate"disabled><i class="fas fa-file-invoice-dollar"></i> Générer facture  </button> 
                                  <div class="col-sm-1">
                                  <button class="btn btn-secondary" onclick="javascript:document.getElementById('nomclient').value = '';document.getElementById('article').value = '';document.getElementById('quantite').value = '';document.getElementById('famille').value = '';document.getElementById('prix_HT').value = '';document.getElementById('taxe').value = '';document.getElementById('valtaxe').value = '';document.getElementById('prixttc').value = '';document.getElementById('totalprixttc').value = '';document.getElementById('modepaiement').value = '';document.getElementById('date_attendue').value = ''">Effacer</button>
                                  </div>
@@ -176,12 +162,7 @@
                                 </div>
                                 </div>
                            
-    <div class="loader"  id="loader" style="text-align:center;display:none" >
-                <p>Loading...</p>
-                <div class="loader-inner"></div>
-                <div class="loader-inner"></div>
-                <div class="loader-inner"></div>
-            </div>
+
          
 
    <div class="modal fade" id="Modalconfirmaddfournisseur" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -220,9 +201,6 @@
       </div>
     </div>
   </div>
-</div> 
-    
-  
-  
+</div>  
 </body>
 </html>

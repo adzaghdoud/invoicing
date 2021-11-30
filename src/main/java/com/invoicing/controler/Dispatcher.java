@@ -115,7 +115,7 @@ public class Dispatcher {
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");		
 		ModelAndView mv ;
 		if (!checkidldap(login,password)) {
-		 mv = new ModelAndView("/accueil/login");
+		mv = new ModelAndView("/accueil/login");
 		mv.addObject("erromsg", "Login ou password invalide");
 		context.close();
 		return mv;
@@ -133,12 +133,6 @@ public class Dispatcher {
 		context.close();		
 		return mv;
 	} 
-	
-	
-
-	
-	
-	
 	@RequestMapping(value = "/dashbord", method = RequestMethod.GET)
 	public ModelAndView dash() {
 		ModelAndView mv = new ModelAndView("/accueil/main");
@@ -456,18 +450,7 @@ public class Dispatcher {
 	return ResponseEntity.ok("Le mail a été bien envoyée à "+mailto);	
 	} 
     
-	@GetMapping(value = "/demo-file-download", produces = "application/pdf")
-    public ResponseEntity<byte[]> demo(byte[] bytes) throws IOException { // (1) Return byte array response
-    	   Path pdfPath = Paths.get("C:\\Users\\adem\\Downloads\\CamScanner 11-23-2021 22.16.pdf");
-    	   byte[] pdf = Files.readAllBytes(pdfPath);
-    
-    	   HttpHeaders headers = new HttpHeaders();
-    	   headers.add("content-disposition", "attachment; filename=" + "adem.pdf");
-    	   ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
-    			   pdf, headers, HttpStatus.OK);
-    	   
-	       return response;
-    }
+	
 
 
 
