@@ -94,7 +94,11 @@
 .filterable .filters input[disabled]:-ms-input-placeholder {
     color: #333;
 }
-
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
 </style>
     </head>
     <body>
