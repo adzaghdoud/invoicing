@@ -174,9 +174,9 @@
             <td>${prestation.numfacture}</td>
             <c:set var = "date" value = "${prestation.date}"/>
             <c:set var = "datereformatted" value = "${fn:substring(date, 0, 19)}" />
-            <td><c:out value="${datereformatted}"></c:out></td>
-            <td>${prestation.client}</td>
-            <td>${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
+            <td width="40%"><c:out value="${datereformatted}"></c:out></td>
+            <td width="30%">${prestation.client}</td>
+            <td width="30%">${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
      </tr>          
    </c:forEach>
   </tbody>
