@@ -28,7 +28,7 @@
     <div class="brand"><img src="${pageContext.request.contextPath}/resources/images/logo.png" width="100" height="100" alt="invoicing">
     <br/>
     <span style="font-size:smaller ;">Version : <%=applVersion%></span>
-    <div>${welcome}</div>
+    <div><i class="far fa-user-circle"></i> ${welcome}</div>
     </div>
  
    
