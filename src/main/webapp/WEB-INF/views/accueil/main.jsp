@@ -58,8 +58,8 @@
                   <a href="#"><i class="fas fa-shopping-cart"></i> Articles <span class="arrow"></span></a>
                  
                 <ul class="sub-menu collapse" id="articles">
-                  <li ><a  class="link"href="document">Liste Articles</a></li>
-                  <!--  <li ><a  class="link"href="articles">Liste Articles</a></li>-->
+                
+                   <li ><a  class="link"href="articles">Liste Articles</a></li>
                 </ul>
                 </li> 
 
