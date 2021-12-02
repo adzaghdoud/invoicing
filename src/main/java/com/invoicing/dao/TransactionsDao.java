@@ -18,4 +18,6 @@ List<Transaction> getlist(String company);
 void updatetvatransaction(String setted_at,double amountttc,Timestamp t,String updated_at);
 List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb , String datefin,String company) ;
 List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin,String company) ;
+void updateproof(String settled_at, String updated_at, String proof_file_name);
+boolean checkeexistproof(String settled_at, String updated_at,String company);
 }

@@ -156,11 +156,13 @@ if (size>20000000) {
 
 
 function downloadkbis() {
+$('#cover-spin').show(0);
 var xhr = new XMLHttpRequest();
     xhr.open('GET', 'Download_Kbis', true);
     xhr.responseType = 'arraybuffer';
     xhr.onload = function(e) {
        if (this.status == 200) {
+	      $('#cover-spin').hide();
           var blob=new Blob([this.response], {type:"application/pdf"});
           var link=document.createElement('a');
           link.href=window.URL.createObjectURL(blob);
@@ -168,6 +170,7 @@ var xhr = new XMLHttpRequest();
           link.click();
        }
          if (this.status == 404) {
+	              $('#cover-spin').hide();
                   document.getElementById("msgmodalnotif").innerHTML="<b>Erreur Téléchargement Kbis , voir log</b>";    
 		          document.getElementById("titleModalnotify").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-triangle'></i> ERREUR</span>";
 				  $("#Modalnotify").modal(); 
@@ -1030,6 +1033,72 @@ function getinfofrombank(iban,slug,token){
 			  console.log(response);
 			});
 }
+
+
+function UpdateTransaction(){
+$("#modalupdatetransaction").modal();	
+
+$("#table_transactions tr").click(function() {//Add a click event to the row of the table
+	var tr = $(this);//Find tr element
+	var td = tr.find("td");//Find td element
+	
+	$("#button_submit").click(function()
+{
+	$('#cover-spin').show(0);
+    var formData = new FormData();
+	formData.append('amount', td[0].innerText);
+	formData.append('settled_at', td[6].innerText);
+	formData.append('updated_at', td[7].innerText);
+	formData.append('proof_file_name', document.getElementById('proof').files[0].name);
+	formData.append('proof_file', document.getElementById('proof').files[0]);
+	
+	var formData2 = new FormData();
+	formData2.append('settled_at', td[6].innerText);
+	formData2.append('updated_at', td[7].innerText);
+	
+	
+	$.ajax({
+	        url: "CheckExistProof",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        data: formData2,
+	        success: function  (response) {
+	        if (response) {
+	
+	$.ajax({
+	        url: "UploadProof",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        data: formData,
+	        success: function  () {
+		  $('#cover-spin').hide();
+           document.getElementById("msgokupload").innerHTML="Le justificatif "+document.getElementById('proof').files[0].name+" a été bien uploadé dans Amazone bucket"
+		   $("#divconfirmok").show();
+           },
+           error : function() {
+	       $('#cover-spin').hide();
+           document.getElementById("msgkoupload").innerHTML="Error lors de l'upload du justificatif "+document.getElementById('proof').files[0].name+"  dans Amazone bucket"
+		   $("#divconfirmko").show()
+       }
+  });
+	}else{
+	       $('#cover-spin').hide();
+           document.getElementById("msgkoupload").innerHTML="il existe déja  un justificatif dans Amazone bucket"
+		   $("#divconfirmko").show()	
+	}
+	
+	}
+	});
+	
+});
+	});	
+}
+
+
 
 
 function refresh_transactions() {	

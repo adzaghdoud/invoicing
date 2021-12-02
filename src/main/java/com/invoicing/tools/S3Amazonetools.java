@@ -21,14 +21,14 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 public class S3Amazonetools {
 	
 	static org.apache.logging.log4j.Logger logger =  LogManager.getLogger(S3Amazonetools.class);
-	static  void Putdocument(String Company,String Typedocument,ByteArrayOutputStream stream,String filename)  throws  Exception{
+	public static  void Putdocument(String Company,String Typedocument,byte[] bytes,String filename)  throws  Exception{
 				
 		        InputStream input;
 				final Properties prop = new Properties();
 				ObjectMetadata metadata = new ObjectMetadata();
 		        metadata.setContentType("application/pdf");
-		        metadata.setContentLength((long) stream.toByteArray().length);
-		        ByteArrayInputStream inputstream = new ByteArrayInputStream(stream.toByteArray());
+		        metadata.setContentLength((long) bytes.length);
+		        ByteArrayInputStream inputstream = new ByteArrayInputStream(bytes);
 				
 					input = new FileInputStream(System.getProperty("env.file.ext"));	           
 					prop.load(input);    

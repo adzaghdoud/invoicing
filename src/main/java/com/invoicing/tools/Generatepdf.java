@@ -176,7 +176,7 @@ public class Generatepdf {
 		         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();	
 			     JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);
 		         try {
-			     S3Amazonetools.Putdocument(company.getRs(), "INVOICES", byteArrayOutputStream,filename+".pdf");
+			     S3Amazonetools.Putdocument(company.getRs(), "INVOICES", byteArrayOutputStream.toByteArray(),filename+".pdf");
 		         } catch (Exception e) { 
 		        	 logger.error(ExceptionUtils.getStackTrace(e));
 		        	 jsonresult.put("msg","Error Uplaod invoice in Amazone S3");

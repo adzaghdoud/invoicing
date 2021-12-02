@@ -1,13 +1,14 @@
 package com.invoicing.controler;
 import java.math.BigDecimal;
 
+
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import com.invoicing.tools.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.invoicing.hibernate.configuration.AppConfig;
@@ -147,4 +149,33 @@ public class TransactionsControler {
 		context.close();
 		return listc;
 	}
+
+	@PostMapping(value = "/UploadProof")
+	public  @ResponseBody void uploadproof(@CookieValue("invoicing_username") String cookielogin,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at,@RequestParam(required = true) String  proof_file_name,@RequestParam(required = true) MultipartFile proof_file ) throws  Exception{
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		srvt.updateproof(settled_at, updated_at, proof_file_name);	
+		S3Amazonetools.Putdocument(srvlogins.getinfo(cookielogin).getCompany(), "PROOF", proof_file.getBytes(),proof_file_name);
+	    context.close();
+	}
+	
+	
+	@PostMapping(value = "/CheckExistProof")
+	public  @ResponseBody boolean uploadproof(@CookieValue("invoicing_username") String cookielogin,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at) throws  Exception{
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+	    boolean res=srvt.checkeexistproof(settled_at, updated_at,srvlogins.getinfo(cookielogin).getCompany());
+	    context.close();
+	    return res;
+	}
+	
+	
+
+
+
+
+
+
 }

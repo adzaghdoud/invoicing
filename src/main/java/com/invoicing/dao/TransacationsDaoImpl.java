@@ -122,10 +122,38 @@ import com.invoicing.model.Transaction;
 			cond = builder.and(builder.equal(root.get("company"), company), builder.equal(root.get("side"), "credit"));
 			return  getSession().createQuery(criteria.select(root).where(cond)).getResultList().size();
 		}
-		
-		
-		
-		
-		
+
+		@Override
+		public void updateproof(String settled_at, String updated_at, String proof_file_name) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+	        CriteriaUpdate<Transaction> criteriaUpdate  = builder.createCriteriaUpdate(Transaction.class);
+	        criteriaUpdate.from(Transaction.class);
+	        Root<Transaction> root = criteriaUpdate.from(Transaction.class);
+	        criteriaUpdate.set("proof_filename",proof_file_name);
+	        criteriaUpdate.where(builder.equal(root.get("updated_at"),updated_at),builder.equal(root.get("settled_at"),settled_at));
+	        getSession().createQuery(criteriaUpdate).executeUpdate();		
+		}
+
+		@Override
+		public boolean checkeexistproof(String settled_at, String updated_at,String company) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+			Root<Transaction> root = criteria.from(Transaction.class);
+			criteria.select(root).where(builder.equal(root.get("settled_at"), settled_at),builder.equal(root.get("updated_at"), updated_at),builder.equal(root.get("company"), company));
+			Query<Transaction> q=getSession().createQuery(criteria);
+			Transaction t;
+			  try {
+	        	 t=q.getSingleResult();
+	        	 
+	         }catch(NoResultException e) {
+	         return false; 
+	         }
+			  if (t.getProof_filename() == null||t.getProof_filename().length() == 0  ) {
+			  return true;
+			  }else {
+				  return false;
+			  }
+		}
+			
 }
 

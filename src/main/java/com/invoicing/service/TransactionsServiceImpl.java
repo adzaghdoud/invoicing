@@ -62,4 +62,14 @@ public class TransactionsServiceImpl implements TransactionsService {
 		return dao.count_credit_trancactions(company);
 	}
 
+	@Override
+	public void updateproof(String settled_at, String updated_at, String proof_file_name) {
+		dao.updateproof(settled_at, updated_at, proof_file_name);
+	}
+
+	@Override
+	public boolean checkeexistproof(String settled_at, String updated_at,String company) {
+		return dao.checkeexistproof(settled_at, updated_at,company);
+	}
+
 }

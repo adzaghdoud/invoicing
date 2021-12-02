@@ -38,6 +38,7 @@ public class Transaction {
 	private double amount_HT;
 	private Timestamp manual_validation;
 	private String company;
+	private String proof_filename;
 	public String getTransaction_id() {
 		return transaction_id;
 	}
@@ -116,6 +117,14 @@ public class Transaction {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+	public String getProof_filename() {
+		return proof_filename;
+	}
+	public void setProof_filename(String proof_filename) {
+		this.proof_filename = proof_filename;
+	}
+
+    
 
 	
    

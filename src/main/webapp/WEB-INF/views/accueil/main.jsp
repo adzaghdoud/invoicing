@@ -63,10 +63,10 @@
                 </ul>
                 </li> 
 
-                <li data-toggle="collapse" data-target="#new" class="collapsed">
+                <li data-toggle="collapse" data-target="#prestations" class="collapsed">
                   <a href="#"><i class="fas fa-chart-area"></i> Reporting <span class="arrow"></span></a>
                 
-                <ul class="sub-menu collapse" id="new">
+                <ul class="sub-menu collapse" id="prestations">
                   <li><a class="link" href="prestations">Liste de prestations</a></li>
                 </ul>
                 </li>
@@ -80,8 +80,11 @@
                   <a href="#"><i class="far fa-plus-square"></i> Actions <span class="arrow"></span></a>
                 
                 <ul class="sub-menu collapse" id="action">
-                  <li><a class="link"href="newinvoice">Création nouvelle facture</a></li> 
-                   <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>
+                 <li><a class="link"href="newinvoice">Création nouvelle facture</a></li> 
+                 <li> <a href="notifyclient" class="link">Relancer une facture </a> </li>
+                 <li> <a href="#" class="link">Ajouter une note de Frais </a> </li>
+                 <li> <a href="#" class="link">Ajouter une indémité kilométrique </a> </li>
+                 <li> <a href="#" class="link">Ajouter une une recette en espéce </a> </li>
                    
                     
                 </ul>
@@ -139,7 +142,7 @@
      </div>
      
      
-     <div class="modal fade" id="modalmessagerie" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modalmessagerie" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -149,7 +152,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        
                                  
                                  
                                  <div class="form-group row">
@@ -197,7 +200,7 @@
                                  <label for="message-text" class="col-form-label"><b>Message</b></label>
                                  <textarea class="form-control" id="containmail" rows="5"></textarea>
                                  </div>
-        </form>
+        
       </div>
       <div class="modal-footer">
       <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val())">Send message <i class="far fa-paper-plane"></i> <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif"></button>

@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -146,9 +147,42 @@ card-counter{
   }
   .btn-default.btn-on.active{background-color: #5BB75B;color: white;}
 .btn-default.btn-off.active{background-color: #DA4F49;color: white;}
-  
+  #cover-spin {
+    position:fixed;
+    width:100%;
+    left:0;right:0;top:0;bottom:0;
+    background-color: rgba(255,255,255,0.1);
+    z-index:9999;
+    display:none;
+}
+
+@-webkit-keyframes spin {
+	from {-webkit-transform:rotate(0deg);}
+	to {-webkit-transform:rotate(360deg);}
+}
+
+@keyframes spin {
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
+}
+
+#cover-spin::after {
+    content:'';
+    display:block;
+    position:absolute;
+    left:48%;top:40%;
+    width:40px;height:40px;
+    border-style:solid;
+    border-color:black;
+    border-top-color:transparent;
+    border-width: 4px;
+    border-radius:50%;
+    -webkit-animation: spin .8s linear infinite;
+    animation: spin .8s linear infinite;
+}
 </style>
 <body>
+<div id="cover-spin"></div>
 <div class="container" id="container_transaction">
     
     <div class="row">
@@ -193,6 +227,7 @@ card-counter{
 						<th  width="auto"><input type="text" class="form-control" placeholder="Updated_at" disabled></th>
 						<th  width="auto"><input type="text" class="form-control" placeholder="Reference" disabled></th>
 						<th  width="auto"><input type="text" class="form-control" placeholder="TVA" disabled></th>
+						<th  width="auto"><input type="text" class="form-control" placeholder="Action" disabled></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -276,10 +311,18 @@ card-counter{
             </div>
             </c:if>              
             </td>
+           </c:if>  
+           <c:if test = "${liste.side == 'debit'}"> 
+           <td><a href="#" onclick="UpdateTransaction()"><span style='color: green;'><i class="fas fa-edit"></i></span></a></td>
            </c:if>
-           
-           
            </tr>
+            
+            
+            
+ 
+            
+            
+            
             </c:forEach>
                 </tbody>
             </table>
@@ -287,15 +330,56 @@ card-counter{
         </div>
        
             
-            
+  <div class="modal fade" id="modalupdatetransaction" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> <span style="color:green"><i class="fas fa-envelope-open-text"></i>Update Transaction</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="form-group row">
+      <label class="col-sm-4 col-form-label"><b>Justificatif</b></label>
+      <div class="col-sm-8">
+      
+     
+      <input type="file"  id ="proof"  class="form-control"  multiple>  
+    
+      </div>
+      </div>                                
+      </div>
+      <div class="alert alert-success" role="success" style="display: none;" id="divconfirmok">
+      <i class="far fa-check-circle"></i> <span id="msgokupload"></span>
+      </div>
+      
+      <div class="alert alert-danger" role="error" style="display: none;" id="divconfirmko">
+      <i class="fas fa-exclamation-triangle"></i> <span id="msgkoupload"></span>
+      </div>
+      
+      <div class="modal-footer">
+      <button type="button" id="button_submit" class="btn btn-success" onclick="UpdateTransaction()">Upload</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="javascript:$('.modal-body input').val('');$('#divconfirmok').hide();$('#divconfirmko').hide()">Close</button>
+      </div>  
+  
+      </div>
+      </div>
+      </div>  
             
 
     </div>
        
     </div>
     
-    
-    <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+ 
+  
+  
+  
+  
+  
+  <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
