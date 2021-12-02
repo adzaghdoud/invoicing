@@ -162,13 +162,14 @@ public class TransactionsControler {
 	
 	
 	@PostMapping(value = "/CheckExistProof")
-	public  @ResponseBody boolean uploadproof(@CookieValue("invoicing_username") String cookielogin,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at) throws  Exception{
+	public  @ResponseBody JSONObject uploadproof(@CookieValue("invoicing_username") String cookielogin,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at) throws  Exception{
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
-	    boolean res=srvt.checkeexistproof(settled_at, updated_at,srvlogins.getinfo(cookielogin).getCompany());
+	    JSONObject json = new JSONObject();
+	    json=srvt.checkeexistproof(settled_at, updated_at,srvlogins.getinfo(cookielogin).getCompany());
 	    context.close();
-	    return res;
+	    return json;
 	}
 	
 	

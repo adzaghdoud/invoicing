@@ -1065,9 +1065,8 @@ $("#table_transactions tr").click(function() {//Add a click event to the row of 
 	        contentType: false,
 	        data: formData2,
 	        success: function  (response) {
-	        if (response) {
-	
-	$.ajax({
+            if ((response.msg.indexOf('Checkok') != -1)) {
+	        $.ajax({
 	        url: "UploadProof",
 	        type: 'POST',
 	        async: false,
@@ -1075,19 +1074,19 @@ $("#table_transactions tr").click(function() {//Add a click event to the row of 
 	        contentType: false,
 	        data: formData,
 	        success: function  () {
-		  $('#cover-spin').hide();
+           $('#cover-spin').hide();
            document.getElementById("msgokupload").innerHTML="Le justificatif "+document.getElementById('proof').files[0].name+" a été bien uploadé dans Amazone bucket"
 		   $("#divconfirmok").show();
            },
            error : function() {
 	       $('#cover-spin').hide();
-           document.getElementById("msgkoupload").innerHTML="Error lors de l'upload du justificatif "+document.getElementById('proof').files[0].name+"  dans Amazone bucket"
+          document.getElementById("msgkoupload").innerHTML="Error lors de l'upload du justificatif "+document.getElementById('proof').files[0].name+"  dans Amazone bucket"
 		   $("#divconfirmko").show()
        }
   });
 	}else{
 	       $('#cover-spin').hide();
-           document.getElementById("msgkoupload").innerHTML="il existe déja  un justificatif dans Amazone bucket"
+           document.getElementById("msgkoupload").innerHTML=response.msg;
 		   $("#divconfirmko").show()	
 	}
 	

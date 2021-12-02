@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import com.invoicing.model.Transaction;
 
 public interface TransactionsDao {
@@ -19,5 +21,5 @@ void updatetvatransaction(String setted_at,double amountttc,Timestamp t,String u
 List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb , String datefin,String company) ;
 List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin,String company) ;
 void updateproof(String settled_at, String updated_at, String proof_file_name);
-boolean checkeexistproof(String settled_at, String updated_at,String company);
+JSONObject checkeexistproof(String settled_at, String updated_at,String company);
 }

@@ -360,7 +360,7 @@ card-counter{
       
       <div class="modal-footer">
       <button type="button" id="button_submit" class="btn btn-success" onclick="UpdateTransaction()">Upload</button>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="javascript:$('.modal-body input').val('');$('#divconfirmok').hide();$('#divconfirmko').hide()">Close</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="javascript:$('#container_transaction').load('liste_transactions_bank');">Close</button>
       </div>  
   
       </div>

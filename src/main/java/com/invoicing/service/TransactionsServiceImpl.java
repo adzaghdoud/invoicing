@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +69,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 	}
 
 	@Override
-	public boolean checkeexistproof(String settled_at, String updated_at,String company) {
+	public JSONObject checkeexistproof(String settled_at, String updated_at,String company) {
 		return dao.checkeexistproof(settled_at, updated_at,company);
 	}
 

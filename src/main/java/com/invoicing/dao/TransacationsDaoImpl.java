@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.query.Query;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import com.invoicing.model.Company;
@@ -134,24 +135,29 @@ import com.invoicing.model.Transaction;
 	        getSession().createQuery(criteriaUpdate).executeUpdate();		
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
-		public boolean checkeexistproof(String settled_at, String updated_at,String company) {
+		public JSONObject checkeexistproof(String settled_at, String updated_at,String company) {
 			CriteriaBuilder builder = getSession().getCriteriaBuilder();
 			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
 			Root<Transaction> root = criteria.from(Transaction.class);
 			criteria.select(root).where(builder.equal(root.get("settled_at"), settled_at),builder.equal(root.get("updated_at"), updated_at),builder.equal(root.get("company"), company));
 			Query<Transaction> q=getSession().createQuery(criteria);
+			JSONObject json=new JSONObject();
 			Transaction t;
 			  try {
 	        	 t=q.getSingleResult();
 	        	 
 	         }catch(NoResultException e) {
-	         return false; 
+	        	 json.put("msg", "Erreur lors de la recherche de la Transaction ,consultez la log");
+	        	 return json;
 	         }
 			  if (t.getProof_filename() == null||t.getProof_filename().length() == 0  ) {
-			  return true;
+		    json.put("msg", "Checkok"); 
+		     return json;
 			  }else {
-				  return false;
+				  json.put("msg", " Erreur il existe Déja un justificatif pour cette transaction : "+t.getProof_filename());
+				  return json;
 			  }
 		}
 			
