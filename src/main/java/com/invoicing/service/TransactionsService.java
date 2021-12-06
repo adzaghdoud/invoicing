@@ -20,4 +20,5 @@ public interface TransactionsService {
 	List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb , String datefin,String company) ;
 	void updateproof(String settled_at, String updated_at, String proof_file_name);
 	JSONObject checkeexistproof(String settled_at, String updated_at,String company);
+	List<Transaction> GetTransactionWithProof(String company);
 }
