@@ -156,9 +156,18 @@ import com.invoicing.model.Transaction;
 		    json.put("msg", "Checkok"); 
 		     return json;
 			  }else {
-				  json.put("msg", " Erreur il existe Déja un justificatif pour cette transaction : "+t.getProof_filename());
+				  json.put("msg", " Erreur il existe DÃ©ja un justificatif pour cette transaction : "+t.getProof_filename());
 				  return json;
 			  }
+		}
+
+		@Override
+		public List<Transaction> GetTransactionWithProof(String company) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
+			Root<Transaction> root = criteria.from(Transaction.class);
+			criteria.select(root).where(builder.equal(root.get("company"), company),builder.notEqual(root.get("proof_filename"),""));
+			return getSession().createQuery(criteria).getResultList();
 		}
 			
 }

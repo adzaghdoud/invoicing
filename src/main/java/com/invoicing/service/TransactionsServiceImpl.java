@@ -73,4 +73,9 @@ public class TransactionsServiceImpl implements TransactionsService {
 		return dao.checkeexistproof(settled_at, updated_at,company);
 	}
 
+	@Override
+	public List<Transaction> GetTransactionWithProof(String company) {
+		return dao.GetTransactionWithProof(company);
+	}
+
 }

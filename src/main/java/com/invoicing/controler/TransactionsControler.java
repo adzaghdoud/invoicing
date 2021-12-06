@@ -173,10 +173,13 @@ public class TransactionsControler {
 	}
 	
 	
-
-
-
-
-
-
+	@RequestMapping(value = "/GetAllTransactionsWithProof", method = RequestMethod.GET)
+	public @ResponseBody List<Transaction> gettransactions(@CookieValue("invoicing_username") String cookielogin ) {
+		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
+		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");		
+		List<Transaction> list = srvt.GetTransactionWithProof(srvlogins.getinfo(cookielogin).getCompany());
+		context.close();
+		return list;
+	}
 }

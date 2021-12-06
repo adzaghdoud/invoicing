@@ -923,6 +923,11 @@ function relance_paiement (){
 	});	
 	
 }
+
+function GetAllTransactionsWithProof(){
+	
+	
+}
 //*************************************************************charts
 
 function drawcharts() {
