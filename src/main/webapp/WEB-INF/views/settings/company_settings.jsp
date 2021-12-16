@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,7 +74,7 @@
 						<div class="card-body">
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Raison Sociale</h6>
+									<h6 class="mb-0"><b>Raison Sociale</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="raisonsociale" class="form-control" value="${info.rs}" disabled/>
@@ -81,7 +82,7 @@
 							</div>
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Siret</h6>
+									<h6 class="mb-0"><b>Siret</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="siret" class="form-control" value="${info.siret}" disabled >
@@ -90,7 +91,7 @@
 							
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Num TVA</h6>
+									<h6 class="mb-0"><b>Num TVA</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="numtva" class="form-control" value="${info.numtva}" disabled >
@@ -99,7 +100,7 @@
 							
 						     <div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Date clôture exercice</h6>
+									<h6 class="mb-0"><b>Date clôture exercice</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="datecloture" class="form-control" value="${info.date_cloture_comptable}" disabled >
@@ -109,7 +110,7 @@
 							
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">RIB</h6>
+									<h6 class="mb-0"><b>RIB</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="rib" class="form-control" value="${info.rib}" disabled/>
@@ -117,7 +118,7 @@
 							</div>
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Adresse</h6>
+									<h6 class="mb-0"><b>Adresse</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="adresse" class="form-control" value="${info.adresse}" disabled/>
@@ -125,7 +126,7 @@
 							</div>
 							<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Ville</h6>
+									<h6 class="mb-0"><b>Ville</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="ville" class="form-control" value="${info.ville}" disabled/>
@@ -134,7 +135,7 @@
 							
 								<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Code postale</h6>
+									<h6 class="mb-0"><b>Code postale</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="cp" class="form-control" value="${info.cp}" disabled/>
@@ -145,7 +146,7 @@
 							
 								<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Bankname</h6>
+									<h6 class="mb-0"><b>Bankname</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="bankname" class="form-control" value="${info.bankname}" disabled/>
@@ -155,7 +156,7 @@
 							
 								<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Slug</h6>
+									<h6 class="mb-0"><b>Slug</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="slug" class="form-control" value="${info.slug}" disabled/>
@@ -165,7 +166,7 @@
 							
 								<div class="row mb-3">
 								<div class="col-sm-3">
-									<h6 class="mb-0">Token</h6>
+									<h6 class="mb-0"><b>Token</b></h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
 									<input type="text" id="token" class="form-control" value="${info.token}" disabled/>
@@ -173,15 +174,68 @@
 							</div>
 							
 							
-								<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">KBIS</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<a href="#" onclick="downloadkbis()" >${info.kbis_file_name}</a>
-									
-								</div>
+							<div class="row mb-3">
+							<div class="col-sm-3">
+						    <h6 class="mb-0"><b>KBIS</b></h6>
 							</div>
+						    <div class="col-sm-9 text-secondary">
+						    <a href="#" onclick="downloadkbis()" >${info.kbis_file_name}</a>
+							</div>
+							</div>
+							<c:set var = "declaration" value = "${info.declaration_tva}"/>
+							<c:if test = "${fn:contains(declaration, 'trimestrielle')}">
+							<div class="row mb-3">
+							<div class="col-sm-3">
+						    <h6 class="mb-0"><b>Déclaration TVA</b></h6>
+							</div>
+							<div class="form-check">
+                            
+                            <input class="form-check-input" type="checkbox" value="" id="trimestrielle" checked >
+                            
+                            <label class="form-check-label" for="flexCheckDefault">
+                            Trimestrielle  
+                            </label>
+                             </div>
+
+                             <div class="form-check">
+                             
+                             <input class="form-check-input" type="checkbox" value="" id="semestrielle"  >
+                           
+                             <label class="form-check-label" for="flexCheckChecked">
+                             Semestrielle
+                             </label>
+                             </div> 
+                             
+                             </div>
+							</c:if>
+							
+							
+							
+							<c:if test = "${fn:contains(declaration, 'semestrielle')}">
+							<div class="row mb-3">
+							<div class="col-sm-3">
+						    <h6 class="mb-0"><b>Déclaration TVA</b></h6>
+							</div>
+							<div class="form-check">
+                            
+                            <input class="form-check-input" type="checkbox" value="" id="trimestrielle"  >
+                            
+                            <label class="form-check-label" for="flexCheckDefault">
+                            Trimestrielle  
+                            </label>
+                             </div>
+
+                             <div class="form-check">
+                             
+                             <input class="form-check-input" type="checkbox" value="" id="semestrielle"  checked>
+                           
+                             <label class="form-check-label" for="flexCheckChecked">
+                             Semestrielle
+                             </label>
+                             </div> 
+                             
+                             </div>
+							</c:if>
 							
 							
 							
@@ -316,6 +370,11 @@ $('#buttonmodifyimage').click(function(){ $('#imgupload').trigger('click');
 $("#imgupload").change(function(){
 changeavatar(document.getElementById('imgupload').files[0],"logo") ; 
 });
+
+$('input[type="checkbox"]').on('change', function() {
+	   $('input[type="checkbox"]').not(this).prop('checked', false);
+	});
+
 </script>
 
 

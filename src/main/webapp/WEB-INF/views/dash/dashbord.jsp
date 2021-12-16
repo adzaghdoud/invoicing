@@ -170,9 +170,9 @@
   <tbody>
    <c:forEach var="prestation" items="${liste_prestations }" begin="0" end="4">
      <tr>
-            <td>${prestation.numfacture}</td>
+            <td id="numfacture">${prestation.numfacture}</td>
             <td >${prestation.client}</td>
-            <td >${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a></td>
+            <td >${prestation.totalttc} <i class="fas fa-euro-sign"></i>   <a href="#" onclick="javascript:show_modal_prestation()"><span style="color:green"><i class="fas fa-info-circle"></i></span></a><a href="Download_Invoice/${prestation.nomfacture}"><span style="color:orange">   <i class="far fa-file-pdf"></i></span></a></td>
      </tr>          
    </c:forEach>
   </tbody>
@@ -205,12 +205,6 @@ drawcharts();
    <h6 class="modal-title"> <span style="color:green"><i class="fas fa-info-circle"></i>  Détail Prestation</span></h6>
    </div>
    <div class="modal-body">  
-                                 <div class="form-group row" >
-                                 <label class="col-sm-4 col-form-label"><b>Num facture</b></label>
-                                 <div class="col-sm-8">
-                                 <input type="text" id="numfacture" class="form-control" /> 
-                                 </div>
-                                 </div>
                                  
                                  
                                  <div class="form-group row" >

@@ -1,13 +1,19 @@
 package com.invoicing.controler;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 
 
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
 import com.invoicing.tools.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -15,6 +21,9 @@ import org.apache.logging.log4j.LogManager;
 import org.json.simple.JSONObject;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +36,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.S3Object;
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Transaction;
 import com.invoicing.service.CompanyService;
@@ -182,4 +198,22 @@ public class TransactionsControler {
 		context.close();
 		return list;
 	}
+
+	@GetMapping(value = "/Download_Log_Invoicing_Tracking")
+	 public ResponseEntity<byte[]> Download_Invoice(@CookieValue("invoicing_username") String cookielogin) throws Exception {
+			InputStream batchconfig = new FileInputStream(System.getProperty("batch.trigger.config.file"));
+			Properties props = new Properties();
+			props.load(batchconfig);	 
+		    byte[] bytes = Files.readAllBytes(Paths.get(props.getProperty("LOG.PATH")+System.getProperty("file.separator")+props.getProperty("LOG.NAME")));
+			HttpHeaders headers = new HttpHeaders();
+			ResponseEntity<byte[]> response=null;
+		    headers.add("content-disposition", "attachment; filename="+props.getProperty("LOG.NAME"));
+		    response = new ResponseEntity<byte[]>(
+		    bytes, headers, HttpStatus.OK);		       
+		    return response;
+		   }
+
+
+
+
 }

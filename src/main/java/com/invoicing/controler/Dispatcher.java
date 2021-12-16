@@ -36,6 +36,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -74,6 +75,7 @@ import com.invoicing.service.TrackingService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
+import com.sun.istack.internal.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +83,7 @@ import java.util.Map;
 import java.util.Properties;
 @Controller
 public class Dispatcher {
-	final org.apache.logging.log4j.Logger logger =  LogManager.getLogger(this.getClass().getName());
+	final static org.apache.logging.log4j.Logger logger =  LogManager.getLogger(Dispatcher.class);
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login() {
@@ -90,20 +92,36 @@ public class Dispatcher {
 	}
 	
 	
-	public static boolean checkidldap(String login , String password) {
-		try {
-		
-	        Properties env = new Properties();
+	@SuppressWarnings("unchecked")
+	public static JSONObject checkidldap(String login , String password) {
+		   JSONObject jres = new JSONObject();
+		   try {
+			Properties env = new Properties();
 	        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 	        env.put(Context.PROVIDER_URL, "ldap://vmi537338.contaboserver.net:389/ou=people,dc=vmi537338,dc=contaboserver,dc=net");
 	        env.put(Context.SECURITY_PRINCIPAL, "uid="+login+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
 	        env.put(Context.SECURITY_CREDENTIALS, password);
 	        DirContext ctx = new InitialDirContext(env); 
 	        ctx.close();
-	        return true;
+	        jres.put("msg", "OK");
+	        return jres;
 			} catch (Exception e) {
-			 System.out.println(ExceptionUtils.getStackTrace(e));
-			 return false;
+			 logger.error(ExceptionUtils.getStackTrace(e));
+			 if (ExceptionUtils.getStackTrace(e).contains("Invalid Credentials")) {
+				 jres.put("msg", "Invalid Credentials"); 
+			   
+			 }
+			 if (ExceptionUtils.getStackTrace(e).contains("Connection refused")) {
+				 jres.put("msg", "Connection refused to LDAP"); 
+			
+			 }
+			 
+			 if (ExceptionUtils.getStackTrace(e).contains("java.net.UnknownHostException")) {
+				 jres.put("msg", "LDAP Server unreachable"); 
+			
+			 }
+			 
+			 return jres;
 			}
 				
 	}
@@ -113,10 +131,11 @@ public class Dispatcher {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");		
-		ModelAndView mv ;
-		if (!checkidldap(login,password)) {
+		ModelAndView mv ;	
+		String msg=checkidldap(login,password).get("msg").toString();
+		if (! msg.contains("OK")) {
 		mv = new ModelAndView("/accueil/login");
-		mv.addObject("erromsg", "Login ou password invalide");
+		mv.addObject("erromsg", msg);
 		context.close();
 		return mv;
 		}

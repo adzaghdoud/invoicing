@@ -999,7 +999,6 @@ function show_modal_prestation() {
    processData: false,
    contentType: false,
    success : function(response) {
-	document.getElementById('numfacture').value=response.numfacture;
 	document.getElementById('nomfacture').value=response.nomfacture+".pdf";
 	document.getElementById('client').value=response.client;
 	document.getElementById('date').value=response.date;

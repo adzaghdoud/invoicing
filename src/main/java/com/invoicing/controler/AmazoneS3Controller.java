@@ -81,4 +81,39 @@ public class AmazoneS3Controller {
 		    		   	
 		
 	}
+
+
+	@GetMapping(value = "/Download_Invoice/{invoicename}",produces = "application/pdf")
+	 public ResponseEntity<byte[]> Download_Invoice(@PathVariable("invoicename") String invoicename , @CookieValue("invoicing_username") String cookielogin) throws Exception {
+		    AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		    LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		    S3Object s3Object = null;
+			InputStream input;
+			HttpHeaders headers = new HttpHeaders();
+			ResponseEntity<byte[]> response=null;
+			final Properties prop = new Properties();
+			input = new FileInputStream(System.getProperty("env.file.ext"));	           
+			prop.load(input);  
+		    /*Retrieve file as object from S3*/
+		    AWSCredentials credentials = new BasicAWSCredentials(prop.getProperty("AmazoneS3.KeyID"),prop.getProperty("AmazoneS3.SecretKey"));
+			   AmazonS3 s3client = AmazonS3ClientBuilder
+						  .standard()
+						  .withCredentials(new AWSStaticCredentialsProvider(credentials))
+						  .withRegion(Regions.EU_WEST_2)
+						  .build();
+		       try {
+			   s3Object = s3client.getObject(prop.getProperty("AmazoneS3.Bucket"),srvlogins.getinfo(cookielogin).getCompany()+"/INVOICES/"+java.time.Year.now().getValue()+"/"+invoicename+".pdf");
+               byte[] bytes = IOUtils.toByteArray(s3Object.getObjectContent());
+		       headers.add("content-disposition", "attachment; filename=" + invoicename);
+		       response = new ResponseEntity<byte[]>(
+		       bytes, headers, HttpStatus.OK);		       
+		       } catch (Exception e) {
+		             
+		    	            response = new ResponseEntity<>(headers, HttpStatus.NOT_FOUND);    		         
+		                    context.close();
+		      		        return response;
+		       }
+		       context.close();
+		       return response;
+		   }
 }

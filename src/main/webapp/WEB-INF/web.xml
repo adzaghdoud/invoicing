@@ -11,7 +11,6 @@
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
     <filter>
     <filter-name>AuthentificationFilter</filter-name>
     <filter-class>com.invoicing.filtre.AuthentificationFilter</filter-class>
@@ -37,4 +36,15 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+	
+	   <error-page>
+   <error-code>404</error-code>
+   <location>/WEB-INF/error-404.jsp</location>
+   </error-page>
+   
+   <error-page>
+   <exception-type>java.lang.Throwable</exception-type>
+   <location>/error.jsp</location>
+   </error-page>
+	
 </web-app>
