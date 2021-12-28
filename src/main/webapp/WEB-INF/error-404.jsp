@@ -8,14 +8,11 @@
 </head>
 <body>
 
-<%System.out.println("KOOOOOOO"); %>
-<% if(response.getStatus() == 500){ %>
-<font color="red">Error: <%=exception.getMessage() %></font><br>
+<%System.out.println("Error : Redirect to error-404.jsp"); %>
 
 <%-- include login page --%>
 
-Hi There, error code is <%=response.getStatus() %><br>
-Please go to <a href="/index.jsp">home page</a>
-<%} %>
+Hi There, error code is 
+
 </body>
 </html>

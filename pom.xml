@@ -4,7 +4,7 @@
   <groupId>Invoicing</groupId>
   <artifactId>Invoicing</artifactId>
   <packaging>war</packaging>
-  <version>3.0.13 </version>
+  <version>3.1.0 </version>
  
   <url>http://maven.apache.org</url>
    <properties>
@@ -149,6 +149,14 @@
     <artifactId>aws-java-sdk-s3</artifactId>
     <version>1.12.113</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/com.twilio.sdk/twilio -->
+<dependency>
+    <groupId>com.twilio.sdk</groupId>
+    <artifactId>twilio</artifactId>
+    <version>7.14.4</version>
+</dependency>
+
+
 
 </dependencies>
   

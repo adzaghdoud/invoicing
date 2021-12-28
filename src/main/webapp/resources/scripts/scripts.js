@@ -127,15 +127,13 @@ function autocomplete() {
 		             });
 	        	}
 	        
-	        	if (document.getElementById("client_name")) {
-	                $("#client_name").autocomplete({
+	        	if (document.getElementById("client_name")) {  
+                  $("#client_name").autocomplete({
 			               source: raisons_sociales
 			             });
 		        	}
 	        	
-	         
-	        
-	        
+	    
 	        
 	        }
 	        
@@ -471,13 +469,15 @@ function getclientsnames() {
         success: function (data) {	      	
         	for (var i in data){ 
         		$("#client_name").append("<option value='"+data[i].rs+"'>"+data[i].rs+"</option>");
+                
+                 $("#client_name_for_sms").append("<option value='"+data[i].rs+"'>"+data[i].rs+"</option>");
                 }
         }
         });
 	
 }
 
-function getclientemail(client_name) {
+function getclientinfo(client_name,field) {
 	if (client_name.localeCompare('') == 0) {
 		$("#client_email").val('');
 	}
@@ -488,7 +488,12 @@ function getclientemail(client_name) {
         success: function (data) {	
         	for (var i in data){ 
         		if(data[i].rs.localeCompare(client_name) == 0) {
-        		$("#client_email").val(data[i].mail);	
+        		if(field.localeCompare('email') == 0) {
+                $("#client_email").val(data[i].mail);	
+                }
+                if(field.localeCompare('tel') == 0) {
+                $("#client_tel").val(data[i].telephone);
+                }
         		}
                 }
         }
@@ -600,7 +605,7 @@ function Generateinvoice(){
         
 
 var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'Download_Invoice_From_Amazone/'+response.Invoice_path, true);
+    xhr.open('GET', 'Download_From_Amazone_AS_Bytes/'+response.Invoice_path, true);
     xhr.responseType = 'arraybuffer';
     xhr.onload = function(e) {
        if (this.status == 200) {
@@ -669,8 +674,8 @@ function sendmail(mailto,subject,contain){
 	$("#refresh_gif").show();
 	var formData = new FormData();
 	formData.append('mailto', mailto);
-	formData.append('subject', subject);
-	formData.append('contain', contain);
+	formData.append('subject', encodeURIComponent(subject));
+	formData.append('contain', encodeURIComponent(contain));
 	formData.append('attached_file', $('input[type=file]')[0].files[0]);
 	if (typeof document.getElementById('file').files[0] !== 'undefined') {
 	formData.append('attached_file_name', document.getElementById('file').files[0].name);
@@ -693,6 +698,37 @@ function sendmail(mailto,subject,contain){
         $("#alertko").show();
         }
 	});	
+}
+
+
+function sendsms(tel,contain){
+	if (tel.length === 0 || contain.length === 0){
+		document.getElementById("msgkosms").innerHTML="<b>Tel ou corps sms manquants</b>"
+        $("#alertkosms").show();
+		
+	}else{
+	$("#refresh_gif_sms").show();
+	var formData = new FormData();
+	formData.append('contain', encodeURIComponent(contain));
+	$.ajax({
+        url: "sendsms/+33"+tel.substring(1),
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+	    $("#refresh_gif_sms").hide();
+        document.getElementById("msgoksms").innerHTML="<b>"+response+"</b>"
+        $("#alertoksms").show();
+        },
+        error :function (jqXHR) {
+	    $("#refresh_gif_sms").hide();
+        document.getElementById("msgkosms").innerHTML="<b>"+jqXHR.responseText+"</b>"
+        $("#alertkosms").show();
+        }
+	});	
+}
 }
 
 
@@ -1055,6 +1091,9 @@ $("#table_transactions tr").click(function() {//Add a click event to the row of 
 	formData.append('updated_at', td[7].innerText);
 	formData.append('proof_file_name', document.getElementById('proof').files[0].name);
 	formData.append('proof_file', document.getElementById('proof').files[0]);
+	formData.append('label', td[5].innerText);
+	formData.append('reference', td[8].innerText);
+	formData.append('montant', td[0].innerText);
 	
 	var formData2 = new FormData();
 	formData2.append('settled_at', td[6].innerText);
@@ -1100,6 +1139,95 @@ $("#table_transactions tr").click(function() {//Add a click event to the row of 
 });
 	});	
 }
+
+
+function UploadNewProof(){
+$("#modalupdatetransaction").modal();	
+
+$("#Proofs_Table tr").click(function() {//Add a click event to the row of the table
+	var tr = $(this);//Find tr element
+	var td = tr.find("td");//Find td element
+	
+	$("#button_submit").click(function()
+   {
+	 $('#cover-spin').show();
+	  $.ajax({
+	        url: "DeleteProof/"+td[0].innerText.substring(0,4)+"/"+td[5].innerText+"/"+td[0].innerText+"/"+td[1].innerText+"/"+td[2].innerText+"/"+td[3].innerText+"/"+td[4].innerText,
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	    success: function () {
+	     var formData = new FormData();
+         formData.append('settled_at', td[0].innerText);
+	     formData.append('updated_at', 'NULL');
+	     formData.append('proof_file_name', document.getElementById('proof').files[0].name);
+	     formData.append('proof_file', document.getElementById('proof').files[0]);
+         formData.append('label', td[1].innerText);
+	     formData.append('reference', td[2].innerText);
+	     formData.append('montant', td[3].innerText);
+	        $.ajax({
+	        url: "UploadProof",
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	        data: formData,
+	        success: function  () {
+           $('#cover-spin').hide();
+            $("#container_proofs").load("List_Proofs");
+           },
+           error : function() {
+	       $('#cover-spin').hide();
+       }
+  });
+       
+               },
+        error : function (jqXHR) {
+	     $("#cover-spin").hide();
+	
+          }
+	});
+	
+	
+	
+	});
+	});
+	}
+
+
+
+
+
+
+function Deleteproof() {
+$("#Proofs_Table tr").click(function() {//Add a click event to the row of the table
+	var tr = $(this);//Find tr element
+	var td = tr.find("td");//Find td element
+	    $("#cover-spin").show();
+        $.ajax({
+	        url: "DeleteProof/"+td[0].innerText.substring(0,4)+"/"+td[5].innerText+"/"+td[0].innerText+"/"+td[1].innerText+"/"+td[2].innerText+"/"+td[3].innerText+"/"+td[4].innerText,
+	        type: 'POST',
+	        async: false,
+	        processData: false,
+	        contentType: false,
+	    success: function () {
+	    $("#cover-spin").hide();
+        $("#container_proofs").load("List_Proofs");
+             },
+        error : function (jqXHR) {
+	     $("#cover-spin").hide();
+	    document.getElementById("msgmodalnotif").innerHTML="<b>"+jqXHR.responseText+ "</b>";
+		document.getElementById("titleModalnotify").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Error Delete</span>";
+		$("#Modalnotify").modal();
+            }
+	});
+	});
+	
+}
+
+
+
 
 
 

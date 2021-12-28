@@ -166,27 +166,7 @@ public class TransactionsControler {
 		return listc;
 	}
 
-	@PostMapping(value = "/UploadProof")
-	public  @ResponseBody void uploadproof(@CookieValue("invoicing_username") String cookielogin,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at,@RequestParam(required = true) String  proof_file_name,@RequestParam(required = true) MultipartFile proof_file ) throws  Exception{
-		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
-		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
-		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
-		srvt.updateproof(settled_at, updated_at, proof_file_name);	
-		S3Amazonetools.Putdocument(srvlogins.getinfo(cookielogin).getCompany(), "PROOF", proof_file.getBytes(),proof_file_name);
-	    context.close();
-	}
-	
-	
-	@PostMapping(value = "/CheckExistProof")
-	public  @ResponseBody JSONObject uploadproof(@CookieValue("invoicing_username") String cookielogin,@RequestParam(required = true) String  settled_at,@RequestParam(required = true) String  updated_at) throws  Exception{
-		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); 
-		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
-		TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
-	    JSONObject json = new JSONObject();
-	    json=srvt.checkeexistproof(settled_at, updated_at,srvlogins.getinfo(cookielogin).getCompany());
-	    context.close();
-	    return json;
-	}
+
 	
 	
 	@RequestMapping(value = "/GetAllTransactionsWithProof", method = RequestMethod.GET)
@@ -214,6 +194,20 @@ public class TransactionsControler {
 		   }
 
 
-
+		@RequestMapping(value = "/List_Proofs", method = RequestMethod.GET)
+		public ModelAndView viewproofs(@CookieValue("invoicing_username") String cookielogin) {
+			AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+			LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+			TransactionsService srvt = (TransactionsService) context.getBean("TransactionsService");
+			ModelAndView mv = new ModelAndView("/bank/list_proofs");
+			mv.addObject("list_proofs", srvt.GetTransactionWithProof(srvlogins.getinfo(cookielogin).getCompany()));
+			mv.addObject("company", srvlogins.getinfo(cookielogin).getCompany());
+			context.close();
+			return mv;
+		
+		}
+	 
+	 
+	 
 
 }

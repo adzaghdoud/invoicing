@@ -7,8 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,12 +46,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -75,6 +71,7 @@ import com.invoicing.service.TrackingService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
+import com.invoicing.tools.Sendsms;
 import com.sun.istack.internal.logging.Logger;
 
 import java.util.ArrayList;
@@ -454,10 +451,11 @@ public class Dispatcher {
 	
 	}
 	@PostMapping(value = "/sendmail")
-	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) {
-	Sendmail s= new Sendmail();
-	s.setContain(contain);
-	s.setSubject(subject);
+	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) throws Exception {
+
+    Sendmail s= new Sendmail();
+	s.setContain(URLDecoder.decode(contain, "UTF-8"));
+	s.setSubject(URLDecoder.decode(subject, "UTF-8"));
 	s.setMailto(mailto);
 	if (attached_file !=null ) {
 	s.setFile(attached_file);
@@ -470,8 +468,17 @@ public class Dispatcher {
 	} 
     
 	
-
-
+	
+	
+	@PostMapping(value = "/sendsms/{PhoneNumber}")
+	public  @ResponseBody ResponseEntity<String> sendsms(@PathVariable("PhoneNumber") String phonenumber,@RequestParam(required = true) String contain) throws Exception {
+    Sendsms s= new Sendsms();
+    if (! s.send(phonenumber, URLDecoder.decode(contain, "UTF-8")) ) {
+   	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du SMS");	
+   	}
+   	return ResponseEntity.ok("Le SMS a été bien envoyé au "+phonenumber);	
+   	} 
+	
 
 
 
