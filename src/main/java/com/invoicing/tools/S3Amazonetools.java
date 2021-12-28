@@ -21,7 +21,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 public class S3Amazonetools {
 	
 	static org.apache.logging.log4j.Logger logger =  LogManager.getLogger(S3Amazonetools.class);
-	public static  void Putdocument(String Company,String Typedocument,byte[] bytes,String filename)  throws  Exception{
+	public static  void Putdocument(String Company,String year,String Typedocument,byte[] bytes,String filename)  throws  Exception{
 				
 		        InputStream input;
 				final Properties prop = new Properties();
@@ -39,7 +39,7 @@ public class S3Amazonetools {
 						  .withCredentials(new AWSStaticCredentialsProvider(credentials))
 						  .withRegion(Regions.EU_WEST_2)
 						  .build();
-				s3client.putObject(prop.getProperty("AmazoneS3.Bucket"), Company+"/"+Typedocument+"/"+java.time.Year.now().getValue()+"/"+filename, (InputStream) inputstream, metadata);		
+				s3client.putObject(prop.getProperty("AmazoneS3.Bucket"), Company+"/"+Typedocument+"/"+year+"/"+filename, (InputStream) inputstream, metadata);		
 				
 	}
 	

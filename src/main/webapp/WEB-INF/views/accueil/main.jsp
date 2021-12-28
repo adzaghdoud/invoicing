@@ -101,7 +101,8 @@
                  <li data-toggle="collapse" data-target="#messagerie" class="collapsed">
                   <a href="#"><i class="fas fa-envelope"></i> Messagerie <span class="arrow"></span></a>
                  <ul class="sub-menu collapse" id="messagerie">
-                  <li><a class="linkmodal" href="#" data-toggle="modal" data-target="#modalmessagerie">Envoyer email</a></li>
+                  <li><a class="linkmodal" href="#" data-toggle="modal" data-target="#modalmessagerie">Envoyer Email</a></li>
+                  <li><a class="linkmodal" href="#" data-toggle="modal" data-target="#modalsms">Envoyer SMS</a></li>
                 </ul>
                 </li>  
                 
@@ -116,6 +117,7 @@
                 <a href="#"><i class="fas fa-university"></i>Transactions bancaires<span class="arrow"></span></a>
                 <ul class="sub-menu collapse" id="bank">
                 <li><a href="liste_transactions_bank" class="link">Liste transactions  ${company_bank_name}</a></li>
+                <li><a href="List_Proofs" class="link">Liste des Justificatifs</a></li>
                 <li><a href="Get_Tracking_Batch" class="link">Suivi Batch Import</a></li>
                 <li><a href="tva_collectee" class="link">Détail TVA</a></li>
                 <li><a href="#" onclick="showmodaltva()">Déclaration TVA</a></li>
@@ -158,7 +160,7 @@
                                  <div class="form-group row">
                                  <label class="col-sm-4 col-form-label"><b>Client</b></label>
                                  <div class="col-sm-8">
-                                  <select   id ="client_name"  class="form-control"   onchange="getclientemail(this.value)" >
+                                  <select   id ="client_name"  class="form-control"   onchange="getclientinfo(this.value,'email')" >
                                   <option value=""></option>
                                  </select>
                                  </div>
@@ -198,7 +200,7 @@
                                  </div>
                                  <div class="form-group">
                                  <label for="message-text" class="col-form-label"><b>Message</b></label>
-                                 <textarea class="form-control" id="containmail" rows="5"></textarea>
+                                 <textarea class="form-control" id="containmail" rows="5" onkeypress="BreakLine();"></textarea>
                                  </div>
         
       </div>
@@ -222,6 +224,70 @@
      </div>
   </div>
 </div>
+
+
+
+
+<div class="modal fade" id="modalsms" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> <span style="color:green"><i class="fas fa-sms"></i>  Nouveau SMS</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+                                 
+                                 
+                                 <div class="form-group row">
+                                 <label class="col-sm-4 col-form-label"><b>Client</b></label>
+                                 <div class="col-sm-8">
+                                  <select   id ="client_name_for_sms"  class="form-control"   onchange="getclientinfo(this.value,'tel')" >
+                                  <option value=""></option>
+                                 </select>
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row">
+                                 <label class="col-sm-4 col-form-label"><b>Telephone</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text"   id ="client_tel"  class="form-control">
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group">
+                                 <label for="message-text" class="col-form-label"><b>Message</b></label>
+                                 <textarea class="form-control" id="containsms" rows="5" onkeypress="BreakLine();"></textarea>
+                                 </div>
+        
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-success" onclick="sendsms($('#client_tel').val(),$('#containsms').val())" >Send SMS <i class="far fa-paper-plane"></i> <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif_sms"></button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      
+      
+      <div class="alert alert-success" role="alert" style="display:none;" id="alertoksms">
+      <span class="alert-icon"><span class="sr-only">Success</span></span>
+      <span id="msgoksms"></span>
+      </div>
+    
+      <div class="alert alert-danger" role="alert" id="alertkosms" style="display:none;">
+      <span class="alert-icon"><span class="sr-only">Danger</span></span>
+     <span id="msgkosms"></span>
+     </div>
+    
+    
+     </div>
+  </div>
+</div>
+    
+
+
+
+
     
      <div id="page-content-wrapper" class="containside">
      </div> 
@@ -295,6 +361,13 @@ $('#modalmessagerie').on('hidden.bs.modal', function () {
     $("#alertok").hide();
     $("#alertko").hide();
 })
+$('#modalsms').on('hidden.bs.modal', function () {
+	$("#client_name_for_sms").val("");
+	$("#client_tel").val("");
+    $("#containsms").val("");
+    $("#alertoksms").hide();
+    $("#alertkosms").hide();
+})
 </script>
 
 <c:if test = "${flag_reset_password == 'YES'}"> 
@@ -305,6 +378,21 @@ $("#Modalnotify").modal();
 </script>
 </c:if>
 
-
+<script>
+function BreakLine() {
+	document.getElementById("button_generate").disabled=false;
+	var key = window.event.keyCode;
+	if (key == 13) {
+        if (document.getElementById("containmail")) {
+		document.getElementById("containmail").value = document.getElementById("containmail").value +"\n";
+        window.event.preventDefault();
+        }
+        if (document.getElementById("containsms")) {
+    		document.getElementById("containsms").value = document.getElementById("containsms").value +"\n";
+            window.event.preventDefault();
+            }
+    }
+}
+</script>
 </body>
 </html>

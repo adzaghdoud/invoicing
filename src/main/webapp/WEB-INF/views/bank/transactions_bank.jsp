@@ -334,7 +334,7 @@ card-counter{
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"> <span style="color:green"><i class="fas fa-envelope-open-text"></i>Update Transaction</span></h5>
+        <h5 class="modal-title"> <span style="color:green"><i class="fas fa-envelope-open-text"></i> Update Transaction</span></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

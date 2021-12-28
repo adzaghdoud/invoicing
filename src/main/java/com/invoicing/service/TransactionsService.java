@@ -18,7 +18,9 @@ public interface TransactionsService {
 	void updatetvatransaction(String setted_at,double amountttc,Timestamp t,String updated_at);
 	List<Transaction> searchtransacbetweentwodates(String datedeb , String datefin,String company) ;
 	List<Transaction> searchtransacbetweentwodates_with_tva(String datedeb , String datefin,String company) ;
-	void updateproof(String settled_at, String updated_at, String proof_file_name);
+	void updateproof(String settled_at, String updated_at,  String label,String reference,double montant,String company,String proof_file_name);
 	JSONObject checkeexistproof(String settled_at, String updated_at,String company);
 	List<Transaction> GetTransactionWithProof(String company);
+	void DeleteProofName(String company , String prooffilename,String settled_at,String label,String reference,double montant,String type);
+	
 }

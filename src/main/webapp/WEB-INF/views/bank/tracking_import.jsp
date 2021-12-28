@@ -59,7 +59,7 @@
                         <th><input type="text" class="form-control" placeholder="Old Balance" disabled></th>
                         <th><input type="text" class="form-control" placeholder="New Balance" disabled></th>
                         <th><input type="text" class="form-control" placeholder="State" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Comment" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Log" disabled></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,7 +92,7 @@
             <td><span class="label label-danger">${tracking.state}</span></td>
             </c:if>
             
-            <td>${tracking.comment}</td>
+            <td><a href="Download_Log_Invoicing_Tracking"><span style="color:orange"><i class="fas fa-file-download"></i></span></a></td>
             </tr>
             </c:if>
             </c:forEach>

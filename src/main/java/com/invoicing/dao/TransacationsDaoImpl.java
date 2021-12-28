@@ -125,14 +125,20 @@ import com.invoicing.model.Transaction;
 		}
 
 		@Override
-		public void updateproof(String settled_at, String updated_at, String proof_file_name) {
+		public void updateproof(String settled_at, String updated_at, String label,String reference,double montant,String company,String proof_file_name) {
 			CriteriaBuilder builder = getSession().getCriteriaBuilder();
 	        CriteriaUpdate<Transaction> criteriaUpdate  = builder.createCriteriaUpdate(Transaction.class);
 	        criteriaUpdate.from(Transaction.class);
 	        Root<Transaction> root = criteriaUpdate.from(Transaction.class);
 	        criteriaUpdate.set("proof_filename",proof_file_name);
-	        criteriaUpdate.where(builder.equal(root.get("updated_at"),updated_at),builder.equal(root.get("settled_at"),settled_at));
-	        getSession().createQuery(criteriaUpdate).executeUpdate();		
+	        //case Proofs view
+	        if (updated_at.contentEquals("NULL")) {
+	        criteriaUpdate.where(builder.equal(root.get("company"),company),builder.equal(root.get("label"),label),builder.equal(root.get("reference"),reference),builder.like(root.get("settled_at"),"%"+settled_at+"%"));	
+	        }else {
+	        criteriaUpdate.where(builder.equal(root.get("updated_at"),updated_at),builder.equal(root.get("settled_at"),settled_at),builder.equal(root.get("company"),company));
+	        }
+	        getSession().createQuery(criteriaUpdate).executeUpdate();	
+	        
 		}
 
 		@SuppressWarnings("unchecked")
@@ -169,6 +175,24 @@ import com.invoicing.model.Transaction;
 			criteria.select(root).where(builder.equal(root.get("company"), company),builder.notEqual(root.get("proof_filename"),""));
 			return getSession().createQuery(criteria).getResultList();
 		}
+
+		@Override
+		public void DeleteProofName(String company, String prooffilename,String settled_at,String label,String reference,double montant,String type) {
+			CriteriaBuilder builder = getSession().getCriteriaBuilder();
+	        CriteriaUpdate<Transaction> criteriaUpdate  = builder.createCriteriaUpdate(Transaction.class);
+	        criteriaUpdate.from(Transaction.class);
+	        Root<Transaction> root = criteriaUpdate.from(Transaction.class);
+	        criteriaUpdate.set("proof_filename",null);
+	        criteriaUpdate.where(builder.equal(root.get("company"),company),builder.equal(root.get("proof_filename"),prooffilename),
+	        builder.equal(root.get("label"),label),
+	        builder.equal(root.get("reference"),reference),builder.equal(root.get("amount"),montant),builder.equal(root.get("side"),type)
+	        );
+	        getSession().createQuery(criteriaUpdate).executeUpdate();
+			
+			
+		}
+
+	
 			
 }
 

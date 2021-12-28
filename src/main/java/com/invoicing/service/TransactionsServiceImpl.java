@@ -64,8 +64,8 @@ public class TransactionsServiceImpl implements TransactionsService {
 	}
 
 	@Override
-	public void updateproof(String settled_at, String updated_at, String proof_file_name) {
-		dao.updateproof(settled_at, updated_at, proof_file_name);
+	public void updateproof(String settled_at, String updated_at, String label,String reference,double montant,String company,String proof_file_name) {
+		dao.updateproof(settled_at, updated_at, label, reference, montant, company, proof_file_name);
 	}
 
 	@Override
@@ -77,5 +77,12 @@ public class TransactionsServiceImpl implements TransactionsService {
 	public List<Transaction> GetTransactionWithProof(String company) {
 		return dao.GetTransactionWithProof(company);
 	}
+
+	@Override
+	public void DeleteProofName(String company , String prooffilename,String settled_at,String label,String reference,double montant,String type) {
+		dao.DeleteProofName(company, prooffilename, settled_at, label, reference, montant, type);
+	}
+
+	
 
 }

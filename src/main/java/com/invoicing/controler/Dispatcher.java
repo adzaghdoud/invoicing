@@ -7,8 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +38,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -43,12 +46,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -74,6 +71,8 @@ import com.invoicing.service.TrackingService;
 import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
+import com.invoicing.tools.Sendsms;
+import com.sun.istack.internal.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +80,7 @@ import java.util.Map;
 import java.util.Properties;
 @Controller
 public class Dispatcher {
-	final org.apache.logging.log4j.Logger logger =  LogManager.getLogger(this.getClass().getName());
+	final static org.apache.logging.log4j.Logger logger =  LogManager.getLogger(Dispatcher.class);
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login() {
@@ -90,20 +89,36 @@ public class Dispatcher {
 	}
 	
 	
-	public static boolean checkidldap(String login , String password) {
-		try {
-		
-	        Properties env = new Properties();
+	@SuppressWarnings("unchecked")
+	public static JSONObject checkidldap(String login , String password) {
+		   JSONObject jres = new JSONObject();
+		   try {
+			Properties env = new Properties();
 	        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 	        env.put(Context.PROVIDER_URL, "ldap://vmi537338.contaboserver.net:389/ou=people,dc=vmi537338,dc=contaboserver,dc=net");
 	        env.put(Context.SECURITY_PRINCIPAL, "uid="+login+",ou=people,dc=vmi537338,dc=contaboserver,dc=net");
 	        env.put(Context.SECURITY_CREDENTIALS, password);
 	        DirContext ctx = new InitialDirContext(env); 
 	        ctx.close();
-	        return true;
+	        jres.put("msg", "OK");
+	        return jres;
 			} catch (Exception e) {
-			 System.out.println(ExceptionUtils.getStackTrace(e));
-			 return false;
+			 logger.error(ExceptionUtils.getStackTrace(e));
+			 if (ExceptionUtils.getStackTrace(e).contains("Invalid Credentials")) {
+				 jres.put("msg", "Invalid Credentials"); 
+			   
+			 }
+			 if (ExceptionUtils.getStackTrace(e).contains("Connection refused")) {
+				 jres.put("msg", "Connection refused to LDAP"); 
+			
+			 }
+			 
+			 if (ExceptionUtils.getStackTrace(e).contains("java.net.UnknownHostException")) {
+				 jres.put("msg", "LDAP Server unreachable"); 
+			
+			 }
+			 
+			 return jres;
 			}
 				
 	}
@@ -113,10 +128,11 @@ public class Dispatcher {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 		CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");		
-		ModelAndView mv ;
-		if (!checkidldap(login,password)) {
+		ModelAndView mv ;	
+		String msg=checkidldap(login,password).get("msg").toString();
+		if (! msg.contains("OK")) {
 		mv = new ModelAndView("/accueil/login");
-		mv.addObject("erromsg", "Login ou password invalide");
+		mv.addObject("erromsg", msg);
 		context.close();
 		return mv;
 		}
@@ -435,10 +451,11 @@ public class Dispatcher {
 	
 	}
 	@PostMapping(value = "/sendmail")
-	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) {
-	Sendmail s= new Sendmail();
-	s.setContain(contain);
-	s.setSubject(subject);
+	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) throws Exception {
+
+    Sendmail s= new Sendmail();
+	s.setContain(URLDecoder.decode(contain, "UTF-8"));
+	s.setSubject(URLDecoder.decode(subject, "UTF-8"));
 	s.setMailto(mailto);
 	if (attached_file !=null ) {
 	s.setFile(attached_file);
@@ -451,8 +468,17 @@ public class Dispatcher {
 	} 
     
 	
-
-
+	
+	
+	@PostMapping(value = "/sendsms/{PhoneNumber}")
+	public  @ResponseBody ResponseEntity<String> sendsms(@PathVariable("PhoneNumber") String phonenumber,@RequestParam(required = true) String contain) throws Exception {
+    Sendsms s= new Sendsms();
+    if (! s.send(phonenumber, URLDecoder.decode(contain, "UTF-8")) ) {
+   	 return ResponseEntity.status(505).body("une erreur est survenue lors de l'envoi du SMS");	
+   	}
+   	return ResponseEntity.ok("Le SMS a été bien envoyé au "+phonenumber);	
+   	} 
+	
 
 
 

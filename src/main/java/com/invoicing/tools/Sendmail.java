@@ -1,7 +1,6 @@
 package com.invoicing.tools;
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +22,7 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 
 public class Sendmail {
 	
@@ -114,7 +114,7 @@ public class Sendmail {
 	}
 	
 	
-	public boolean send(){
+	          public boolean send(){
 		 
 		      try {
 				InputStream input = new FileInputStream(System.getProperty("env.file.ext"));
@@ -157,7 +157,7 @@ public class Sendmail {
 	    		Multipart multipart = new MimeMultipart();
 
 	            MimeBodyPart textBodyPart = new MimeBodyPart();
-	            textBodyPart.setContent(this.contain, "text/html; charset=utf-8"); 
+	            textBodyPart.setContent(this.contain, "text/plain; charset=utf-8"); 
 	            textBodyPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
 	            if ( this.filename !=null) {
 	            MimeBodyPart attachmentBodyPart= new MimeBodyPart();
