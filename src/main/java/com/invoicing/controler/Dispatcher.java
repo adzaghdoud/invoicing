@@ -2,6 +2,7 @@ package com.invoicing.controler;
 
 import java.io.File;
 
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,22 +43,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.io.InputStreamResource;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+
 import com.invoicing.hibernate.configuration.AppConfig;
 import com.invoicing.model.Logins;
 import com.invoicing.model.Prestations;
@@ -72,7 +65,7 @@ import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.Ldaptools;
 import com.invoicing.tools.Sendmail;
 import com.invoicing.tools.Sendsms;
-import com.sun.istack.internal.logging.Logger;
+
 
 import java.util.ArrayList;
 import java.util.List;
