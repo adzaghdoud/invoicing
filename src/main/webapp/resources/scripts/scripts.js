@@ -760,25 +760,19 @@ function setttcfield(){
 	});
 }
 function createnewarticle() {
-	var formData = new FormData();
 	if ($("#designation").val().length >0 && $("#famille").val().length > 0 && $("#pvht").val().length >0  
-			&& $("#paht").val().length >0 && $("#taxe").val().length >0 && $("#valtaxe").val().length>0 && $("#pvttc").val().length >0 ) {
+			 && $("#taxe").val().length >0 && $("#valtaxe").val().length>0 && $("#pvttc").val().length >0 ) {
     $("#loader").show();
-	formData.append('designation', $("#designation").val());
-	formData.append('famille', $("#famille").val());
-	formData.append('pvht', $("#pvht").val());
-	formData.append('paht', $("#paht").val());
-	formData.append('taxe', $("#taxe").val());
-	formData.append('valtaxe', $("#valtaxe").val());
-	formData.append('pvttc', $("#pvttc").val());
+	var ItemJSON = {"designation": $("#designation").val(),"famille":$("#famille").val(),"pvht":$("#pvht").val(),"paht": $("#paht").val(),"taxe":$("#taxe").val(),"valtaxe":$("#valtaxe").val(),"pvttc":$("#pvttc").val()};
+    var myJSON = JSON.stringify(ItemJSON);
 	
 	$.ajax({
         url: "createnewarticle",
         type: 'POST',
         async: true,
         processData: false,
-        contentType: false,
-        data: formData,
+        contentType: "application/json; charset=utf-8",
+        data: myJSON,
         success: function (response) {
 	    $('.modal-backdrop').hide();
         $('body').removeClass('modal-open');
