@@ -48,7 +48,7 @@ public class ArticlesControler {
 	
 	
 	@RequestMapping(value = "/createnewarticle", method = RequestMethod.POST)
-	public @ResponseBody boolean createnew(@RequestBody Article a ,@CookieValue("invoicing_username") String cookielogin) {
+	public ResponseEntity<String>createnew(@RequestBody Article a ,@CookieValue("invoicing_username") String cookielogin) {
 		AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		ArticleService srvarticles = (ArticleService) context.getBean("ArticleService");
 		LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
@@ -60,11 +60,15 @@ public class ArticlesControler {
 			
 		}catch(Exception e) {
 			context.close();
-			ExceptionUtils.getStackTrace(e);
-			return false;
+			log.error(ExceptionUtils.getStackTrace(e));
+			if (ExceptionUtils.getStackTrace(e).contains("Duplicate entry")) {
+			return ResponseEntity.status(550).body("Le produit "+a.getDesignation() +" exite déja en base de données");
+			}else {
+			return ResponseEntity.status(550).body("Erreur création produit ,Consultez la log");
+			}
 		}
 		context.close();
-		return true;
+		return ResponseEntity.ok().body("Le nouveau Article "+a.getDesignation() +"a été bien créé");
 	}
 	
 	

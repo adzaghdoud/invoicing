@@ -165,10 +165,18 @@
                                  </div>
                                  </div>
                                  
+                                 
+                                 
+                                 
+                                 
+                                 
                                  <div class="form-group row" >
                                  <label class="col-sm-4 col-form-label"><b>Taxe</b></label>
                                  <div class="col-sm-6">
-                                 <input type="text" id="taxe" class="form-control" placeholder="TVA"/> 
+                                 <select   id ="taxe" class="form-group">
+                                 <option value=""></option>
+                                 <option value="TVA">TVA </option>
+                                 </select>
                                  </div>
                                  </div>
                                  

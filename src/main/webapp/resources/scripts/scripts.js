@@ -573,7 +573,7 @@ function showinfoarticle(quantite,namearticle){
 }
 
 function Generateinvoice(){
-	$('#cover-spin').show(0);
+	$('#cover-spin').show();
 	var ItemJSON = {"quantite": $("#quantite").val(),"montantHT":$("#prix_HT").val(),"montantTTC": $("#prixttc").val(),"totalttc":$("#totalprixttc").val(),"article":$("#article").val(),"client":$("#nomclient").val(),"taxe":$("#taxe").val(),"valtaxe":$("#valtaxe").val(),"modepaiement":$("#modepaiement").val(),"datepaiementattendue":$("#date_attendue").val()};
     var myJSON = JSON.stringify(ItemJSON);
 	$.ajax({
@@ -778,12 +778,10 @@ function createnewarticle() {
         $('body').removeClass('modal-open');
         $('#Modalnewarticle').modal('hide');  
         $("#articlescontainer").load("articles");
-
-
         },
-        error :function () {
+             error :function (jqXHR) {
         	 $("#loader").hide();
-        	 document.getElementById("msgModalnotify").innerHTML="<b> Erreur lors de la création du nouveau article </b>";
+        	 document.getElementById("msgModalnotify").innerHTML="<b>"+jqXHR.responseText+"</b>";
              document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation'></i> Error</span>";
              $("#Modalnotify").modal(); 
         }

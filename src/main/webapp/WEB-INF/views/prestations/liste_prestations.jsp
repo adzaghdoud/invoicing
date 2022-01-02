@@ -92,7 +92,7 @@
 						<th><input type="text" class="form-control" placeholder="Valeur Taxe" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Montant TTC" disabled></th>
 						<th><input type="text" class="form-control" placeholder="Total TTC" disabled></th>
-						<th><i class="fas fa-download"></i></th>
+						<th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,7 +113,10 @@
             <td>${prestation.valtaxe} %</td>
             <td>${prestation.montantTTC}</td>
             <td>${prestation.totalttc}</td>
-            <td><a href="#" onclick="javascript:Generate_post_invoice()"><span style='color: green;'><i class="far fa-file-pdf"></i></span></a></td>
+            <td><a href="#" onclick="javascript:Generate_post_invoice()"><span style='color: green;'><i class="far fa-file-pdf"></i></span></a>
+            <a href="#" onclick="javascript:UpdatePrestation()"><span style='color: orange;'><i class="fas fa-edit"></i></span></a>
+            </td>
+            </tr>
             </c:forEach>
                 </tbody>
             </table>
