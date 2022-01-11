@@ -15,5 +15,7 @@ public interface PrestationsService {
 	void validate_paiement(String numfacture);
 	long number_paiement_to_validate();
 	long number_paiement_validate();
+	void DeletePrestation (String invoicename);
+	void UpdatePrestation(Prestations p);
 
 }

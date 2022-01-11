@@ -9,17 +9,25 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name="prestations")
+@NamedNativeQueries({
 @NamedNativeQuery(
         name = "search_prestations",
         query = "SELECT * FROM invoicing.prestations  where date between ? and  ? and company=?",
                     resultClass=Prestations.class
+    ),
+
+@NamedNativeQuery(
+        name = "reset_auto_increment",
+        query = "ALTER TABLE prestations AUTO_INCREMENT =?",resultClass=Prestations.class
     )
 
+})
 public class Prestations {
     @Id
     @Column(name = "id_prestation")

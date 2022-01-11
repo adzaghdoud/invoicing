@@ -5,9 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-
+import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
@@ -20,6 +21,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Repository;
 
 import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.model.Article;
 import com.invoicing.model.Prestations;
 import com.invoicing.model.Transaction;
 import com.invoicing.service.CompanyService;
@@ -179,8 +181,38 @@ public class PrestationsDaoImpl extends  AbstractDao implements PrestationsDao{
 	}
 
 
+	@Override
+	public void DeletePrestation(String invoicename) {
+		javax.persistence.Query queryreset = getSession().createNamedQuery("reset_auto_increment", Prestations.class);
+		CriteriaBuilder criteriaBuilder  = getSession().getCriteriaBuilder();
+		CriteriaDelete<Prestations> query = criteriaBuilder.createCriteriaDelete(Prestations.class);
+		//get last auto increment
+		Long lastid=getlast_id_prestation();
+		Root<Prestations> root = query.from(Prestations.class);
+		query.where(criteriaBuilder.equal(root.get("nomfacture"),invoicename));
+		getSession().createQuery(query).executeUpdate();
+		//reset auto increment after delete
+		queryreset.setParameter(1, lastid-1);
+		queryreset.executeUpdate();
+	}
 
 
+	@Override
+	public void UpdatePrestation(Prestations p ) {		
+		CriteriaBuilder builder = getSession().getCriteriaBuilder();
+        CriteriaUpdate<Prestations> criteriaUpdate  = builder.createCriteriaUpdate(Prestations.class);
+        criteriaUpdate.from(Prestations.class);
+        Root<Prestations> root = criteriaUpdate.from(Prestations.class);
+        criteriaUpdate.set("statut_paiement",p.getStatut_paiement()); 
+        criteriaUpdate.set("quantite",p.getQuantite());
+        criteriaUpdate.set("montantHT",p.getMontantHT());
+        criteriaUpdate.set("taxe",p.getTaxe());
+        criteriaUpdate.set("valtaxe",p.getValtaxe());
+        criteriaUpdate.set("montantTTC",p.getMontantTTC());
+        criteriaUpdate.set("totalttc",p.getTotalttc());
+        criteriaUpdate.where(builder.equal(root.get("nomfacture"),p.getNomfacture()),builder.equal(root.get("company"),p.getCompany()));	    
+        getSession().createQuery(criteriaUpdate).executeUpdate();
+	}
 
 
 		

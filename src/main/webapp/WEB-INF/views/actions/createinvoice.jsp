@@ -97,7 +97,7 @@
                                  
                                  
                                  <div class="form-group row" >
-                                 <label class="col-sm-2 col-form-label"><b>Prix HT <i class="fas fa-euro-sign"></i></b></label>
+                                 <label class="col-sm-2 col-form-label"><b>PU HT <i class="fas fa-euro-sign"></i></b></label>
                                  <div class="col-sm-4">
                                  <input type="text" id="prix_HT" class="form-control" disabled/> 
                                  </div>
@@ -118,14 +118,14 @@
                                  </div>
 
                                  <div class="form-group row" >
-                                 <label class="col-sm-2 col-form-label"><b>Prix TTC <i class="fas fa-euro-sign"></i></b></label>
+                                 <label class="col-sm-2 col-form-label"><b>PU TTC <i class="fas fa-euro-sign"></i></b></label>
                                  <div class="col-sm-4">
                                  <input type="text" id="prixttc" class="form-control" disabled/> 
                                  </div>
                                  </div>
                                  
                                  <div class="form-group row" >
-                                 <label class="col-sm-2 col-form-label"><b>Total prix TTC <i class="fas fa-euro-sign"></i></b></label>
+                                 <label class="col-sm-2 col-form-label"><b>Total TTC <i class="fas fa-euro-sign"></i></b></label>
                                  <div class="col-sm-4">
                                  <input type="text" id="totalprixttc" class="form-control" disabled/> 
                                  </div>

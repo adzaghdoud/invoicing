@@ -41,6 +41,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.model.Article;
 import com.invoicing.model.Client;
 import com.invoicing.model.Company;
 import com.invoicing.model.Prestations;
@@ -219,6 +220,47 @@ public class PrestationsControler {
 	}
 
 	
+
+	
+	@PostMapping(value = "/DetelePrestation/{invoicename}")
+	public  @ResponseBody ResponseEntity<String> DeletePrestation(@PathVariable("invoicename") String invoicename){
+		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
+		  try {
+			  srvprestation.DeletePrestation(invoicename);
+			  context.close();
+		
+		  }catch(Exception e) {
+			  System.out.println(ExceptionUtils.getStackTrace(e));
+			  context.close();
+			  return ResponseEntity.status(505).body("Une erreur est servenue , merci de consulter la log");
+		  }
+		  return ResponseEntity.ok("Suppresion Prestation OK");
+	}
+
+	
+	@PostMapping(value = "/ModifyPrestation")
+	public  @ResponseBody ResponseEntity<String> UpdatePrestation(@RequestBody Prestations  p ,@CookieValue("invoicing_username") String cookielogin){
+		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
+		  LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+		  p.setCompany(srvlogins.getinfo(cookielogin).getCompany());
+		  try {
+	     	  srvprestation.UpdatePrestation(p);
+			  context.close();
+		
+		  }catch(Exception e) {
+			  System.out.println(ExceptionUtils.getStackTrace(e));
+			  context.close();
+			  return ResponseEntity.status(505).body("Une erreur est servenue , merci de consulter la log");
+		  }
+		  return ResponseEntity.ok("Update Prestation OK");
+	}
+	
+	
+	
+   
+
 
 
 }

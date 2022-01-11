@@ -66,7 +66,8 @@
 }
 </style>
 <body>
-<div class="container">
+  <div id="cover-spin"></div>
+<div class="container" id="PrestationContainer">
     <h3><i class="fas fa-list"></i> Liste des prestations</h3>
     <hr>
     <div class="row">
@@ -87,10 +88,10 @@
                         <th><input type="text" class="form-control" placeholder="Paiement" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Date" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Quantité" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Montant HT" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="PU HT" disabled></th>
                         <th><input type="text" class="form-control" placeholder="Taxe" disabled></th>
-						<th><input type="text" class="form-control" placeholder="Valeur Taxe" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Montant TTC" disabled></th>
+						<th><input type="text" class="form-control" placeholder="Val Taxe" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="PU TTC" disabled></th>
 						<th><input type="text" class="form-control" placeholder="Total TTC" disabled></th>
 						<th>Action</th>
                     </tr>
@@ -124,7 +125,117 @@
     </div>
     </div>
     
-    <div id="cover-spin"></div>
+    
+    
+  <div class="modal fade" id="ModalmodifyPrestation" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="titlemodalmodifyPrestation"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Article</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyArticle" class="form-control" disabled/> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Nom Facture</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyNomfacture" class="form-control"  disabled/> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Paiement</b></label>
+                                 <div class="col-sm-8">
+                                 <select   id ="PrestationModifyPaiement"  class="form-control btn btn-default dropdown-toggle" style="height:40px">
+                                 <option>validé</option>
+                                 <option>en attente</option>
+                                 </select>              
+                                 </div>
+                                 </div>
+                                       
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Quantité</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyQuantite" class="form-control" /> 
+                                 </div>
+                                 </div>
+
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>PU HT </b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyMontantht" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Taxe</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyTaxe" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Val Taxe</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyValtaxe" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>PU TTC</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyMontantttc" class="form-control" /> 
+                                 </div>
+                                 </div>
+                                 
+                                 
+                                   
+                                 <div class="form-group row" >
+                                 <label class="col-sm-4 col-form-label"><b>Total TTC</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text" id="PrestationModifyTotalttc" class="form-control" /> 
+                                 </div>
+                                 </div>
+   
+                                                                                   
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" onclick="DeletePrestation($('#PrestationModifyNomfacture').val())">Delete</button>
+        <button type="button" class="btn btn-success" onclick="ModifyPrestation()">Modify</button>
+         </div> 
+      <div class="alert alert-success" role="alert" style="display:none;" id="alertokPres">
+      <span class="alert-icon"><span class="sr-only">Success</span></span>
+      <span id="msgokPres"></span>
+      </div>
+    
+      <div class="alert alert-danger" role="alert" id="alertkoPres" style="display:none;">
+      <span class="alert-icon"><span class="sr-only">Danger</span></span>
+     <span id="msgkoPres"></span>
+     </div>
+        
+        
+         
+    </div>
+  </div>
+</div> 
+    
+    
+    
+    
+    
+    
+    
+    
+  
    <div class="modal fade" id="Modalnotify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

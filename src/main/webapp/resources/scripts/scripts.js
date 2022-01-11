@@ -655,12 +655,14 @@ function Generate_post_invoice() {
             document.getElementById("msgModalnotify").innerHTML="<b> "+td[1].innerText+" a été bien générée</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: green;'><i class='fas fa-check-circle'></i> Confirmation</span>";
             $("#Modalnotify").modal();
+            
             setTimeout(function(){
             	  $('#Modalnotify').modal('hide')
            	}, 2000);
 
 
        }else {
+	        $('#cover-spin').hide();
 	        document.getElementById("msgModalnotify").innerHTML="<b> "+jqXHR.responseText+"</b>";
             document.getElementById("titlemodal").innerHTML="<span style='color: red;'><i class='fas fa-exclamation-triangle'></i> Error </span>";
             $("#Modalnotify").modal();	
@@ -669,6 +671,103 @@ function Generate_post_invoice() {
 xhr.send();
 });
 }
+
+function UpdatePrestation(){
+
+$("#Prestation_table tr").click(function() {//Add a click event to the row of the table
+	var tr = $(this);//Find tr element
+	var td = tr.find("td");//Find td element
+document.getElementById("titlemodalmodifyPrestation").innerHTML="<span style='color: orange;'> <b> <i>Update Prestation</i> </b></span>"
+$("#PrestationModifyArticle").val(td[0].innerText);
+$("#PrestationModifyNomfacture").val(td[1].innerText);
+if (td[2].innerText.localeCompare('Validé') == 0) {
+	$("#PrestationModifyPaiement").prop("selectedIndex", 0);
+}
+
+if (td[2].innerText.localeCompare('En attente') == 0) {
+	$("#PrestationModifyPaiement").prop("selectedIndex", 1);
+}
+
+
+$("#PrestationModifyDate").val(td[3].innerText);
+$("#PrestationModifyQuantite").val(td[4].innerText);
+$("#PrestationModifyMontantht").val(td[5].innerText);
+$("#PrestationModifyTaxe").val(td[6].innerText);
+$("#PrestationModifyValtaxe").val(td[7].innerText);
+$("#PrestationModifyMontantttc").val(td[8].innerText);	
+$("#PrestationModifyTotalttc").val(td[9].innerText);	
+$("#ModalmodifyPrestation").modal();
+});	
+}
+
+function DeletePrestation(Invoice){	
+$("#cover-spin").show();
+$.ajax({
+        url: "DetelePrestation/"+Invoice,
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+        $("#cover-spin").hide();
+        document.getElementById("msgokPres").innerHTML="<b>"+response+"</b>"
+        $("#alertokPres").show();
+        $("#PrestationContainer").load("prestations");
+        },
+        error :function (jqXHR) {
+	     $("#cover-spin").hide();
+        if (jqXHR.status == 505) {
+        document.getElementById("msgkoPres").innerHTML="<b>"+jqXHR.responseText+"</b>"
+        $("#alertkoPres").show();
+        }else {
+	    document.getElementById("msgkoPres").innerHTML="<b>Une Erreur technique est survenue , consultez la log</b>"
+        $("#alertkoPres").show();
+        }
+        }
+	});	
+
+
+	
+}
+
+
+
+
+function ModifyPrestation(){	
+$("#cover-spin").show();
+var ItemJSON = {"article":$("#PrestationModifyArticle").val(),"nomfacture":$("#PrestationModifyNomfacture").val(),"quantite": $("#PrestationModifyQuantite").val(),"statut_paiement":$("#PrestationModifyPaiement").val(),"montantHT":$("#PrestationModifyMontantht").val(),"taxe": $("#PrestationModifyTaxe").val(),"valtaxe":$("#PrestationModifyValtaxe").val().substring(0,4),"montantTTC":$("#PrestationModifyMontantttc").val(),"totalttc":$("#PrestationModifyTotalttc").val()};
+var myJSON = JSON.stringify(ItemJSON);
+$.ajax({
+        url: "ModifyPrestation",
+        type: 'POST',
+        async: false,
+        processData: false,
+        contentType: "application/json; charset=utf-8",
+        data: myJSON,
+        success: function (response) {
+        $("#cover-spin").hide();
+        document.getElementById("msgokPres").innerHTML="<b>"+response+"</b>"
+        $("#alertokPres").show();
+        $("#PrestationContainer").load("prestations");
+        },
+        error :function (jqXHR) {
+	     $("#cover-spin").hide();
+        if (jqXHR.status == 505) {
+        document.getElementById("msgkoPres").innerHTML="<b>"+jqXHR.responseText+"</b>"
+        $("#alertkoPres").show();
+        }else {
+	    document.getElementById("msgkoPres").innerHTML="<b>Une Erreur technique est survenue , consultez la log</b>"
+        $("#alertkoPres").show();
+        }
+        }
+	});	
+
+
+	
+}
+
+
+
 //****************************************************** JS send mail 
 function sendmail(mailto,subject,contain){
 	$("#refresh_gif").show();

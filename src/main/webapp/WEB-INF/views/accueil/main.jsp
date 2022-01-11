@@ -64,7 +64,7 @@
                 </li> 
 
                 <li data-toggle="collapse" data-target="#prestations" class="collapsed">
-                  <a href="#"><i class="fas fa-chart-area"></i> Reporting <span class="arrow"></span></a>
+                  <a href="#"><i class="fas fa-coins"></i> Prestations <span class="arrow"></span></a>
                 
                 <ul class="sub-menu collapse" id="prestations">
                   <li><a class="link" href="prestations">Liste de prestations</a></li>

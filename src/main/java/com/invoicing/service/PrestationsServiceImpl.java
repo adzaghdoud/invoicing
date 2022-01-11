@@ -51,10 +51,6 @@ public class PrestationsServiceImpl implements PrestationsService{
 		
 	}
 
-
-
-
-
 	public long number_paiement_to_validate() {
 		// TODO Auto-generated method stub
 		return dao.number_paiement_to_validate();
@@ -81,7 +77,14 @@ public class PrestationsServiceImpl implements PrestationsService{
 		return dao.getperstationbynomfacture(nomfacture, company);
 	}
 
+	@Override
+	public void DeletePrestation(String invoicename) {
+		dao.DeletePrestation(invoicename);
+	}
 
 
-
+	@Override
+	public void UpdatePrestation(Prestations p) {
+		dao.UpdatePrestation(p);
+	}
 }
