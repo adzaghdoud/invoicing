@@ -38,6 +38,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
+import org.jfree.util.Log;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -129,7 +130,15 @@ public class Dispatcher {
 		return mv;
 		}
 		;
-	
+		LocalDate today = LocalDate.now();	
+		if (srvcompany.getcompanybyraison(srvlogins.getinfo(login).getCompany()).getDate_cloture_comptable() != null && today.getYear() > Integer.parseInt(srvcompany.getcompanybyraison(srvlogins.getinfo(login).getCompany()).getDate_cloture_comptable().substring(0, 3)))	
+		try{
+		srvcompany.updatedatecloturecomptable(srvlogins.getinfo(login).getCompany(), today.getYear()+1+"-12-31");	
+		}catch (Exception e ) {
+		Log.error("Erreur Mise à jour date cloture comptable : "+ExceptionUtils.getStackTrace(e));	
+		}
+		
+		
 		mv = new ModelAndView("/accueil/main");
 		mv.addObject("welcome","Bonjour "+login);
 		mv.addObject("company_name",srvlogins.getinfo(login).getCompany());

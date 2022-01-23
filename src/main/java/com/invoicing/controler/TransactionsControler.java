@@ -122,35 +122,38 @@ public class TransactionsControler {
 		
 		double totaltvarecoltes=0;
 		double total_tva_deductible=0;
+		List<Transaction> listT=srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany());	
 		
-		for (int i=0 ; i<srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
-			 if (srvt.searchtransacbetweentwodates(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getOperation_type().toString().contentEquals("income")) {
-				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount());
-					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount_HT());
+		for (int i=0 ; i<listT.size() ; i++) {
+			 if (listT.get(i).getOperation_type().toString().contentEquals("income") ) {
+				    // calcul tva income
+				    if (listT.get(i).getAmount_HT()>0) {
+				    BigDecimal bd = BigDecimal.valueOf(listT.get(i).getAmount());
+					BigDecimal bd2 = BigDecimal.valueOf(listT.get(i).getAmount_HT());
 					BigDecimal result=bd.subtract(bd2);
 					result = result.setScale(2, RoundingMode.DOWN);
 					totaltvarecoltes=totaltvarecoltes+(result.doubleValue());
-			 }
+				    }
+				    }else {
+				    	// calcul tva déduite
+				        if (listT.get(i).getAmount_HT() >0) {
+				    	BigDecimal bd = BigDecimal.valueOf(listT.get(i).getAmount());
+						BigDecimal bd2 = BigDecimal.valueOf(listT.get(i).getAmount_HT());
+						BigDecimal result=bd.subtract(bd2);
+						result = result.setScale(2, RoundingMode.DOWN);
+						total_tva_deductible=total_tva_deductible+(result.doubleValue());	
+				        }
+				    	
+				    }
+		
+		
+		
 		}
-		
-		
-		
-		for (int i=0 ; i<srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).size() ; i++) {
-			 if (! srvt.searchtransacbetweentwodates(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getOperation_type().toString().contentEquals("income")) {
-				    BigDecimal bd = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount());
-					BigDecimal bd2 = BigDecimal.valueOf(srvt.searchtransacbetweentwodates_with_tva(datedeb, datefin,srvlogins.getinfo(cookielogin).getCompany()).get(i).getAmount_HT());
-					BigDecimal result=bd.subtract(bd2);
-					result = result.setScale(2, RoundingMode.DOWN);
-					total_tva_deductible=total_tva_deductible+(result.doubleValue());
-			 }
-		}
-
 		
 		BigDecimal bd = BigDecimal.valueOf(totaltvarecoltes);
 		BigDecimal bd2 = BigDecimal.valueOf(total_tva_deductible);
 		BigDecimal totaltvadu=bd.subtract(bd2);
 		totaltvadu = totaltvadu.setScale(2, RoundingMode.DOWN);
-	
 		context.close();
 		tva.put("totaltvarecoltes", totaltvarecoltes);
 		tva.put("totaltvadu", java.lang.Math.abs(totaltvadu.doubleValue()));

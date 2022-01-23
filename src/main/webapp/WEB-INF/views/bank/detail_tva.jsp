@@ -54,13 +54,13 @@ body {
                               </div>
                               
                               <div class="form-group row" >
-                              <label class="col-sm-2 col-form-label"><b>Total TVA récoltées</b></label>
+                              <label class="col-sm-2 col-form-label"><b>Total TVA Encaissée €</b></label>
                               <div class="col-sm-4">
                               <input type="text"  id ="totaltva" class="form-control"/> 
                               </div>
                               </div>
                               <div class="form-group row" >
-                              <label class="col-sm-2 col-form-label"><b>Total TVA dû</b></label>
+                              <label class="col-sm-2 col-form-label"><b>Total TVA dû €</b></label>
                               <div class="col-sm-4">
                               <input type="text"  id ="totaltvadu" class="form-control"/> 
                               </div>
@@ -72,7 +72,7 @@ body {
                 <div class="form-group row">
                 <div class="col-sm-3">      
 			    <button type="button" class="btn btn-success" onclick="totaltva()"><i class="fas fa-search"></i> Chercher</button>
-			   <button type="button" id="reset"  class="btn btn-primary" onclick="javascript:document.getElementById('datedeb').value = '';document.getElementById('datefin').value = '';document.getElementById('totaltva').value = '' ;$('#tbobytransaction').empty();">Reset</button>
+			   <button type="button" id="reset"  class="btn btn-primary" onclick="javascript:document.getElementById('datedeb').value = '';document.getElementById('datefin').value = '';document.getElementById('totaltva').value = '' ;document.getElementById('totaltvadu').value = '';$('#tbobytransaction').empty();">Reset</button>
 			   </div>
 				</div>
 				

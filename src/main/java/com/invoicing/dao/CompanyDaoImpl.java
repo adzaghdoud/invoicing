@@ -91,4 +91,17 @@ public class CompanyDaoImpl extends  AbstractDao implements CompanyDao {
 	        getSession().createQuery(criteriaUpdate).executeUpdate();
 		}
 
+			@Override
+			public void updatedatecloturecomptable(String rs,String newdate) {
+				CriteriaBuilder builder = getSession().getCriteriaBuilder();    
+		        CriteriaUpdate<Company> criteriaUpdate  = builder.createCriteriaUpdate(Company.class);
+		        criteriaUpdate.from(Company.class);
+		        Root<Company> root = criteriaUpdate.from(Company.class);
+		        criteriaUpdate.where(builder.equal(root.get("rs"),rs));
+		        criteriaUpdate.set("date_cloture_comptable", newdate);
+		        getSession().createQuery(criteriaUpdate).executeUpdate();	
+				
+				
+			}
+
 }

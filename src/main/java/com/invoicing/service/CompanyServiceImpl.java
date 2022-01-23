@@ -40,6 +40,11 @@ public class CompanyServiceImpl implements CompanyService {
 		dao.updatlogo(rs, logo);
 	}
 
+	@Override
+	public void updatedatecloturecomptable(String rs, String newdate) {
+		dao.updatedatecloturecomptable(rs, newdate);
+	}
+
 
 
 }

@@ -10,5 +10,6 @@ public interface CompanyService {
 	Company getcompanybyraison(String raison);
 	void updatetimestamprefresh(Timestamp t, String rs);
 	void updatlogo(String rs, byte[] logo);
+	void updatedatecloturecomptable(String rs,String newdate);
 
 }
