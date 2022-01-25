@@ -1436,7 +1436,9 @@ function reducetva(value) {
 }	
 
 function totaltva () {
-         $.ajax({
+       
+        if($('#datedeb').val() && $('#datefin').val()) {
+            $.ajax({
 	        url: "totaltva/"+$('#datedeb').val()+"/"+$('#datefin').val(),
 	        type: 'GET',
 	        async: false,
@@ -1448,8 +1450,8 @@ function totaltva () {
             },
            error : function () {
 	
-}
-});
+           }
+           });
 
             $.ajax({
 	        url: "Getransactionsbetween_with_tva/"+$('#datedeb').val()+"/"+$('#datefin').val(),
@@ -1472,9 +1474,26 @@ function totaltva () {
             },
            error : function () {
 	
-}
+            }
 });
-     
+}else{	
+if (! $('#datedeb').val() || !  $('#datefin').val() )	 {
+        console.log("********************************** one is empty");
+        document.getElementById("msgmodalnotifTVA").innerHTML="<b>Merci de choisir les deux dates</b>";
+		document.getElementById("titleModalnotifyTVA").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Erreur de Saisie</span>";
+		$("#ModalnotifyTVA").modal();	
+}
+
+
+
+if (  new Date($('#datedeb').val()) > new Date($('#datefin').val())  )	 {
+        console.log("*********************not correcct");
+        document.getElementById("msgmodalnotifTVA").innerHTML="<b>L'intervalle est incorrect'</b>";
+		document.getElementById("titleModalnotifyTVA").innerHTML=" <span style='color: red;'><i class='fas fa-exclamation-circle'></i> Erreur de Saisie</span>";
+		$("#ModalnotifyTVA").modal();	
+}
+
+}     
 }
 
 

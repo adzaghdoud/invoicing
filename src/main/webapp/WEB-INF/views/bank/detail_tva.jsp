@@ -5,8 +5,8 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">		  
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">		  
 		
 <style>
 body {
@@ -103,8 +103,22 @@ body {
     			
     		</tbody>
     	</table>
-    	<!-- END PROJECT TABLE -->
     </div>
+</div>
+ <div class="modal fade" id="ModalnotifyTVA" tabindex="-1"   role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="titleModalnotifyTVA"></h5>
+      </div>
+      <div class="modal-body">
+       <span id="msgmodalnotifTVA"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

@@ -133,7 +133,8 @@ public class Dispatcher {
 		LocalDate today = LocalDate.now();	
 		if (srvcompany.getcompanybyraison(srvlogins.getinfo(login).getCompany()).getDate_cloture_comptable() != null && today.getYear() > Integer.parseInt(srvcompany.getcompanybyraison(srvlogins.getinfo(login).getCompany()).getDate_cloture_comptable().substring(0, 3)))	
 		try{
-		srvcompany.updatedatecloturecomptable(srvlogins.getinfo(login).getCompany(), today.getYear()+1+"-12-31");	
+		srvcompany.updatedatecloturecomptable(srvlogins.getinfo(login).getCompany(), today.getYear()+"-12-31");
+		Log.info("La mise à jour de la date de clôture comptable a été effectuée avec succés");
 		}catch (Exception e ) {
 		Log.error("Erreur Mise à jour date cloture comptable : "+ExceptionUtils.getStackTrace(e));	
 		}
