@@ -268,6 +268,7 @@ public class PrestationsControler {
 			LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
 			List<Prestations> listP= srvpres.getlistprestations(srvlogins.getinfo(cookielogin).getCompany());
 		    	StringWriter sw = new StringWriter();
+		    	
 		    	sw.append("Id;Client;Num Facture;Nom Facture;Date;Quantite;Total_TTC;Article;Taxe;Val Taxe ;Statut Paiement;Mode Paiement ; Date Paiement Attendue \n");
 		    	for(int i=0 ; i<listP.size(); i++) {
 		    		sw.append(listP.get(i).getId()+";"+listP.get(i).getClient()+";"+listP.get(i).getNumfacture()+";"+listP.get(i).getNomfacture()+";"+listP.get(i).getDate()+";"
@@ -275,6 +276,7 @@ public class PrestationsControler {
 		    		+listP.get(i).getQuantite()+";"+listP.get(i).getTotalttc()+";"+listP.get(i).getArticle()+";"+listP.get(i).getTaxe()+";"
 		    		+listP.get(i).getValtaxe()+";"+listP.get(i).getStatut_paiement()+";"+listP.get(i).getModepaiement()+";"+listP.get(i).getDatepaiementattendue()+"\n");
 		    	}
+		    	System.out.println("****************************************"+sw.toString());
 		    	HttpHeaders headers = new HttpHeaders();
 				ResponseEntity<byte[]> response=null;
 			    headers.add("content-disposition", "attachment; filename=ListPrestations.csv");
