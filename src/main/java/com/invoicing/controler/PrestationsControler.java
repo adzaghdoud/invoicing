@@ -3,6 +3,7 @@ package com.invoicing.controler;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -276,12 +277,11 @@ public class PrestationsControler {
 		    		+listP.get(i).getQuantite()+";"+listP.get(i).getTotalttc()+";"+listP.get(i).getArticle()+";"+listP.get(i).getTaxe()+";"
 		    		+listP.get(i).getValtaxe()+";"+listP.get(i).getStatut_paiement()+";"+listP.get(i).getModepaiement()+";"+listP.get(i).getDatepaiementattendue()+"\n");
 		    	}
-		    	System.out.println("****************************************"+sw.toString());
 		    	HttpHeaders headers = new HttpHeaders();
 				ResponseEntity<byte[]> response=null;
 			    headers.add("content-disposition", "attachment; filename=ListPrestations.csv");
 			    response = new ResponseEntity<byte[]>(
-			    		sw.toString().getBytes(), headers, HttpStatus.OK);		       
+			    		sw.toString().getBytes(StandardCharsets.ISO_8859_1), headers, HttpStatus.OK);		       
 			    context.close();
 			    return response;	 
 		 
