@@ -27,13 +27,27 @@ import org.springframework.web.multipart.MultipartFile;
 public class Sendmail {
 	
 	private String mailto;
+	private String cc;
 	private String subject;
 	private String contain;
 	private MultipartFile file;
 	private String filename;
 	private String filetype;
-
 	
+    
+	
+	
+		
+	public String getCc() {
+		return cc;
+	}
+
+
+	public void setCc(String cc) {
+		this.cc = cc;
+	}
+
+
 	public MultipartFile getFile() {
 		return file;
 	}
@@ -150,7 +164,10 @@ public class Sendmail {
 	    		}	
 	    	    Message message = new MimeMessage(session);
 	    		message.setFrom(new InternetAddress(prop.getProperty("COMPANY.EMAIL")));
-	    		message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(this.mailto));	
+	    		message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(mailto));
+	    		if (cc != null ) {
+	    	    message.setRecipients(Message.RecipientType.CC,InternetAddress.parse(cc))	;
+	    		}
 	    		message.setSubject(this.subject);
 	    		
 	    		

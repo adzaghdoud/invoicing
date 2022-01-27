@@ -262,7 +262,7 @@ public class PrestationsControler {
 	}
 	
 	
-	@GetMapping(value = "/DownloadPrestations",produces = "application/csv;charset=utf8")
+	@GetMapping(value = "/DownloadPrestations",produces = "application/csv")
 	 public ResponseEntity<byte[]> DownloadProducts(@CookieValue("invoicing_username") String cookielogin) throws Exception {
 			AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 			PrestationsService srvpres = (PrestationsService) context.getBean("PrestationsService");

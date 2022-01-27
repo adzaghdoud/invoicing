@@ -769,14 +769,15 @@ $.ajax({
 
 
 //****************************************************** JS send mail 
-function sendmail(mailto,subject,contain){
+function sendmail(mailto,subject,contain,cc){
 	$("#refresh_gif").show();
 	var formData = new FormData();
 	formData.append('mailto', mailto);
 	formData.append('subject', encodeURIComponent(subject));
 	formData.append('contain', encodeURIComponent(contain));
-	formData.append('attached_file', $('input[type=file]')[0].files[0]);
+	formData.append('cc', cc);
 	if (typeof document.getElementById('file').files[0] !== 'undefined') {
+    formData.append('attached_file', $('input[type=file]')[0].files[0]);
 	formData.append('attached_file_name', document.getElementById('file').files[0].name);
 	}
 	$.ajax({

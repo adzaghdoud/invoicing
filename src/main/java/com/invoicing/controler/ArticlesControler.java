@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
@@ -124,7 +125,7 @@ public class ArticlesControler {
 
 
 	
-	@GetMapping(value = "/DowloadProductsCSV")
+	@GetMapping(value = "/DowloadProductsCSV",produces = "application/csv")
 	 public ResponseEntity<byte[]> DownloadProducts(@CookieValue("invoicing_username") String cookielogin) throws Exception {
 			AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 			ArticleService srvarticles = (ArticleService) context.getBean("ArticleService");
@@ -142,7 +143,7 @@ public class ArticlesControler {
 				ResponseEntity<byte[]> response=null;
 			    headers.add("content-disposition", "attachment; filename=ListProducts.csv");
 			    response = new ResponseEntity<byte[]>(
-			    		sw.toString().getBytes(), headers, HttpStatus.OK);		       
+			    		sw.toString().getBytes(StandardCharsets.ISO_8859_1), headers, HttpStatus.OK);		       
 			    context.close();
 			    return response;	 
 		 

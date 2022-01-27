@@ -453,12 +453,15 @@ public class Dispatcher {
 	
 	}
 	@PostMapping(value = "/sendmail")
-	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) throws Exception {
+	public  @ResponseBody ResponseEntity<String> sendmail(@RequestParam(required = true) String mailto,@RequestParam(required = false) String cc,@RequestParam(required = true) String subject,@RequestParam(required = true) String contain,@RequestParam(required = false) MultipartFile attached_file,@RequestParam (required = false)String attached_file_name) throws Exception {
 
     Sendmail s= new Sendmail();
 	s.setContain(URLDecoder.decode(contain, "UTF-8"));
 	s.setSubject(URLDecoder.decode(subject, "UTF-8"));
 	s.setMailto(mailto);
+	if (cc != null ) {
+	s.setCc(cc);
+	}
 	if (attached_file !=null ) {
 	s.setFile(attached_file);
 	s.setFilename(attached_file_name);
@@ -468,10 +471,6 @@ public class Dispatcher {
 	}
 	return ResponseEntity.ok("Le mail a été bien envoyée à "+mailto);	
 	} 
-    
-	
-	
-	
 	@PostMapping(value = "/sendsms/{PhoneNumber}")
 	public  @ResponseBody ResponseEntity<String> sendsms(@PathVariable("PhoneNumber") String phonenumber,@RequestParam(required = true) String contain) throws Exception {
     Sendsms s= new Sendsms();

@@ -173,7 +173,13 @@
                                  </div>
                                  </div>
                                  
-          
+                                 <div class="form-group row">
+                                 <label class="col-sm-4 col-form-label"><b>Cc</b></label>
+                                 <div class="col-sm-8">
+                                 <input type="text"   id ="cc_email"  class="form-control">
+                                 </div>
+                                 </div>
+                                 
                                  <div class="form-group row">
                                  <label class="col-sm-4 col-form-label"><b>Piéce jointe</b></label>
                                  <div class="col-sm-8">
@@ -205,7 +211,7 @@
         
       </div>
       <div class="modal-footer">
-      <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val())">Send message <i class="far fa-paper-plane"></i> <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif"></button>
+      <button type="button" class="btn btn-success" onclick="sendmail($('#client_email').val(),$('#subject').val(),$('#containmail').val(),$('#cc_email').val())">Send message <i class="far fa-paper-plane"></i> <img src="${pageContext.request.contextPath}/resources/images/icon_refresh.gif" width="20" height="20" style="display: none" id="refresh_gif"></button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
       
