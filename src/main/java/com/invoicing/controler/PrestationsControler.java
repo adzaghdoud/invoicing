@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -260,7 +261,7 @@ public class PrestationsControler {
 	}
 	
 	
-	@GetMapping(value = "/DownloadPrestations")
+	@GetMapping(value = "/DownloadPrestations",produces = "application/csv;charset=utf8")
 	 public ResponseEntity<byte[]> DownloadProducts(@CookieValue("invoicing_username") String cookielogin) throws Exception {
 			AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 			PrestationsService srvpres = (PrestationsService) context.getBean("PrestationsService");
@@ -269,7 +270,6 @@ public class PrestationsControler {
 		    	StringWriter sw = new StringWriter();
 		    	sw.append("Id;Client;Num Facture;Nom Facture;Date;Quantite;Total_TTC;Article;Taxe;Val Taxe ;Statut Paiement;Mode Paiement ; Date Paiement Attendue \n");
 		    	for(int i=0 ; i<listP.size(); i++) {
-		    		System.out.println("***************************************"+listP.get(i).getStatut_paiement());
 		    		sw.append(listP.get(i).getId()+";"+listP.get(i).getClient()+";"+listP.get(i).getNumfacture()+";"+listP.get(i).getNomfacture()+";"+listP.get(i).getDate()+";"
 		    			
 		    		+listP.get(i).getQuantite()+";"+listP.get(i).getTotalttc()+";"+listP.get(i).getArticle()+";"+listP.get(i).getTaxe()+";"
