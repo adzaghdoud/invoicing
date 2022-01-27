@@ -2,6 +2,7 @@ package com.invoicing.controler;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +46,7 @@ import com.invoicing.model.Article;
 import com.invoicing.model.Client;
 import com.invoicing.model.Company;
 import com.invoicing.model.Prestations;
+import com.invoicing.service.ArticleService;
 import com.invoicing.service.ClientService;
 import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
@@ -258,6 +260,29 @@ public class PrestationsControler {
 	}
 	
 	
+	@GetMapping(value = "/DownloadPrestations")
+	 public ResponseEntity<byte[]> DownloadProducts(@CookieValue("invoicing_username") String cookielogin) throws Exception {
+			AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+			PrestationsService srvpres = (PrestationsService) context.getBean("PrestationsService");
+			LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+			List<Prestations> listP= srvpres.getlistprestations(srvlogins.getinfo(cookielogin).getCompany());
+		    	StringWriter sw = new StringWriter();
+		    	sw.append("Id;Client;Num Facture;Nom Facture;Date;Quantite;Total_TTC;Article;Taxe;Val Taxe ;Statut Paiement;Mode Paiement ; Date Paiement Attendue \n");
+		    	for(int i=0 ; i<listP.size(); i++) {
+		    		sw.append(listP.get(i).getId()+";"+listP.get(i).getClient()+";"+listP.get(i).getNumfacture()+";"+listP.get(i).getNomfacture()+";"+listP.get(i).getDate()+";"
+		    			
+		    		+listP.get(i).getQuantite()+";"+listP.get(i).getTotalttc()+";"+listP.get(i).getArticle()+";"+listP.get(i).getTaxe()+";"
+		    		+listP.get(i).getValtaxe()+";"+listP.get(i).getStatut_paiement()+";"+listP.get(i).getModepaiement()+";"+listP.get(i).getDatepaiementattendue()+"\n");
+		    	}
+		    	HttpHeaders headers = new HttpHeaders();
+				ResponseEntity<byte[]> response=null;
+			    headers.add("content-disposition", "attachment; filename=ListPrestations.csv");
+			    response = new ResponseEntity<byte[]>(
+			    		sw.toString().getBytes(), headers, HttpStatus.OK);		       
+			    context.close();
+			    return response;	 
+		 
+		   }
 	
    
 

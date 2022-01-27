@@ -29,7 +29,7 @@ body {
 <body>
  <div class="card card-outline-secondary">
                         <div class="card-header">
-                            <h5 class="mb-0">Calcul TVA</h5>
+                            <h5 class="mb-0"> <i class="fas fa-calculator"></i> Calcul TVA</h5>
                             
                         </div>
                         <div class="card-body">
@@ -70,7 +70,8 @@ body {
                               
                               
                 <div class="form-group row">
-                <div class="col-sm-3">      
+                <div class="col-sm-3"> 
+                    
 			    <button type="button" class="btn btn-success" onclick="totaltva()"><i class="fas fa-search"></i> Chercher</button>
 			   <button type="button" id="reset"  class="btn btn-primary" onclick="javascript:document.getElementById('datedeb').value = '';document.getElementById('datefin').value = '';document.getElementById('totaltva').value = '' ;document.getElementById('totaltvadu').value = '';$('#tbobytransaction').empty();">Reset</button>
 			   </div>
@@ -90,13 +91,13 @@ body {
     	<table class="table colored-header datatable project-list">
     		<thead>
     			<tr>
-    				<th>label</th>
-    				<th>Reference</th>
-    				<th>settled_at</th>
-    				<th>Side</th>
-    				<th>Operation Type</th>
-    				<th>Amout TTC</th>
-    	            <th>Amout HT</th>
+    				<th><i>label</i></th>
+    				<th><i>Reference</i></th>
+    				<th><i>settled_at</i></th>
+    				<th><i>Side</i></th>
+    				<th><i>Operation Type</i></th>
+    				<th><i>Amout TTC</i></th>
+    	            <th><i>Amout HT</i></th>
     			</tr>
     		</thead>
     		<tbody id="tbobytransaction"> 

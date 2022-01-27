@@ -127,6 +127,7 @@
         </div>
            <div>
                    <button class="btn btn-success" onclick="javascript:$('#Modalnewarticle').modal()"><i class="fas fa-plus"></i> Nouveau Article </button>
+                   <a href="DowloadProductsCSV"><button class="btn btn-secondary" ><i class="fas fa-file-download"></i> Download </button></a>
             </div>
             
           </div>

@@ -1,15 +1,26 @@
 package com.invoicing.controler;
 
+import java.io.FileInputStream;
+
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,13 +73,13 @@ public class ArticlesControler {
 			context.close();
 			log.error(ExceptionUtils.getStackTrace(e));
 			if (ExceptionUtils.getStackTrace(e).contains("Duplicate entry")) {
-			return ResponseEntity.status(550).body("Le produit "+a.getDesignation() +" exite déja en base de données");
+			return ResponseEntity.status(550).body("Le produit "+a.getDesignation() +" exite dÃ©ja en base de donnÃ©es");
 			}else {
-			return ResponseEntity.status(550).body("Erreur création produit ,Consultez la log");
+			return ResponseEntity.status(550).body("Erreur crÃ©ation produit ,Consultez la log");
 			}
 		}
 		context.close();
-		return ResponseEntity.ok().body("Le nouveau Article "+a.getDesignation() +"a été bien créé");
+		return ResponseEntity.ok().body("Le nouveau Article "+a.getDesignation() +"a Ã©tÃ© bien crÃ©Ã©");
 	}
 	
 	
@@ -86,11 +97,11 @@ public class ArticlesControler {
 		} catch (Exception e ) {
 		log.error(ExceptionUtils.getStackTrace(e));
 		context.close();
-		return ResponseEntity.status(550).body("Erreur modification en base de données");
+		return ResponseEntity.status(550).body("Erreur modification en base de donnÃ©es");
 		}
 		
 		context.close();
-		return ResponseEntity.ok().body("La modification a été faite avec succés");
+		return ResponseEntity.ok().body("La modification a Ã©tÃ© faite avec succÃ©s");
 	}
 	
 	
@@ -103,11 +114,44 @@ public class ArticlesControler {
 		} catch (Exception e) {
 			log.error(ExceptionUtils.getStackTrace(e));
 			context.close();
-			return ResponseEntity.status(550).body("Erreur suppression en base de données");
+			return ResponseEntity.status(550).body("Erreur suppression en base de donnÃ©es");
 			
 		}
 		context.close();
-		return ResponseEntity.ok().body("Le produit a été bien supprimé");
+		return ResponseEntity.ok().body("Le produit a Ã©tÃ© bien supprimÃ©");
 	}
 	
+
+
+	
+	@GetMapping(value = "/DowloadProductsCSV")
+	 public ResponseEntity<byte[]> DownloadProducts(@CookieValue("invoicing_username") String cookielogin) throws Exception {
+			AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
+			ArticleService srvarticles = (ArticleService) context.getBean("ArticleService");
+			LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");
+			List<Article> listA= srvarticles.getlistarticles(srvlogins.getinfo(cookielogin).getCompany());
+		    	StringWriter sw = new StringWriter();
+		    	sw.append("Designation;Famille;PV_HT;PA_HT;Taxe;Val_Taxe;PV_TTC;Last Modification;By Who;Company\n");
+		    	for(int i=0 ; i<listA.size(); i++) {
+		    		sw.append(listA.get(i).getDesignation()+";"+listA.get(i).getFamille()+";"+listA.get(i).getPvht()+";"+listA.get(i).getPaht()+";"
+		    			
+		    		+listA.get(i).getTaxe()+";"+listA.get(i).getValtaxe()+";"+listA.get(i).getPvttc()+";"+listA.get(i).getLast_modification()+";"
+		    		+listA.get(i).getBywho()+";"+listA.get(i).getRs()+"\n");
+		    	}
+		    	HttpHeaders headers = new HttpHeaders();
+				ResponseEntity<byte[]> response=null;
+			    headers.add("content-disposition", "attachment; filename=ListProducts.csv");
+			    response = new ResponseEntity<byte[]>(
+			    		sw.toString().getBytes(), headers, HttpStatus.OK);		       
+			    context.close();
+			    return response;	 
+		 
+		   }
+	
+
+
+
 }
+
+
+
