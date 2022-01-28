@@ -166,11 +166,14 @@ public class Sendmail {
 	    		message.setFrom(new InternetAddress(prop.getProperty("COMPANY.EMAIL")));
 	    		message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(mailto));
 	    		if (cc != null ) {
-	    	    message.setRecipients(Message.RecipientType.CC,InternetAddress.parse(cc))	;
-	    		}
-	    		message.setSubject(this.subject);
-	    		
-	    		
+	    	  String [] listccemails= cc.split(" ");
+	    	  String listccemailsFormatted=listccemails[0];
+	    	  for(int i=1 ; i<listccemails.length; i++) {
+	    		  listccemailsFormatted=listccemailsFormatted+","+listccemails[i]; 
+	    	  }    	
+	    	   message.setRecipients(Message.RecipientType.CC,InternetAddress.parse(listccemailsFormatted))	;
+	    	  }
+	    		message.setSubject(this.subject);    		
 	    		Multipart multipart = new MimeMultipart();
 
 	            MimeBodyPart textBodyPart = new MimeBodyPart();
