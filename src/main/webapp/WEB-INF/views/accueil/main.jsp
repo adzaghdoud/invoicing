@@ -6,7 +6,7 @@
 
 <head>
 <title>Invoicing</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel = "icon" href =  "${pageContext.request.contextPath}/resources/images/logo.png"  type = "image/x-icon"> 
 <style type="text/css">
   <%@include file="/resources/css/main.css" %>
