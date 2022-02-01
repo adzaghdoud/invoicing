@@ -4,7 +4,7 @@
   <groupId>Invoicing</groupId>
   <artifactId>Invoicing</artifactId>
   <packaging>war</packaging>
-  <version>3.1.6</version>
+  <version>3.1.7</version>
  
   <url>http://maven.apache.org</url>
    <properties>
@@ -26,7 +26,11 @@
         </repository>
 		</repositories>
   <dependencies>
-    
+    <dependency>
+    <groupId>com.google.code.findbugs</groupId>
+    <artifactId>jsr305</artifactId>
+    <version>3.0.2</version>
+</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -147,7 +151,7 @@
 <dependency>
     <groupId>com.amazonaws</groupId>
     <artifactId>aws-java-sdk-s3</artifactId>
-    <version>1.12.113</version>
+    <version>1.12.150</version>
 </dependency>
 <!-- https://mvnrepository.com/artifact/com.twilio.sdk/twilio -->
 <dependency>
@@ -190,7 +194,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.3</version>
         <configuration>
           <archive>
            <manifest>

@@ -247,7 +247,8 @@ public class Dispatcher {
 	    for(int i=0 ; i<listp.size(); i++) {    	
 	    ca+=listp.get(i).getTotalttc();	
 	    }
-		mv.addObject("ca",ca);
+	    BigDecimal CA = BigDecimal.valueOf(ca);
+		mv.addObject("ca",CA.setScale(2, RoundingMode.DOWN));
 		mv.addObject("nb_paiement_to_validate", srvprestations.number_paiement_to_validate());
 		mv.addObject("nb_paiement_validated", srvprestations.number_paiement_validate());
 		mv.addObject("nb_clients", srvclient.numberclient(srvlogins.getinfo(cookielogin).getCompany()));
