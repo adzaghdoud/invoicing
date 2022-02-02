@@ -217,7 +217,7 @@ drawcharts();
                                  <div class="form-group row" >
                                  <label class="col-sm-4 col-form-label"><b>Client</b></label>
                                  <div class="col-sm-8">
-                                 <input type="text" id="client" class="form-control" /> 
+                                 <input type="text" id="clientmodal" class="form-control" /> 
                                  </div>
                                  </div>
                                  <div class="form-group row" >

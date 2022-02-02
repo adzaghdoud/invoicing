@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
 import org.json.simple.JSONObject;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -36,6 +37,7 @@ import com.invoicing.service.TransactionsService;
 import com.invoicing.tools.S3Amazonetools;
 @Controller
 public class AmazoneS3Controller {
+	final org.apache.logging.log4j.Logger log =  LogManager.getLogger(this.getClass().getName());
 	@GetMapping(value = "/Download_From_Amazone_AS_Bytes/{company}/{typedocument}/{documentname}",produces = "application/pdf")
 	 public @ResponseBody byte[] Download_From_Amazone_AS_Bytes(@PathVariable("company") String company ,@PathVariable("typedocument") String typedocument ,@PathVariable("documentname") String documentname) throws Exception {
 		    S3Object s3Object = null;
@@ -121,7 +123,43 @@ public class AmazoneS3Controller {
 		
 	}
 
-
+	
+	
+	
+	
+	@GetMapping(value = "/DownloadStatus",produces = "application/pdf")
+	public ResponseEntity<byte[]> DownloadStatus(@CookieValue("invoicing_username") String cookielogin)throws Exception {
+		    AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		    CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
+		    LoginsService srvlogins = (LoginsService) context.getBean("LoginsService");		    
+		    S3Object s3Object = null;
+			InputStream input;
+			final Properties prop = new Properties();
+			input = new FileInputStream(System.getProperty("env.file.ext"));	           
+			prop.load(input);  
+		    /*Retrieve file as object from S3*/
+		       AWSCredentials credentials = new BasicAWSCredentials(prop.getProperty("AmazoneS3.KeyID"),prop.getProperty("AmazoneS3.SecretKey"));
+			   AmazonS3 s3client = AmazonS3ClientBuilder
+						  .standard()
+						  .withCredentials(new AWSStaticCredentialsProvider(credentials))
+						  .withRegion(Regions.EU_WEST_2)
+						  .build();
+		       try {
+			   s3Object = s3client.getObject(prop.getProperty("AmazoneS3.Bucket"),srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getRs()+"/ADMINISTRATION/Status/"+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getStatus_file_name());
+		       }catch(Exception e) {
+		       log.error("The file "+srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getStatus_file_name()+" is not found in Amazone S3"); 	   
+		       context.close();
+	           return null;
+		       }
+		       byte[] bytes = IOUtils.toByteArray(s3Object.getObjectContent());
+		       HttpHeaders headers = new HttpHeaders();
+		       headers.add("content-disposition", "attachment; filename=" + srvcompany.getcompanybyraison(srvlogins.getinfo(cookielogin).getCompany()).getStatus_file_name());
+		       ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
+		       bytes, headers, HttpStatus.OK);
+		       context.close();
+		       return response;
+	  		
+	}
 	@GetMapping(value = "/Download_Invoice/{invoicename}",produces = "application/pdf")
 	 public ResponseEntity<byte[]> Download_Invoice(@PathVariable("invoicename") String invoicename , @CookieValue("invoicing_username") String cookielogin) throws Exception {
 		    AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);

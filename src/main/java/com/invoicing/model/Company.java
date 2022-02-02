@@ -33,6 +33,7 @@ public class Company {
 	private String date_cloture_comptable;
 	private String kbis_file_name;
 	private String declaration_tva;
+	private String status_file_name;
 	public String getBankname() {
 		return bankname;
 	}
@@ -146,6 +147,12 @@ public class Company {
 	}
 	public void setDeclaration_tva(String declaration_tva) {
 		this.declaration_tva = declaration_tva;
+	}
+	public String getStatus_file_name() {
+		return status_file_name;
+	}
+	public void setStatus_file_name(String status_file_name) {
+		this.status_file_name = status_file_name;
 	}
 	
     	

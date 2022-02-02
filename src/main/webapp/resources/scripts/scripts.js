@@ -180,6 +180,10 @@ xhr.send();
 
 
 
+
+
+
+
 //*********************************************** JS clients
 
 function Getclient() {
@@ -1128,7 +1132,7 @@ function show_modal_prestation() {
    contentType: false,
    success : function(response) {
 	document.getElementById('nomfacture').value=response.nomfacture+".pdf";
-	document.getElementById('client').value=response.client;
+	document.getElementById('clientmodal').value=response.client;
 	document.getElementById('date').value=response.date;
 	document.getElementById('article').value=response.article;
 	document.getElementById('quantite').value=response.quantite;

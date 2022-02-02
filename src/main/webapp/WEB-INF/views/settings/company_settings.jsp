@@ -176,10 +176,11 @@
 							
 							<div class="row mb-3">
 							<div class="col-sm-3">
-						    <h6 class="mb-0"><b>KBIS</b></h6>
+						    <h6 class="mb-0"><b>Documents</b></h6>
 							</div>
 						    <div class="col-sm-9 text-secondary">
-						    <a href="#" onclick="downloadkbis()" >${info.kbis_file_name}</a>
+						    <a href="#" onclick="downloadkbis()" ><span style='color: green;'>${info.kbis_file_name}</span></a>
+						    <a href="DownloadStatus"><span style='color: green;'>${info.status_file_name}</span></a>
 							</div>
 							</div>
 							<c:set var = "declaration" value = "${info.declaration_tva}"/>
