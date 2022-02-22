@@ -2,6 +2,7 @@ package com.invoicing.controler;
 
 import java.io.FileInputStream;
 
+
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -30,7 +31,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
-import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.context.AppConfig;
 import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
 import com.invoicing.service.TransactionsService;

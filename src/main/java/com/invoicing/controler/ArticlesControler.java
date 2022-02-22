@@ -2,6 +2,7 @@ package com.invoicing.controler;
 
 import java.io.FileInputStream;
 
+
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.context.AppConfig;
 import com.invoicing.model.Article;
 import com.invoicing.service.ArticleService;
 import com.invoicing.service.LoginsService;

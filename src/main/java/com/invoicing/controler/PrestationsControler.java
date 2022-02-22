@@ -1,6 +1,7 @@
 package com.invoicing.controler;
 
 import java.io.FileInputStream;
+
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +44,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
-import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.context.AppConfig;
 import com.invoicing.model.Article;
 import com.invoicing.model.Client;
 import com.invoicing.model.Company;

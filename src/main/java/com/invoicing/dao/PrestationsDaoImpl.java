@@ -1,6 +1,7 @@
 package com.invoicing.dao;
 
 import java.time.LocalDate;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,7 @@ import org.hibernate.query.Query;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Repository;
-
-import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.context.AppConfig;
 import com.invoicing.model.Article;
 import com.invoicing.model.Prestations;
 import com.invoicing.model.Transaction;

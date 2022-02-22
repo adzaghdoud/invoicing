@@ -5,6 +5,8 @@ package com.invoicing.controler;
 
 import java.io.FileInputStream;
 
+
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -51,7 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.context.AppConfig;
 import com.invoicing.model.Logins;
 import com.invoicing.model.Prestations;
 import com.invoicing.model.Transaction;

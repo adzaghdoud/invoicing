@@ -1,6 +1,8 @@
 package com.invoicing.controler;
 import java.util.ArrayList;
 
+
+
 import java.util.List;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -16,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.invoicing.hibernate.configuration.AppConfig;
+import com.invoicing.context.AppConfig;
 import com.invoicing.service.CompanyService;
 import com.invoicing.service.LoginsService;
 import com.invoicing.tools.Sendmail;
