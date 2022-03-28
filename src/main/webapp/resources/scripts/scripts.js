@@ -962,6 +962,8 @@ function showmodaldelete(){
 	
 }
 function suppression_article(designation) {
+	    console.log("****************************************************"+designation);
+	     
         $.ajax({
         url: "deletearticle/"+designation,
         type: 'POST',

@@ -201,7 +201,7 @@ public class PrestationsControler {
 	}
 
 	@PostMapping(value = "/Generate_Post_Invoice/{nomfacture}",produces = "application/pdf")
-	public  ResponseEntity<byte[]> GeneratePostinvoice(@PathVariable("nomfacture") String nomfacture,@CookieValue("invoicing_username") String cookielogin){	
+	public  @ResponseBody byte[] GeneratePostinvoice(@PathVariable("nomfacture") String nomfacture,@CookieValue("invoicing_username") String cookielogin){	
 		  AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);	
 		  PrestationsService srvprestation = (PrestationsService) context.getBean("PrestationsService");
 		  CompanyService srvcompany = (CompanyService) context.getBean("CompanyService");
@@ -215,12 +215,9 @@ public class PrestationsControler {
 		  pdf.setFiletype("invoice");
 		  pdf.setClient(c);
 		  pdf.setPrestation(P);
-	      HttpHeaders headers = new HttpHeaders();
-	      headers.add("content-disposition", "attachment; filename=" + nomfacture+".pdf");
-	      ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
-	      pdf.GenerateInvoiceAsBytes(), headers, HttpStatus.OK);
+
 		  context.close();
-		  return response;
+		  return pdf.GenerateInvoiceAsBytes();
 		
 	}
 

@@ -144,19 +144,19 @@
 					</datasetRun>
 					<jr:listContents height="110" width="230">
 						<textField>
-							<reportElement x="0" y="0" width="100" height="20" uuid="01442f7c-d631-47de-877e-12c8095423a2"/>
+							<reportElement x="0" y="0" width="230" height="20" uuid="01442f7c-d631-47de-877e-12c8095423a2"/>
 							<textFieldExpression><![CDATA[$F{rs}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="0" y="20" width="200" height="20" uuid="2186d6f2-2f7d-4af7-bf4d-41b02480eaff"/>
+							<reportElement x="0" y="20" width="230" height="20" uuid="2186d6f2-2f7d-4af7-bf4d-41b02480eaff"/>
 							<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="0" y="40" width="200" height="20" uuid="baf447f8-02f1-45b3-8656-a19e4d701f2c"/>
+							<reportElement x="0" y="40" width="230" height="20" uuid="baf447f8-02f1-45b3-8656-a19e4d701f2c"/>
 							<textFieldExpression><![CDATA[$F{ville}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="0" y="60" width="100" height="20" uuid="520bfcf6-c9a4-4fc6-9065-f2b5a78587b1"/>
+							<reportElement x="0" y="60" width="230" height="20" uuid="520bfcf6-c9a4-4fc6-9065-f2b5a78587b1"/>
 							<textFieldExpression><![CDATA[$F{cp}]]></textFieldExpression>
 						</textField>
 						<staticText>
@@ -164,7 +164,7 @@
 							<text><![CDATA[Siret:]]></text>
 						</staticText>
 						<textField>
-							<reportElement x="30" y="80" width="170" height="30" uuid="3c4d19c3-f432-452f-8dac-c2827e94fb35"/>
+							<reportElement x="30" y="80" width="200" height="30" uuid="3c4d19c3-f432-452f-8dac-c2827e94fb35"/>
 							<textFieldExpression><![CDATA[$F{siret}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
